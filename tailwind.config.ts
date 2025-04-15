@@ -61,7 +61,30 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Vitality color scheme
+				vitality: {
+					50: '#f0eeff',
+					100: '#e5deff',
+					200: '#d6bcfa',
+					300: '#9b87f5',
+					400: '#8B5CF6',
+					500: '#7E69AB',
+					600: '#6E59A5',
+					700: '#1A1F2C',
+					800: '#403E43',
+					900: '#222222',
+				},
+				brand: {
+					orange: '#F97316',
+					green: '#F2FCE2',
+					blue: '#0EA5E9',
+					softblue: '#D3E4FD',
 				}
+			},
+			fontFamily: {
+				sans: ['Inter', 'sans-serif'],
+				display: ['Playfair Display', 'serif'],
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
