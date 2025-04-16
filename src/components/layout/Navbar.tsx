@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -21,7 +21,7 @@ const Navbar = () => {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-6">
           <Link to="/" className="text-gray-700 hover:text-vitality-400 font-medium transition-colors">
             Home
           </Link>
@@ -39,6 +39,13 @@ const Navbar = () => {
           </Link>
           <Link to="/contact" className="text-gray-700 hover:text-vitality-400 font-medium transition-colors">
             Contact
+          </Link>
+          <Link to="/doctor-registration" className="text-gray-700 hover:text-vitality-400 font-medium transition-colors flex items-center">
+            <UserPlus size={16} className="mr-1" />
+            Join Our Team
+          </Link>
+          <Link to="/profile" className="text-gray-700 hover:text-vitality-400 font-medium transition-colors">
+            Profile
           </Link>
           <Button asChild className="bg-accent hover:bg-accent/90">
             <Link to="/booking">Book Now</Link>
@@ -100,6 +107,21 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               Contact
+            </Link>
+            <Link 
+              to="/doctor-registration" 
+              className="text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors flex items-center"
+              onClick={toggleMenu}
+            >
+              <UserPlus size={16} className="mr-1" />
+              Join Our Team
+            </Link>
+            <Link 
+              to="/profile" 
+              className="text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
+              onClick={toggleMenu}
+            >
+              Profile
             </Link>
             <Button asChild className="bg-accent hover:bg-accent/90 w-full">
               <Link to="/booking" onClick={toggleMenu}>Book Now</Link>
