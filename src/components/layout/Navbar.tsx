@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, UserPlus } from "lucide-react";
+import { Menu, X, UserPlus, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -47,6 +47,14 @@ const Navbar = () => {
           <Link to="/profile" className="text-gray-700 hover:text-vitality-400 font-medium transition-colors">
             Profile
           </Link>
+          <div className="flex space-x-2">
+            <Button variant="outline" asChild className="border-vitality-400 text-vitality-400 hover:bg-vitality-50">
+              <Link to="/signin"><LogIn size={16} className="mr-1" /> Sign In</Link>
+            </Button>
+            <Button asChild className="bg-accent hover:bg-accent/90">
+              <Link to="/signup">Sign Up</Link>
+            </Button>
+          </div>
           <Button asChild className="bg-accent hover:bg-accent/90">
             <Link to="/booking">Book Now</Link>
           </Button>
@@ -122,6 +130,21 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               Profile
+            </Link>
+            <Link 
+              to="/signin" 
+              className="text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors flex items-center"
+              onClick={toggleMenu}
+            >
+              <LogIn size={16} className="mr-1" />
+              Sign In
+            </Link>
+            <Link 
+              to="/signup" 
+              className="text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md bg-vitality-100 hover:bg-vitality-200 transition-colors"
+              onClick={toggleMenu}
+            >
+              Sign Up
             </Link>
             <Button asChild className="bg-accent hover:bg-accent/90 w-full">
               <Link to="/booking" onClick={toggleMenu}>Book Now</Link>
