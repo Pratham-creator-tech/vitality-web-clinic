@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, UserPlus, LogIn } from "lucide-react";
+import { Menu, X, UserPlus, LogIn, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -12,6 +12,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,6 +30,15 @@ const Navbar = () => {
   const isActive = (path: string) => {
     return location.pathname === path;
   };
+
+  const services = [
+    { name: "Sports Rehabilitation", path: "/services/sports-rehabilitation" },
+    { name: "Manual Therapy", path: "/services/manual-therapy" },
+    { name: "Post-Surgical Rehabilitation", path: "/services/post-surgical" },
+    { name: "Chronic Pain Management", path: "/services/chronic-pain" },
+    { name: "Neurological Rehabilitation", path: "/services/neurological" },
+    { name: "Strength & Conditioning", path: "/services/strength-conditioning" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
@@ -93,11 +108,42 @@ const Navbar = () => {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <Link to="/services">
+                <NavigationMenuTrigger>Services</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-3 p-6 w-[400px]">
+                    <li className="row-span-1">
+                      <Link to="/services">
+                        <NavigationMenuLink
+                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-vitality-50 to-vitality-100 p-6 no-underline outline-none focus:shadow-md"
+                        >
+                          <div className="mb-2 mt-4 text-lg font-medium text-vitality-600">Our Services</div>
+                          <p className="text-sm leading-tight text-vitality-600/80">
+                            Comprehensive range of physiotherapy services tailored to your needs
+                          </p>
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                    {services.map((service, index) => (
+                      <li key={index}>
+                        <Link to={service.path}>
+                          <NavigationMenuLink 
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">{service.name}</div>
+                          </NavigationMenuLink>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/pricing">
                   <NavigationMenuLink 
-                    className={navigationMenuTriggerStyle() + (isActive("/services") ? " bg-accent/20" : "")}
+                    className={navigationMenuTriggerStyle() + (isActive("/pricing") ? " bg-accent/20" : "")}
                   >
-                    Services
+                    Pricing
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -165,12 +211,45 @@ const Navbar = () => {
             >
               About Us
             </Link>
+            
+            {/* Services dropdown for mobile */}
+            <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger className={`w-full text-left text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/services") ? "bg-accent/20" : ""} flex items-center justify-between`}>
+                  <span>Services</span>
+                  <ChevronDown size={16} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full bg-white">
+                  <DropdownMenuItem asChild>
+                    <Link 
+                      to="/services" 
+                      className="w-full cursor-pointer"
+                      onClick={toggleMenu}
+                    >
+                      All Services
+                    </Link>
+                  </DropdownMenuItem>
+                  {services.map((service, index) => (
+                    <DropdownMenuItem key={index} asChild>
+                      <Link 
+                        to={service.path} 
+                        className="w-full cursor-pointer"
+                        onClick={toggleMenu}
+                      >
+                        {service.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            
             <Link 
-              to="/services" 
-              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/services") ? "bg-accent/20" : ""}`}
+              to="/pricing" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/pricing") ? "bg-accent/20" : ""}`}
               onClick={toggleMenu}
             >
-              Services
+              Pricing
             </Link>
             <Link 
               to="/blog" 
