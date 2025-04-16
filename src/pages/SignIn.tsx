@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import PageLayout from "@/components/layout/PageLayout";
 import { useToast } from "@/hooks/use-toast";
 
@@ -21,6 +22,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -32,17 +34,41 @@ const SignIn = () => {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Sign in attempt:", data);
-    
-    // Simulate successful login - in a real app, this would validate with your auth system
-    toast({
-      title: "Sign in successful",
-      description: "Welcome back to Vitality Physio!",
-    });
-    
-    // Navigate to profile page after successful login
-    setTimeout(() => navigate("/profile"), 1500);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setIsLoading(true);
+      
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) {
+        toast({
+          title: "Sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        console.error("Sign in error:", error);
+        return;
+      }
+
+      toast({
+        title: "Sign in successful",
+        description: "Welcome back to Vitality Physio!",
+      });
+      
+      navigate("/profile");
+    } catch (error) {
+      console.error("Unexpected error during sign in:", error);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -70,6 +96,7 @@ const SignIn = () => {
                             placeholder="your.email@example.com" 
                             {...field} 
                             className="pl-10"
+                            disabled={isLoading}
                           />
                           <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         </div>
@@ -91,6 +118,7 @@ const SignIn = () => {
                             placeholder="••••••••"
                             {...field}
                             className="pr-10 pl-10"
+                            disabled={isLoading}
                           />
                           <LogIn className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                           <Button
@@ -99,6 +127,7 @@ const SignIn = () => {
                             size="icon"
                             className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
                             onClick={() => setShowPassword(!showPassword)}
+                            disabled={isLoading}
                           >
                             {showPassword ? (
                               <EyeOff className="h-5 w-5" />
@@ -112,8 +141,12 @@ const SignIn = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full bg-vitality-400 hover:bg-vitality-500">
-                  Sign In
+                <Button 
+                  type="submit" 
+                  className="w-full bg-vitality-400 hover:bg-vitality-500"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
             </Form>

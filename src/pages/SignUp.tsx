@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import PageLayout from "@/components/layout/PageLayout";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,6 +33,7 @@ type FormValues = z.infer<typeof formSchema>;
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -47,17 +49,86 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Sign up data:", data);
-    
-    // Simulate successful registration - in a real app, this would create a user in your auth system
-    toast({
-      title: "Account created successfully",
-      description: "Welcome to Vitality Physio!",
-    });
-    
-    // Navigate to profile page after successful registration
-    setTimeout(() => navigate("/profile"), 1500);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setIsLoading(true);
+      
+      // Register with Supabase and set role in metadata
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullName,
+            role: data.userType, // This will be used by our database trigger
+          }
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Registration failed",
+          description: error.message,
+          variant: "destructive",
+        });
+        console.error("Registration error:", error);
+        return;
+      }
+
+      // Create the profile in the appropriate table
+      if (data.userType === "patient") {
+        const { error: profileError } = await supabase
+          .from('patients')
+          .insert({
+            full_name: data.fullName,
+            email: data.email,
+          });
+          
+        if (profileError) {
+          toast({
+            title: "Profile creation failed",
+            description: profileError.message,
+            variant: "destructive",
+          });
+          console.error("Patient profile creation error:", profileError);
+          return;
+        }
+      } else if (data.userType === "doctor") {
+        const { error: profileError } = await supabase
+          .from('doctors')
+          .insert({
+            full_name: data.fullName,
+            email: data.email,
+          });
+          
+        if (profileError) {
+          toast({
+            title: "Profile creation failed",
+            description: profileError.message,
+            variant: "destructive",
+          });
+          console.error("Doctor profile creation error:", profileError);
+          return;
+        }
+      }
+
+      toast({
+        title: "Account created successfully",
+        description: "Welcome to Vitality Physio! Please check your email to confirm your account.",
+      });
+      
+      // Navigate to profile page after successful registration
+      setTimeout(() => navigate("/profile"), 1500);
+    } catch (error) {
+      console.error("Unexpected error during registration:", error);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -85,6 +156,7 @@ const SignUp = () => {
                             placeholder="John Doe" 
                             {...field} 
                             className="pl-10"
+                            disabled={isLoading}
                           />
                           <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         </div>
@@ -106,6 +178,7 @@ const SignUp = () => {
                             placeholder="your.email@example.com" 
                             {...field} 
                             className="pl-10"
+                            disabled={isLoading}
                           />
                           <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         </div>
@@ -128,6 +201,7 @@ const SignUp = () => {
                             placeholder="••••••••"
                             {...field}
                             className="pl-10 pr-10"
+                            disabled={isLoading}
                           />
                           <UserPlus className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                           <Button
@@ -136,6 +210,7 @@ const SignUp = () => {
                             size="icon"
                             className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
                             onClick={() => setShowPassword(!showPassword)}
+                            disabled={isLoading}
                           >
                             {showPassword ? (
                               <EyeOff className="h-5 w-5" />
@@ -163,6 +238,7 @@ const SignUp = () => {
                             placeholder="••••••••"
                             {...field}
                             className="pl-10 pr-10"
+                            disabled={isLoading}
                           />
                           <UserPlus className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                           <Button
@@ -171,6 +247,7 @@ const SignUp = () => {
                             size="icon"
                             className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            disabled={isLoading}
                           >
                             {showConfirmPassword ? (
                               <EyeOff className="h-5 w-5" />
@@ -197,6 +274,7 @@ const SignUp = () => {
                           variant={field.value === "patient" ? "default" : "outline"}
                           className={field.value === "patient" ? "bg-vitality-400 hover:bg-vitality-500" : ""}
                           onClick={() => form.setValue("userType", "patient")}
+                          disabled={isLoading}
                         >
                           Patient
                         </Button>
@@ -205,6 +283,7 @@ const SignUp = () => {
                           variant={field.value === "doctor" ? "default" : "outline"}
                           className={field.value === "doctor" ? "bg-vitality-400 hover:bg-vitality-500" : ""}
                           onClick={() => form.setValue("userType", "doctor")}
+                          disabled={isLoading}
                         >
                           Doctor/Therapist
                         </Button>
@@ -223,6 +302,7 @@ const SignUp = () => {
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          disabled={isLoading}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
@@ -235,8 +315,12 @@ const SignUp = () => {
                   )}
                 />
                 
-                <Button type="submit" className="w-full bg-vitality-400 hover:bg-vitality-500">
-                  Create Account
+                <Button 
+                  type="submit" 
+                  className="w-full bg-vitality-400 hover:bg-vitality-500"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </Form>
