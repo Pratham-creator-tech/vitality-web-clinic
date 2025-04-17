@@ -1,7 +1,7 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, ArrowRight, Shield, Star, UserCheck } from "lucide-react";
+import { Star as LucideStar, StarHalf } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -54,16 +54,16 @@ const HeroSection = () => {
             
             <div className="flex items-center space-x-4">
               <div className="flex -space-x-4">
-                <div className="w-10 h-10 rounded-full bg-vitality-300 flex items-center justify-center text-white text-xs">
+                <div className="w-10 h-10 rounded-full bg-vitality-300 flex items-center justify-center text-white text-xs font-bold">
                   4.9
                 </div>
                 <div className="flex space-x-1 items-center bg-white py-1 px-3 rounded-full shadow-sm border border-gray-100">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <svg key={star} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
+                    star <= 4 ? 
+                      <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" /> : 
+                      <StarHalf key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                   ))}
-                  <span className="text-sm font-medium text-gray-600 ml-1">
+                  <span className="text-sm font-medium text-gray-600 ml-2">
                     (400+ reviews)
                   </span>
                 </div>
@@ -80,11 +80,9 @@ const HeroSection = () => {
               />
             </div>
             
-            {/* Decorative elements */}
             <div className="absolute -top-6 -right-6 w-32 h-32 bg-vitality-300 rounded-full opacity-30 z-0"></div>
             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-brand-orange rounded-full opacity-10 z-0"></div>
             
-            {/* Stats card */}
             <div className="absolute -bottom-5 -left-5 md:left-5 bg-white rounded-lg shadow-lg p-4 z-20 border border-gray-100">
               <div className="flex items-center space-x-4">
                 <div className="bg-vitality-50 rounded-full p-3">
@@ -101,7 +99,6 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Trusted By Section */}
       <div className="bg-white py-8 border-t border-gray-100">
         <div className="container mx-auto px-4">
           <p className="text-center text-gray-500 font-medium mb-6">Trusted By</p>
