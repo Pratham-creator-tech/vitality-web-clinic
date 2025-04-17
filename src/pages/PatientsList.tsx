@@ -24,15 +24,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { Search, UserPlus, FileText, Calendar, Activity, Bone, Heart, Brain, Dumbbell } from "lucide-react";
+import { Search, UserPlus, FileText, Calendar, Activity, Bone, Heart, Brain, Dumbbell, Shield } from "lucide-react";
+import AIFloatingButton from "@/components/ai/AIFloatingButton";
 
 type Patient = {
   id: string;
   full_name: string;
-  email: string;
-  phone: string;
+  email: string; // We'll mask this for privacy
   dob: string | null;
-  address: string | null;
+  address: string | null; // We'll mask this for privacy
   medical_history: string | null;
   created_at: string;
 };
@@ -90,12 +90,19 @@ const PatientsList = () => {
       // For demo purposes, we're fetching all patients
       const { data, error } = await supabase
         .from("patients")
-        .select("*")
+        .select("id, full_name, email, dob, address, medical_history, created_at")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      setPatients(data || []);
+      // Mask sensitive information before setting to state
+      const maskedData = data?.map(patient => ({
+        ...patient,
+        email: maskEmail(patient.email),
+        address: patient.address ? "Available upon request" : null,
+      })) || [];
+
+      setPatients(maskedData);
     } catch (error) {
       console.error("Error fetching patients:", error);
       toast({
@@ -106,6 +113,13 @@ const PatientsList = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Function to mask email for privacy
+  const maskEmail = (email: string): string => {
+    const [username, domain] = email.split('@');
+    const maskedUsername = username.charAt(0) + '*'.repeat(username.length - 2) + username.charAt(username.length - 1);
+    return `${maskedUsername}@${domain}`;
   };
 
   const filteredPatients = patients.filter((patient) => {
@@ -186,6 +200,7 @@ const PatientsList = () => {
           </CardContent>
         </Card>
       </div>
+      <AIFloatingButton />
     </PageLayout>
   );
 };
@@ -206,7 +221,7 @@ const renderPatientsTable = (patients: Patient[], loading: boolean) => {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
+            <TableHead className="hidden md:table-cell">Medical Info</TableHead>
             <TableHead>Last Appointment</TableHead>
             <TableHead>Next Appointment</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -230,8 +245,19 @@ const renderPatientsTable = (patients: Patient[], loading: boolean) => {
             return (
               <TableRow key={patient.id}>
                 <TableCell className="font-medium">{patient.full_name}</TableCell>
-                <TableCell>{patient.email}</TableCell>
-                <TableCell>{patient.phone || "Not provided"}</TableCell>
+                <TableCell>
+                  <div className="flex items-center">
+                    <Shield className="h-4 w-4 mr-2 text-vitality-500" />
+                    {patient.email}
+                  </div>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {patient.medical_history ? (
+                    <span className="text-sm text-gray-600">Available</span>
+                  ) : (
+                    <span className="text-sm text-gray-400">Not provided</span>
+                  )}
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />

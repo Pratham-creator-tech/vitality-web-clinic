@@ -51,7 +51,7 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         <SectionTitle 
           title="Our Specialized Services" 
@@ -61,21 +61,25 @@ const ServicesSection = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {services.map((service) => (
-            <div 
+            <Link 
               key={service.id} 
-              className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow group"
+              to={service.link}
+              className="bg-white border border-gray-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-all group"
             >
-              <div className="mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold mb-3 text-vitality-700">{service.title}</h3>
+              <div className="bg-vitality-50 rounded-xl p-4 inline-block mb-4">
+                {service.icon}
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-vitality-700 group-hover:text-vitality-500 transition-colors">
+                {service.title}
+              </h3>
               <p className="text-gray-600 mb-4">{service.description}</p>
-              <Link 
-                to={service.link}
+              <div 
                 className="inline-flex items-center text-vitality-500 font-medium group-hover:text-vitality-600"
               >
                 Learn More
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
+              </div>
+            </Link>
           ))}
         </div>
         
