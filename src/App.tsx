@@ -20,6 +20,15 @@ import DoctorRegistration from "./pages/DoctorRegistration";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import SportsRehabilitation from "./pages/services/SportsRehabilitation";
+import ManualTherapy from "./pages/services/ManualTherapy";
+import PostSurgical from "./pages/services/PostSurgical";
+import ChronicPain from "./pages/services/ChronicPain";
+import Neurological from "./pages/services/Neurological";
+import StrengthConditioning from "./pages/services/StrengthConditioning";
+import AIAssistant from "./pages/AIAssistant";
+import DoctorUSP from "./pages/DoctorUSP";
+import PatientsList from "./pages/PatientsList";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +54,20 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            
+            {/* Service specific pages */}
+            <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
+            <Route path="/services/manual-therapy" element={<ManualTherapy />} />
+            <Route path="/services/post-surgical" element={<PostSurgical />} />
+            <Route path="/services/chronic-pain" element={<ChronicPain />} />
+            <Route path="/services/neurological" element={<Neurological />} />
+            <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
+            
+            {/* New pages */}
+            <Route path="/ai-assistant" element={<AIAssistant />} />
+            <Route path="/doctor-benefits" element={<DoctorUSP />} />
+            <Route path="/patients" element={<PatientsList />} />
+            
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

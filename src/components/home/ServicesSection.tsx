@@ -79,10 +79,16 @@ const ServicesSection = () => {
           ))}
         </div>
         
-        <div className="text-center mt-12">
+        <div className="flex flex-col sm:flex-row items-center gap-4 justify-center mt-12">
           <Button asChild variant="outline">
             <Link to="/services" className="flex items-center">
               View All Services
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
+          </Button>
+          <Button asChild>
+            <Link to="/ai-assistant" className="flex items-center">
+              Try Our AI Assistant
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
