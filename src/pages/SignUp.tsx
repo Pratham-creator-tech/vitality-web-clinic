@@ -54,7 +54,7 @@ const SignUp = () => {
       setIsLoading(true);
       
       // Register with Supabase and set role in metadata
-      const { error } = await supabase.auth.signUp({
+      const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
@@ -75,6 +75,18 @@ const SignUp = () => {
         return;
       }
 
+      // Make sure we have a user ID before proceeding
+      if (!authData.user) {
+        toast({
+          title: "Registration failed",
+          description: "Unable to create user profile. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const userId = authData.user.id;
+
       // Create the profile in the appropriate table
       if (data.userType === "patient") {
         const { error: profileError } = await supabase
@@ -82,6 +94,7 @@ const SignUp = () => {
           .insert({
             full_name: data.fullName,
             email: data.email,
+            user_id: userId  // Add the user_id here
           });
           
         if (profileError) {
@@ -99,6 +112,7 @@ const SignUp = () => {
           .insert({
             full_name: data.fullName,
             email: data.email,
+            user_id: userId  // Add the user_id here
           });
           
         if (profileError) {
