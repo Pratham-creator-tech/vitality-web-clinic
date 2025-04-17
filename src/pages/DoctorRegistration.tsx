@@ -3,8 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { 
   UserPlus,
   Upload,
@@ -38,11 +38,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const doctorFormSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters").optional(),
   phone: z.string().min(10, "Please enter a valid phone number"),
   specialization: z.string().min(2, "Please select a specialization"),
   qualifications: z.string().min(10, "Please provide your qualifications"),
@@ -92,6 +93,20 @@ const DoctorRegistration = () => {
   );
   
   const [paymentCycle, setPaymentCycle] = useState<"monthly" | "yearly">("monthly");
+  const [savedSignupData, setSavedSignupData] = useState<{
+    fullName: string;
+    email: string;
+    password: string;
+  } | null>(null);
+  
+  useEffect(() => {
+    // Check if we have saved signup data from the signup page
+    const savedData = sessionStorage.getItem('doctorSignupData');
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      setSavedSignupData(parsedData);
+    }
+  }, []);
   
   const form = useForm<DoctorFormValues>({
     resolver: zodResolver(doctorFormSchema),
@@ -112,23 +127,94 @@ const DoctorRegistration = () => {
     }
   });
 
+  // Set the form values from saved signup data if available
+  useEffect(() => {
+    if (savedSignupData) {
+      form.setValue('fullName', savedSignupData.fullName);
+      form.setValue('email', savedSignupData.email);
+    }
+  }, [savedSignupData, form]);
+
   const onSubmit = async (data: DoctorFormValues) => {
     setIsSubmitting(true);
     try {
-      // In a real app, this would be an API call to register the doctor
-      console.log("Doctor registration data:", data);
-      
-      // Simulate API call and payment processing
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast.success("Registration initiated! Redirecting to payment...");
-      // Here you would redirect to a payment page or process payment
-      // For now we'll simulate a successful payment
-      setTimeout(() => {
-        navigate("/profile?registration=success");
-      }, 1500);
+      // Register the user with Supabase if we have the data from signup
+      if (savedSignupData) {
+        const { data: authData, error } = await supabase.auth.signUp({
+          email: savedSignupData.email,
+          password: savedSignupData.password,
+          options: {
+            data: {
+              full_name: data.fullName,
+              role: 'doctor',
+            }
+          }
+        });
+
+        if (error) {
+          toast.error("Registration failed: " + error.message);
+          console.error("Registration error:", error);
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Make sure we have a user ID before proceeding
+        if (!authData.user) {
+          toast.error("Registration failed: Unable to create user profile");
+          setIsSubmitting(false);
+          return;
+        }
+
+        const userId = authData.user.id;
+
+        // Set subscription details
+        const subscriptionEndDate = new Date();
+        if (data.paymentCycle === "monthly") {
+          subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + 1);
+        } else {
+          subscriptionEndDate.setFullYear(subscriptionEndDate.getFullYear() + 1);
+        }
+
+        // Create the doctor profile
+        const { error: profileError } = await supabase
+          .from('doctors')
+          .insert({
+            user_id: userId,
+            full_name: data.fullName,
+            email: data.email,
+            phone: data.phone,
+            specialization: data.specialization,
+            experience_years: parseInt(data.yearsExperience),
+            about: data.bio,
+            subscription_tier: data.planType,
+            subscription_status: 'active',
+            subscription_start_date: new Date().toISOString(),
+            subscription_end_date: subscriptionEndDate.toISOString()
+          });
+          
+        if (profileError) {
+          toast.error("Profile creation failed: " + profileError.message);
+          console.error("Doctor profile creation error:", profileError);
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Clear saved signup data
+        sessionStorage.removeItem('doctorSignupData');
+
+        toast.success("Registration successful! Welcome to Vitality Physio");
+        
+        // Simulate payment processing
+        setTimeout(() => {
+          navigate("/profile?registration=success");
+        }, 1500);
+      } else {
+        // Handle the case where user came directly to this page without going through signup
+        toast.error("Missing registration information. Please start from the signup page.");
+        navigate("/signup");
+      }
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("Unexpected error during registration:", error);
       toast.error("There was a problem with your registration. Please try again.");
     } finally {
       setIsSubmitting(false);

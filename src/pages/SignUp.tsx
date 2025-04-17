@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -53,7 +52,26 @@ const SignUp = () => {
     try {
       setIsLoading(true);
       
-      // Register with Supabase and set role in metadata
+      // If user selected doctor/therapist, redirect to the doctor registration page
+      if (data.userType === "doctor") {
+        // Store form data in session storage to use it on the registration page
+        sessionStorage.setItem('doctorSignupData', JSON.stringify({
+          fullName: data.fullName,
+          email: data.email,
+          password: data.password
+        }));
+        
+        toast({
+          title: "Doctor Registration Required",
+          description: "Please select a subscription plan to continue registration.",
+        });
+        
+        // Redirect to the doctor registration page
+        navigate("/doctor-registration");
+        return;
+      }
+      
+      // Continue with patient registration
       const { data: authData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
@@ -87,43 +105,23 @@ const SignUp = () => {
 
       const userId = authData.user.id;
 
-      // Create the profile in the appropriate table
-      if (data.userType === "patient") {
-        const { error: profileError } = await supabase
-          .from('patients')
-          .insert({
-            full_name: data.fullName,
-            email: data.email,
-            user_id: userId  // Add the user_id here
-          });
-          
-        if (profileError) {
-          toast({
-            title: "Profile creation failed",
-            description: profileError.message,
-            variant: "destructive",
-          });
-          console.error("Patient profile creation error:", profileError);
-          return;
-        }
-      } else if (data.userType === "doctor") {
-        const { error: profileError } = await supabase
-          .from('doctors')
-          .insert({
-            full_name: data.fullName,
-            email: data.email,
-            user_id: userId  // Add the user_id here
-          });
-          
-        if (profileError) {
-          toast({
-            title: "Profile creation failed",
-            description: profileError.message,
-            variant: "destructive",
-          });
-          console.error("Doctor profile creation error:", profileError);
-          return;
-        }
+      // Create the patient profile
+      const { error: profileError } = await supabase
+        .from('patients')
+        .insert({
+          full_name: data.fullName,
+          email: data.email,
+          user_id: userId
+        });
+        
+      if (profileError) {
+        toast({
+          title: "Profile creation failed",
+          description: profileError.message,
+          variant: "destructive",
+        });
+        console.error("Patient profile creation error:", profileError);
+        return;
       }
 
       toast({
