@@ -109,9 +109,9 @@ const SignUp = () => {
       const { error: profileError } = await supabase
         .from('patients')
         .insert({
+          user_id: userId,
           full_name: data.fullName,
-          email: data.email,
-          user_id: userId
+          email: data.email
         });
         
       if (profileError) {
@@ -129,8 +129,8 @@ const SignUp = () => {
         description: "Welcome to Vitality Physio! Please check your email to confirm your account.",
       });
       
-      // Navigate to profile page after successful registration
-      setTimeout(() => navigate("/profile"), 1500);
+      // Navigate to signin page after successful registration
+      setTimeout(() => navigate("/signin"), 1500);
     } catch (error) {
       console.error("Unexpected error during registration:", error);
       toast({
