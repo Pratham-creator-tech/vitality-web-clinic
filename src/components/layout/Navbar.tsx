@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, UserPlus, LogIn, ChevronDown } from "lucide-react";
@@ -44,9 +43,11 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-2xl font-bold font-display text-vitality-600">
-            <span className="text-vitality-400">Vitality</span> Physio
-          </span>
+          <img 
+            src="/lovable-uploads/fb7174ec-5732-4824-ba20-36eb209037b8.png" 
+            alt="YASHA Logo" 
+            className="h-12"
+          />
         </Link>
         
         {/* Desktop Navigation */}
