@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, UserPlus, LogIn, ChevronDown } from "lucide-react";
@@ -46,8 +47,9 @@ const Navbar = () => {
           <img 
             src="/lovable-uploads/fb7174ec-5732-4824-ba20-36eb209037b8.png" 
             alt="YASHA Logo" 
-            className="h-12"
+            className="h-12 object-contain filter brightness-90 saturate-150 contrast-125 hue-rotate-15"
           />
+          <span className="text-vitality-700 font-bold text-xl tracking-tight">YASHA</span>
         </Link>
         
         {/* Desktop Navigation */}
