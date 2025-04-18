@@ -2,7 +2,8 @@
 import { Link } from "react-router-dom";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Heart, Dumbbell, Bone, UserPlus, Activity, BrainCircuit, Baby, Users, Yoga, Mindfulness, Bandage, Needle, Zap, Grid, Video } from "lucide-react";
+import { ArrowRight, Heart, Dumbbell, Bone, UserPlus, Activity, BrainCircuit, Baby, 
+  Users, Flame, ThermometerSun, Bandage, Syringe, Zap, Grid, Video } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const services = [
@@ -50,7 +51,7 @@ const services = [
     id: 6,
     title: "Geriatric Rehabilitation",
     description: "Specialized care for elderly patients focusing on mobility and independence.",
-    icon: <Mindfulness className="h-10 w-10 text-vitality-400" />,
+    icon: <ThermometerSun className="h-10 w-10 text-vitality-400" />,
     link: "/services/geriatric-rehab",
     image: "https://images.unsplash.com/photo-1574279606130-09958dc756f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1776&q=80"
   },
@@ -101,7 +102,7 @@ const advancedServices = [
     id: 2,
     title: "Dry Needling Therapy",
     description: "Precision treatment for muscle pain and tension.",
-    icon: <Needle className="h-10 w-10 text-vitality-400" />,
+    icon: <Syringe className="h-10 w-10 text-vitality-400" />,
     link: "/services/dry-needling",
     image: "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
   },
