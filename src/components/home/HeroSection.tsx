@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, ArrowRight, Shield, Star, UserCheck } from "lucide-react";
 import { Star as LucideStar, StarHalf } from "lucide-react";
+import { TrustedByCarousel } from "./TrustedByCarousel";
 
 const HeroSection = () => {
   return (
@@ -110,6 +111,8 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
+      
+      <TrustedByCarousel />
     </section>
   );
 };
