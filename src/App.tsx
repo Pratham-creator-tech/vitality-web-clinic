@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,11 +29,6 @@ import StrengthConditioning from "./pages/services/StrengthConditioning";
 import AIAssistant from "./pages/AIAssistant";
 import DoctorUSP from "./pages/DoctorUSP";
 import PatientsList from "./pages/PatientsList";
-import Kinesiotaping from "./pages/services/Kinesiotaping";
-import DryNeedling from "./pages/services/DryNeedling";
-import NeuroDynamic from "./pages/services/NeuroDynamic";
-import Cupping from "./pages/services/Cupping";
-import VirtualPhysio from "./pages/services/VirtualPhysio";
 
 const queryClient = new QueryClient();
 
@@ -66,13 +62,6 @@ const App = () => (
             <Route path="/services/chronic-pain" element={<ChronicPain />} />
             <Route path="/services/neurological" element={<Neurological />} />
             <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
-            
-            {/* Advanced Services */}
-            <Route path="/services/kinesiotaping" element={<Kinesiotaping />} />
-            <Route path="/services/dry-needling" element={<DryNeedling />} />
-            <Route path="/services/neuro-dynamic" element={<NeuroDynamic />} />
-            <Route path="/services/cupping" element={<Cupping />} />
-            <Route path="/services/virtual" element={<VirtualPhysio />} />
             
             {/* New pages */}
             <Route path="/ai-assistant" element={<AIAssistant />} />
