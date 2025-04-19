@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   Activity,
@@ -23,7 +22,7 @@ import {
   Ruler,
   HeartPulse,
   Brain,
-  Walking,
+  // Remove Walking and use an existing icon
   ListTodo,
   Microscope,
   HandHeart,
