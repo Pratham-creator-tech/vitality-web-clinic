@@ -1,7 +1,8 @@
+
 import { Link } from "react-router-dom";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Heart, Dumbbell, Bone, UserPlus, Activity, BrainCircuit, Baby, 
+import { ArrowRight, Heart, Dumbbell, Bone, UserPlus, Activity, Brain, 
   Users, Flame, ThermometerSun, Bandage, Syringe, Zap, Grid, Video } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
