@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Twitter, Mail, MapPin, Phone } from "lucide-react";
+import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Home, Info, Calendar, Video, MessageCircle, UserPlus, Stethoscope, Brain, Users } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -28,65 +28,55 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Main Pages */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-vitality-700">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 text-vitality-700">Main Pages</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Home
+                <Link to="/" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Home className="mr-2 h-4 w-4" /> Home
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  About Us
+                <Link to="/about" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Info className="mr-2 h-4 w-4" /> About Us
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Services
+                <Link to="/services" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Stethoscope className="mr-2 h-4 w-4" /> Services
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Health Tips
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  FAQ
+                <Link to="/booking" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Calendar className="mr-2 h-4 w-4" /> Book Appointment
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Advanced Features */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-vitality-700">Our Services</h3>
+            <h3 className="text-lg font-bold mb-4 text-vitality-700">Advanced Features</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/services/sports-rehabilitation" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Sports Rehabilitation
+                <Link to="/ai-assistant" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Brain className="mr-2 h-4 w-4" /> AI Assistant
                 </Link>
               </li>
               <li>
-                <Link to="/services/manual-therapy" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Manual Therapy
+                <Link to="/video-library" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Video className="mr-2 h-4 w-4" /> Video Library
                 </Link>
               </li>
               <li>
-                <Link to="/services/post-surgical" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Post-Surgical Rehabilitation
+                <Link to="/interactive-body-map" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Users className="mr-2 h-4 w-4" /> Interactive Body Map
                 </Link>
               </li>
               <li>
-                <Link to="/services/chronic-pain" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  Chronic Pain Management
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  View All Services
+                <Link to="/doctor-registration" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <UserPlus className="mr-2 h-4 w-4" /> Doctor Registration
                 </Link>
               </li>
             </ul>
