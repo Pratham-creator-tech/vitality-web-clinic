@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { useTheme } from "next-themes";
 
 const trustedPartners = [
   {
@@ -36,16 +37,16 @@ const trustedPartners = [
 ];
 
 const TrustedByCarousel = () => {
+  const { theme } = useTheme();
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true, 
     align: "start",
     dragFree: true,
-    direction: "rtl"
+    containScroll: "trimSnaps"
   });
   
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Auto-play functionality
   useEffect(() => {
     if (!emblaApi) return;
     
@@ -54,13 +55,11 @@ const TrustedByCarousel = () => {
       emblaApi.scrollNext();
     };
     
-    // Start autoplay
     const startAutoplay = () => {
       stopAutoplay();
-      autoplayRef.current = setInterval(autoplay, 3000);
+      autoplayRef.current = setInterval(autoplay, 2000); // Faster interval
     };
     
-    // Stop autoplay
     const stopAutoplay = () => {
       if (autoplayRef.current) {
         clearInterval(autoplayRef.current);
@@ -68,10 +67,8 @@ const TrustedByCarousel = () => {
       }
     };
     
-    // Initialize autoplay
     startAutoplay();
     
-    // Pause on hover
     const emblaNode = emblaApi.rootNode();
     emblaNode.addEventListener('mouseenter', stopAutoplay);
     emblaNode.addEventListener('mouseleave', startAutoplay);
@@ -84,19 +81,22 @@ const TrustedByCarousel = () => {
   }, [emblaApi]);
   
   return (
-    <div className="overflow-hidden" ref={emblaRef}>
+    <div className="w-full overflow-hidden bg-background" ref={emblaRef}>
       <div className="flex">
-        {trustedPartners.map((partner, index) => (
+        {[...trustedPartners, ...trustedPartners].map((partner, index) => (
           <div 
-            key={index} 
-            className={`flex-none mx-4 p-4 rounded-lg transition-transform duration-300 hover:scale-110 ${partner.color} bg-opacity-20 hover:bg-opacity-30`}
-            style={{ minWidth: "200px" }}
+            key={`${partner.name}-${index}`}
+            className={`flex-none mx-4 p-6 rounded-xl transition-all duration-300 hover:scale-105 ${
+              theme === 'dark' ? 'bg-gray-800/50' : `${partner.color} bg-opacity-10'
+            } hover:bg-opacity-20`}
+            style={{ minWidth: "250px" }}
           >
             <img 
               src={partner.logo} 
               alt={partner.name} 
-              className="h-10 w-full object-contain filter-none hover:brightness-110 transition-all" 
+              className="h-12 w-full object-contain filter-none hover:brightness-110 transition-all" 
             />
+            <p className="mt-3 text-sm text-muted-foreground text-center">{partner.name}</p>
           </div>
         ))}
       </div>
