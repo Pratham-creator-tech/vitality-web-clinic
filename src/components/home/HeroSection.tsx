@@ -1,7 +1,9 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, ArrowRight, Shield, Star, UserCheck } from "lucide-react";
 import { Star as LucideStar, StarHalf } from "lucide-react";
+import TrustedByCarousel from "./TrustedByCarousel";
 
 const HeroSection = () => {
   return (
@@ -102,12 +104,7 @@ const HeroSection = () => {
       <div className="bg-white py-8 border-t border-gray-100">
         <div className="container mx-auto px-4">
           <p className="text-center text-gray-500 font-medium mb-6">Trusted By</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            <img src="https://placehold.co/150x50/f3f4f6/64748b?text=Regional+Hospital" alt="Regional Hospital" className="h-8 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" />
-            <img src="https://placehold.co/150x50/f3f4f6/64748b?text=Sports+Center" alt="Sports Center" className="h-8 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" />
-            <img src="https://placehold.co/150x50/f3f4f6/64748b?text=Wellness+Club" alt="Wellness Club" className="h-8 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" />
-            <img src="https://placehold.co/150x50/f3f4f6/64748b?text=Health+Network" alt="Health Network" className="h-8 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" />
-          </div>
+          <TrustedByCarousel />
         </div>
       </div>
     </section>
