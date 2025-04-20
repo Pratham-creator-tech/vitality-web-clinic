@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -40,6 +41,7 @@ import {
 } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+// Form schemas
 const personalInfoSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
@@ -59,6 +61,7 @@ const medicalInfoSchema = z.object({
   primaryPhysician: z.string().optional(),
 });
 
+// Professional info for doctors only
 const professionalInfoSchema = z.object({
   specialization: z.string().min(2, "Please select a specialization"),
   qualifications: z.string().min(5, "Please provide your qualifications"),
@@ -74,13 +77,14 @@ type MedicalInfoValues = z.infer<typeof medicalInfoSchema>;
 type ProfessionalInfoValues = z.infer<typeof professionalInfoSchema>;
 
 const Profile = () => {
-  const [isDoctor, setIsDoctor] = useState(false);
+  const [isDoctor, setIsDoctor] = useState(false); // Toggle for profile type
   const [isPersonalInfoSubmitting, setIsPersonalInfoSubmitting] = useState(false);
   const [isMedicalInfoSubmitting, setIsMedicalInfoSubmitting] = useState(false);
   const [isProfessionalInfoSubmitting, setIsProfessionalInfoSubmitting] = useState(false);
   
   const navigate = useNavigate();
 
+  // Personal info form
   const personalInfoForm = useForm<PersonalInfoValues>({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
@@ -94,6 +98,7 @@ const Profile = () => {
     }
   });
 
+  // Medical info form (for patients)
   const medicalInfoForm = useForm<MedicalInfoValues>({
     resolver: zodResolver(medicalInfoSchema),
     defaultValues: {
@@ -106,6 +111,7 @@ const Profile = () => {
     }
   });
 
+  // Professional info form (for doctors)
   const professionalInfoForm = useForm<ProfessionalInfoValues>({
     resolver: zodResolver(professionalInfoSchema),
     defaultValues: {
@@ -122,8 +128,12 @@ const Profile = () => {
   const onPersonalInfoSubmit = async (data: PersonalInfoValues) => {
     setIsPersonalInfoSubmitting(true);
     try {
+      // In a real app, this would be an API call to update user profile
       console.log("Personal info update:", data);
+      
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
+      
       toast.success("Personal information updated successfully!");
     } catch (error) {
       console.error("Update error:", error);
@@ -136,8 +146,12 @@ const Profile = () => {
   const onMedicalInfoSubmit = async (data: MedicalInfoValues) => {
     setIsMedicalInfoSubmitting(true);
     try {
+      // In a real app, this would be an API call
       console.log("Medical info update:", data);
+      
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
+      
       toast.success("Medical information updated successfully!");
     } catch (error) {
       console.error("Update error:", error);
@@ -150,8 +164,12 @@ const Profile = () => {
   const onProfessionalInfoSubmit = async (data: ProfessionalInfoValues) => {
     setIsProfessionalInfoSubmitting(true);
     try {
+      // In a real app, this would be an API call
       console.log("Professional info update:", data);
+      
+      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 800));
+      
       toast.success("Professional information updated successfully!");
     } catch (error) {
       console.error("Update error:", error);
@@ -184,6 +202,7 @@ const Profile = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Sidebar - Profile Summary */}
           <div className="md:col-span-1">
             <Card className="shadow-md">
               <CardContent className="pt-6">
@@ -245,46 +264,26 @@ const Profile = () => {
               </CardContent>
             </Card>
 
+            {/* Additional sidebar card for quick links */}
             <Card className="shadow-md mt-4">
               <CardContent className="pt-6">
                 <h3 className="font-medium mb-3">Quick Links</h3>
                 <div className="space-y-2">
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start text-sm" 
-                    onClick={() => {
-                      toast({
-                        title: "Change Password",
-                        description: "This feature will be available soon.",
-                      });
-                    }}
-                  >
+                  <Button variant="ghost" className="w-full justify-start text-sm">
                     <Key size={16} className="mr-2" />
                     Change Password
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full justify-start text-sm"
-                    onClick={() => navigate("/pricing")}
-                  >
+                  <Button variant="ghost" className="w-full justify-start text-sm">
                     <CreditCard size={16} className="mr-2" />
                     Billing Information
                   </Button>
                   {isDoctor ? (
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-start text-sm"
-                      onClick={() => navigate("/patients-list")}
-                    >
+                    <Button variant="ghost" className="w-full justify-start text-sm">
                       <Calendar size={16} className="mr-2" />
                       Manage Schedule
                     </Button>
                   ) : (
-                    <Button 
-                      variant="ghost" 
-                      className="w-full justify-start text-sm"
-                      onClick={() => navigate("/booking")}
-                    >
+                    <Button variant="ghost" className="w-full justify-start text-sm">
                       <Calendar size={16} className="mr-2" />
                       Appointments
                     </Button>
@@ -294,6 +293,7 @@ const Profile = () => {
             </Card>
           </div>
 
+          {/* Main Content */}
           <div className="md:col-span-3">
             <Tabs defaultValue="personal" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
@@ -306,6 +306,7 @@ const Profile = () => {
                 <TabsTrigger value="security">Security</TabsTrigger>
               </TabsList>
 
+              {/* Personal Information Tab */}
               <TabsContent value="personal">
                 <Card>
                   <CardHeader>
@@ -445,6 +446,7 @@ const Profile = () => {
                 </Card>
               </TabsContent>
 
+              {/* Medical Information Tab (for patients) */}
               {!isDoctor && (
                 <TabsContent value="medical">
                   <Card>
@@ -583,6 +585,7 @@ const Profile = () => {
                 </TabsContent>
               )}
 
+              {/* Professional Information Tab (for doctors) */}
               {isDoctor && (
                 <TabsContent value="professional">
                   <Card>
@@ -721,6 +724,7 @@ const Profile = () => {
                 </TabsContent>
               )}
 
+              {/* Security Tab */}
               <TabsContent value="security">
                 <Card>
                   <CardHeader>

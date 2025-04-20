@@ -1,105 +1,316 @@
 
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { LanguageSelector } from "@/components/ui/language-selector";
-import { NavbarLinks } from "./NavbarLinks";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Menu, X, UserPlus, LogIn, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import UserMenu from "@/components/layout/UserMenu";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  
-  // Close mobile menu when changing routes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
 
-  // Add scroll listener to change navbar appearance
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const services = [
+    { name: "Sports Rehabilitation", path: "/services/sports-rehabilitation" },
+    { name: "Manual Therapy", path: "/services/manual-therapy" },
+    { name: "Post-Surgical Rehabilitation", path: "/services/post-surgical" },
+    { name: "Chronic Pain Management", path: "/services/chronic-pain" },
+    { name: "Neurological Rehabilitation", path: "/services/neurological" },
+    { name: "Strength & Conditioning", path: "/services/strength-conditioning" },
+  ];
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? "bg-white/95 backdrop-blur-sm shadow-md py-2" 
-          : "bg-transparent py-4"
-      }`}
-    >
-      <nav className="container mx-auto px-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link 
-          to="/" 
-          className="flex items-center space-x-2"
-          aria-label="Vitality Physio Home"
-        >
-          <span className="text-xl font-bold text-vitality-600">
-            Vitality<span className="text-vitality-400">Physio</span>
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="text-2xl font-bold font-display text-vitality-600">
+            <span className="text-vitality-400">Vitality</span> Physio
           </span>
         </Link>
         
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-1">
-          <NavbarLinks className="flex" />
-        </div>
-        
-        {/* Desktop Actions Area */}
-        <div className="hidden md:flex items-center space-x-2">
-          <LanguageSelector />
-          <ThemeToggle />
-          <UserMenu />
-        </div>
-        
+        <nav className="hidden md:flex items-center">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/">
+                  <NavigationMenuLink 
+                    className={navigationMenuTriggerStyle() + (isActive("/") ? " bg-accent/20" : "")}
+                  >
+                    Home
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>About</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-3 p-6 w-[400px]">
+                    <li className="row-span-3">
+                      <Link to="/about">
+                        <NavigationMenuLink
+                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-vitality-50 to-vitality-100 p-6 no-underline outline-none focus:shadow-md"
+                        >
+                          <div className="mb-2 mt-4 text-lg font-medium text-vitality-600">About Us</div>
+                          <p className="text-sm leading-tight text-vitality-600/80">
+                            Learn about our clinic, mission and team of professionals
+                          </p>
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/doctor-registration">
+                        <NavigationMenuLink 
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none">Join Our Team</div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Apply to become a part of our physio team
+                          </p>
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/faq">
+                        <NavigationMenuLink 
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none">FAQ</div>
+                          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            Frequently asked questions about our services
+                          </p>
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Services</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid gap-3 p-6 w-[400px]">
+                    <li className="row-span-1">
+                      <Link to="/services">
+                        <NavigationMenuLink
+                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-vitality-50 to-vitality-100 p-6 no-underline outline-none focus:shadow-md"
+                        >
+                          <div className="mb-2 mt-4 text-lg font-medium text-vitality-600">Our Services</div>
+                          <p className="text-sm leading-tight text-vitality-600/80">
+                            Comprehensive range of physiotherapy services tailored to your needs
+                          </p>
+                        </NavigationMenuLink>
+                      </Link>
+                    </li>
+                    {services.map((service, index) => (
+                      <li key={index}>
+                        <Link to={service.path}>
+                          <NavigationMenuLink 
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">{service.name}</div>
+                          </NavigationMenuLink>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/pricing">
+                  <NavigationMenuLink 
+                    className={navigationMenuTriggerStyle() + (isActive("/pricing") ? " bg-accent/20" : "")}
+                  >
+                    Pricing
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/blog">
+                  <NavigationMenuLink 
+                    className={navigationMenuTriggerStyle() + (isActive("/blog") ? " bg-accent/20" : "")}
+                  >
+                    Blog
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <Link to="/contact">
+                  <NavigationMenuLink 
+                    className={navigationMenuTriggerStyle() + (isActive("/contact") ? " bg-accent/20" : "")}
+                  >
+                    Contact
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          <div className="flex items-center ml-6 space-x-3">
+            <Button variant="outline" asChild size="sm" className="border-vitality-400 text-vitality-400 hover:bg-vitality-50">
+              <Link to="/signin"><LogIn size={14} className="mr-1" /> Sign In</Link>
+            </Button>
+            <Button asChild size="sm" className="bg-accent hover:bg-accent/90">
+              <Link to="/signup">Sign Up</Link>
+            </Button>
+            <Button asChild size="sm" className="bg-vitality-400 hover:bg-vitality-500">
+              <Link to="/booking">Book Now</Link>
+            </Button>
+          </div>
+        </nav>
+
         {/* Mobile Menu Button */}
-        <div className="flex items-center md:hidden space-x-2">
-          <ThemeToggle />
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            className="ml-1"
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </Button>
-        </div>
-      </nav>
-      
-      {/* Mobile Navigation Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden w-full bg-background shadow-lg absolute top-full left-0 right-0 py-4 border-t"
-          >
-            <div className="container mx-auto px-4 flex flex-col space-y-4">
-              <NavbarLinks className="flex flex-col space-y-2" />
-              <div className="flex justify-between items-center pt-4 border-t border-gray-200">
-                <LanguageSelector />
-                <UserMenu />
-              </div>
+        <button
+          onClick={toggleMenu}
+          className="md:hidden text-gray-700 hover:text-vitality-400"
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden">
+          <div className="container mx-auto px-4 py-4 flex flex-col space-y-3 bg-white">
+            <Link 
+              to="/" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              Home
+            </Link>
+            <Link 
+              to="/about" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/about") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              About Us
+            </Link>
+            
+            {/* Services dropdown for mobile */}
+            <div className="relative">
+              <DropdownMenu>
+                <DropdownMenuTrigger className={`w-full text-left text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/services") ? "bg-accent/20" : ""} flex items-center justify-between`}>
+                  <span>Services</span>
+                  <ChevronDown size={16} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full bg-white">
+                  <DropdownMenuItem asChild>
+                    <Link 
+                      to="/services" 
+                      className="w-full cursor-pointer"
+                      onClick={toggleMenu}
+                    >
+                      All Services
+                    </Link>
+                  </DropdownMenuItem>
+                  {services.map((service, index) => (
+                    <DropdownMenuItem key={index} asChild>
+                      <Link 
+                        to={service.path} 
+                        className="w-full cursor-pointer"
+                        onClick={toggleMenu}
+                      >
+                        {service.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            
+            <Link 
+              to="/pricing" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/pricing") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              Pricing
+            </Link>
+            <Link 
+              to="/blog" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/blog") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              Blog
+            </Link>
+            <Link 
+              to="/faq" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/faq") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              FAQ
+            </Link>
+            <Link 
+              to="/contact" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/contact") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              Contact
+            </Link>
+            <Link 
+              to="/doctor-registration" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/doctor-registration") ? "bg-accent/20" : ""} flex items-center`}
+              onClick={toggleMenu}
+            >
+              <UserPlus size={16} className="mr-1" />
+              Join Our Team
+            </Link>
+            <Link 
+              to="/profile" 
+              className={`text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors ${isActive("/profile") ? "bg-accent/20" : ""}`}
+              onClick={toggleMenu}
+            >
+              Profile
+            </Link>
+            
+            <div className="pt-2 border-t border-gray-100">
+              <Link 
+                to="/signin" 
+                className="flex items-center text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
+                onClick={toggleMenu}
+              >
+                <LogIn size={16} className="mr-1" />
+                Sign In
+              </Link>
+              <Link 
+                to="/signup" 
+                className="flex items-center text-gray-700 hover:text-vitality-400 font-medium px-4 py-2 mt-2 rounded-md bg-vitality-100 hover:bg-vitality-200 transition-colors"
+                onClick={toggleMenu}
+              >
+                Sign Up
+              </Link>
+              <Button asChild className="mt-3 w-full bg-accent hover:bg-accent/90">
+                <Link to="/booking" onClick={toggleMenu}>Book Now</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
