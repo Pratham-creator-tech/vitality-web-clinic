@@ -39,7 +39,7 @@ const TrustedByCarousel = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     loop: true, 
     align: "start",
-    speed: 10,
+    dragFree: true,
     direction: "rtl"
   });
   
