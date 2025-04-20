@@ -1,9 +1,6 @@
 
 import React, { useEffect, useRef } from "react";
-import { useEmblaCarousel as originalUseEmblaCarousel } from "embla-carousel-react";
-
-// Create a wrapper around the original hook with correct typing
-const useEmblaCarousel = originalUseEmblaCarousel as any;
+import useEmblaCarousel from "embla-carousel-react";
 
 const trustedPartners = [
   {
