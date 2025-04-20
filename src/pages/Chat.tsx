@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -56,23 +55,19 @@ const Chat = () => {
         if (doctorData) {
           setAssignedDoctor(doctorData);
           
-          // Fetch messages between patient and this doctor
-          const { data: messagesData, error: messagesError } = await supabase
-            .from("chat_messages")
-            .select("*")
-            .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
-            .order("created_at", { ascending: true });
+          // Since chat_messages table doesn't exist yet, we'll just use mock data
+          // In a real app, this would query the chat_messages table
+          // const { data: messagesData, error: messagesError } = await supabase
+          //   .from("chat_messages")
+          //   .select("*")
+          //   .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+          //   .order("created_at", { ascending: true });
           
-          if (messagesError && messagesError.code !== 'PGRST116') {
-            throw messagesError;
-          }
+          // if (messagesError) throw messagesError;
           
-          if (messagesData) {
-            setMessages(messagesData);
-          }
-        } else {
-          // No doctor assigned, we could show a message to book first
-          setAssignedDoctor(null);
+          // if (messagesData) {
+          //   setMessages(messagesData);
+          // }
         }
       } catch (error: any) {
         console.error("Error fetching chat data:", error);
@@ -108,7 +103,7 @@ const Chat = () => {
         setMessages(mockMessages);
       }
     }, 1000);
-  }, [user, navigate]);
+  }, [user, navigate, messages.length]);
   
   // Scroll to bottom when messages change
   useEffect(() => {

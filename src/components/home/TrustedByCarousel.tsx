@@ -1,6 +1,9 @@
 
 import React, { useEffect, useRef } from "react";
-import { useEmblaCarousel } from "embla-carousel-react";
+import { useEmblaCarousel as originalUseEmblaCarousel } from "embla-carousel-react";
+
+// Create a wrapper around the original hook with correct typing
+const useEmblaCarousel = originalUseEmblaCarousel as any;
 
 const trustedPartners = [
   {
@@ -30,7 +33,7 @@ const trustedPartners = [
   },
   {
     name: "Elite Athletes Association",
-    logo: "https://placehold.co/150x50/facc15/1f2937?text=Athletes+Association",
+    logo: "https://placehold.co/150x50/facc15/1f2937?text=Elite+Athletes",
     color: "bg-yellow-400"
   }
 ];

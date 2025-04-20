@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -18,7 +17,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ChevronRight, Save, UserCircle } from "lucide-react";
 
-// Define the form schema with zod
 const profileFormSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   phone: z.string().optional(),
@@ -48,7 +46,6 @@ const UserOnboarding = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Create profile form
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -60,7 +57,6 @@ const UserOnboarding = () => {
     },
   });
   
-  // Create pain form
   const painForm = useForm<PainFormValues>({
     resolver: zodResolver(painFormSchema),
     defaultValues: {
@@ -81,15 +77,15 @@ const UserOnboarding = () => {
     setIsSubmitting(true);
     
     try {
-      // Insert or update patient record
+      const email = user.email || "";
+      
       const { error } = await supabase.from("patients").upsert({
         user_id: user.id,
         full_name: data.fullName,
+        email: email,
         phone: data.phone,
-        // Convert age to ISO date format for dob (approximate)
         dob: new Date(new Date().getFullYear() - parseInt(data.age), 0, 1).toISOString().split('T')[0],
         address: data.address,
-        // Add gender to medical_history as JSON
         medical_history: JSON.stringify({ gender: data.gender }),
       });
       
@@ -114,7 +110,6 @@ const UserOnboarding = () => {
     setIsSubmitting(true);
     
     try {
-      // Get current patient record
       const { data: patientData, error: fetchError } = await supabase
         .from("patients")
         .select("medical_history")
@@ -123,16 +118,13 @@ const UserOnboarding = () => {
       
       if (fetchError) throw fetchError;
       
-      // Parse and update medical history
       let medicalHistory = {};
       try {
         medicalHistory = patientData.medical_history ? JSON.parse(patientData.medical_history) : {};
       } catch (e) {
-        // If JSON parse fails, use empty object
         medicalHistory = {};
       }
       
-      // Add pain information to medical history
       const updatedMedicalHistory = {
         ...medicalHistory,
         pain: {
@@ -144,7 +136,6 @@ const UserOnboarding = () => {
         },
       };
       
-      // Update patient record
       const { error: updateError } = await supabase
         .from("patients")
         .update({
