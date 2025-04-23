@@ -1,100 +1,91 @@
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
+import Index from "./pages/Index";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Pricing from "./pages/Pricing";
+import Booking from "./pages/Booking";
+import Contact from "./pages/Contact";
+import FAQ from "./pages/FAQ";
+import Blog from "./pages/Blog";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import NotFound from "./pages/NotFound";
+import DoctorRegistration from "./pages/DoctorRegistration";
+import Profile from "./pages/Profile";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import SportsRehabilitation from "./pages/services/SportsRehabilitation";
+import ManualTherapy from "./pages/services/ManualTherapy";
+import PostSurgical from "./pages/services/PostSurgical";
+import ChronicPain from "./pages/services/ChronicPain";
+import Neurological from "./pages/services/Neurological";
+import StrengthConditioning from "./pages/services/StrengthConditioning";
+import AIAssistant from "./pages/AIAssistant";
+import DoctorUSP from "./pages/DoctorUSP";
+import PatientsList from "./pages/PatientsList";
+import InteractiveBodyMap from "./pages/InteractiveBodyMap";
+import PainTracker from "./pages/PainTracker";
+import VideoLibrary from "./pages/VideoLibrary";
+import VirtualTour from "./pages/VirtualTour";
 
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/ui/theme-provider";
-import { AuthProvider } from "@/context/AuthContext";
-import { LanguageProvider } from "@/context/LanguageContext";
-import ScrollToTop from "@/components/ScrollToTop";
+const queryClient = new QueryClient();
 
-import Index from "@/pages/Index";
-import About from "@/pages/About";
-import Services from "@/pages/Services";
-import PainTracker from "@/pages/PainTracker";
-import Blog from "@/pages/Blog";
-import VirtualTour from "@/pages/VirtualTour";
-import FAQ from "@/pages/FAQ";
-import Contact from "@/pages/Contact";
-import InteractiveBodyMap from "@/pages/InteractiveBodyMap";
-import VideoLibrary from "@/pages/VideoLibrary";
-import AIAssistant from "@/pages/AIAssistant";
-import NotFound from "@/pages/NotFound";
-import SignIn from "@/pages/SignIn";
-import SignUp from "@/pages/SignUp";
-import Booking from "@/pages/Booking";
-import Profile from "@/pages/Profile";
-import Pricing from "@/pages/Pricing";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import TermsOfService from "@/pages/TermsOfService";
-import UserOnboarding from "@/pages/UserOnboarding";
-import Dashboard from "@/pages/Dashboard";
-import ExercisePlan from "@/pages/ExercisePlan";
-import Chat from "@/pages/Chat";
-
-// Service-specific pages
-import SportsRehabilitation from "@/pages/services/SportsRehabilitation";
-import ManualTherapy from "@/pages/services/ManualTherapy";
-import PostSurgical from "@/pages/services/PostSurgical";
-import ChronicPain from "@/pages/services/ChronicPain";
-import Neurological from "@/pages/services/Neurological";
-import StrengthConditioning from "@/pages/services/StrengthConditioning";
-import DoctorUSP from "@/pages/DoctorUSP";
-import DoctorRegistration from "@/pages/DoctorRegistration";
-import PatientsList from "@/pages/PatientsList";
-
-function App() {
-  return (
-    <ThemeProvider defaultTheme="light" storageKey="vitality-theme">
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
       <LanguageProvider>
-        <AuthProvider>
-          <Router>
-            <ScrollToTop />
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/services" element={<Services />} />
-              <Route path="/pain-tracker" element={<PainTracker />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/virtual-tour" element={<VirtualTour />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
-              <Route path="/video-library" element={<VideoLibrary />} />
-              <Route path="/ai-assistant" element={<AIAssistant />} />
-              <Route path="/sign-in" element={<SignIn />} />
-              <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/booking" element={<Booking />} />
-              <Route path="/profile" element={<Profile />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/booking" element={<Booking />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/blog" element={<Blog />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="/onboarding" element={<UserOnboarding />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/exercise-plan" element={<ExercisePlan />} />
-              <Route path="/chat" element={<Chat />} />
+              <Route path="/doctor-registration" element={<DoctorRegistration />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
               
-              {/* Service-specific routes */}
+              {/* Service specific pages */}
               <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
               <Route path="/services/manual-therapy" element={<ManualTherapy />} />
               <Route path="/services/post-surgical" element={<PostSurgical />} />
               <Route path="/services/chronic-pain" element={<ChronicPain />} />
-              <Route path="/services/neurological-rehabilitation" element={<Neurological />} />
+              <Route path="/services/neurological" element={<Neurological />} />
               <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
               
-              {/* Doctor-specific routes */}
-              <Route path="/doctor-usp" element={<DoctorUSP />} />
-              <Route path="/doctor-registration" element={<DoctorRegistration />} />
-              <Route path="/patients-list" element={<PatientsList />} />
+              {/* New features */}
+              <Route path="/ai-assistant" element={<AIAssistant />} />
+              <Route path="/doctor-benefits" element={<DoctorUSP />} />
+              <Route path="/patients" element={<PatientsList />} />
+              <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
+              <Route path="/pain-tracker" element={<PainTracker />} />
+              <Route path="/video-library" element={<VideoLibrary />} />
+              <Route path="/virtual-tour" element={<VirtualTour />} />
               
-              {/* 404 route */}
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </Router>
-          <Toaster />
-        </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
       </LanguageProvider>
-    </ThemeProvider>
-  );
-}
+    </AuthProvider>
+  </QueryClientProvider>
+);
 
 export default App;
