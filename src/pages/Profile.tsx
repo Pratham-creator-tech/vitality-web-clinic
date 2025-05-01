@@ -51,6 +51,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Link } from "react-router-dom";
 
 // Form schemas
 const personalInfoSchema = z.object({
@@ -679,7 +680,7 @@ const Profile = () => {
                                 <FormItem>
                                   <FormLabel>Height</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Your height (e.g., 5'10\" or 178 cm)" {...field} />
+                                    <Input placeholder="Your height (e.g., 5'10&quot; or 178 cm)" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
