@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import gsap from 'gsap';
 
 type BodyPart = {
   id: string;
@@ -26,7 +27,7 @@ interface Interactive3DBodyMapProps {
 
 const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBodyMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const selectedPartRef = useRef<THREE.Object3D | null>(null);
+  const selectedPartRef = useRef<THREE.Mesh | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
