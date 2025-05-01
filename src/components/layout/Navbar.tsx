@@ -46,7 +46,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="font-display text-xl md:text-2xl font-bold text-vitality-700 dark:text-vitality-300">
-              Vitality
+              YASHA's Physiocare
               <span className="text-accent">.</span>
             </span>
           </Link>
@@ -96,7 +96,21 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : null}
+            ) : (
+              <div className="flex gap-2">
+                <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
+                  <Link to="/signin">Sign In</Link>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="text-gray-700 dark:text-gray-200">
+                  <Link to="/signup">Sign Up</Link>
+                </Button>
+              </div>
+            )}
+
+            {/* Booking Button - Make sure it's always visible */}
+            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white hidden md:flex">
+              <Link to="/booking">Book Appointment</Link>
+            </Button>
 
             {/* Mobile Menu Button */}
             <Button

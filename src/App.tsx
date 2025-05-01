@@ -29,6 +29,17 @@ import PostSurgical from "./pages/services/PostSurgical";
 import ChronicPain from "./pages/services/ChronicPain";
 import Neurological from "./pages/services/Neurological";
 import StrengthConditioning from "./pages/services/StrengthConditioning";
+import PediatricRehabilitation from "./pages/services/PediatricRehabilitation";
+import GeriatricRehabilitation from "./pages/services/GeriatricRehabilitation";
+import WomensHealth from "./pages/services/WomensHealth";
+import PosturalAlignment from "./pages/services/PosturalAlignment";
+import ObesityManagement from "./pages/services/ObesityManagement";
+import GroupExercises from "./pages/services/GroupExercises";
+import Kinesiotaping from "./pages/services/Kinesiotaping";
+import DryNeedling from "./pages/services/DryNeedling";
+import NeuroDynamic from "./pages/services/NeuroDynamic";
+import CuppingTherapy from "./pages/services/CuppingTherapy";
+import VirtualPhysiotherapy from "./pages/services/VirtualPhysiotherapy";
 import AIAssistant from "./pages/AIAssistant";
 import DoctorUSP from "./pages/DoctorUSP";
 import PatientsList from "./pages/PatientsList";
@@ -64,6 +75,7 @@ const App = () => (
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/patients" element={<PatientsList />} />
                 
                 {/* Service specific pages */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
@@ -72,11 +84,21 @@ const App = () => (
                 <Route path="/services/chronic-pain" element={<ChronicPain />} />
                 <Route path="/services/neurological" element={<Neurological />} />
                 <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
+                <Route path="/services/pediatric-rehabilitation" element={<PediatricRehabilitation />} />
+                <Route path="/services/geriatric-rehabilitation" element={<GeriatricRehabilitation />} />
+                <Route path="/services/womens-health" element={<WomensHealth />} />
+                <Route path="/services/postural-alignment" element={<PosturalAlignment />} />
+                <Route path="/services/obesity-management" element={<ObesityManagement />} />
+                <Route path="/services/group-exercises" element={<GroupExercises />} />
+                <Route path="/services/kinesiotaping" element={<Kinesiotaping />} />
+                <Route path="/services/dry-needling" element={<DryNeedling />} />
+                <Route path="/services/neuro-dynamic" element={<NeuroDynamic />} />
+                <Route path="/services/cupping-therapy" element={<CuppingTherapy />} />
+                <Route path="/services/virtual-physiotherapy" element={<VirtualPhysiotherapy />} />
                 
                 {/* New features */}
                 <Route path="/ai-assistant" element={<AIAssistant />} />
                 <Route path="/doctor-benefits" element={<DoctorUSP />} />
-                <Route path="/patients" element={<PatientsList />} />
                 <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
                 <Route path="/pain-tracker" element={<PainTracker />} />
                 <Route path="/video-library" element={<VideoLibrary />} />

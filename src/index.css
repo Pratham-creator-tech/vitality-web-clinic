@@ -90,10 +90,16 @@
   body {
     @apply bg-background text-foreground overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
+    max-width: 100vw;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 }
 
