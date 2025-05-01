@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { ScrollToTop } from "./components/ui/scroll-to-top";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -40,50 +42,53 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/booking" element={<Booking />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              <Route path="/doctor-registration" element={<DoctorRegistration />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              
-              {/* Service specific pages */}
-              <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
-              <Route path="/services/manual-therapy" element={<ManualTherapy />} />
-              <Route path="/services/post-surgical" element={<PostSurgical />} />
-              <Route path="/services/chronic-pain" element={<ChronicPain />} />
-              <Route path="/services/neurological" element={<Neurological />} />
-              <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
-              
-              {/* New features */}
-              <Route path="/ai-assistant" element={<AIAssistant />} />
-              <Route path="/doctor-benefits" element={<DoctorUSP />} />
-              <Route path="/patients" element={<PatientsList />} />
-              <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
-              <Route path="/pain-tracker" element={<PainTracker />} />
-              <Route path="/video-library" element={<VideoLibrary />} />
-              <Route path="/virtual-tour" element={<VirtualTour />} />
-              
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-      </LanguageProvider>
+      <ThemeProvider>
+        <LanguageProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <ScrollToTop />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/booking" element={<Booking />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/doctor-registration" element={<DoctorRegistration />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                
+                {/* Service specific pages */}
+                <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
+                <Route path="/services/manual-therapy" element={<ManualTherapy />} />
+                <Route path="/services/post-surgical" element={<PostSurgical />} />
+                <Route path="/services/chronic-pain" element={<ChronicPain />} />
+                <Route path="/services/neurological" element={<Neurological />} />
+                <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
+                
+                {/* New features */}
+                <Route path="/ai-assistant" element={<AIAssistant />} />
+                <Route path="/doctor-benefits" element={<DoctorUSP />} />
+                <Route path="/patients" element={<PatientsList />} />
+                <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
+                <Route path="/pain-tracker" element={<PainTracker />} />
+                <Route path="/video-library" element={<VideoLibrary />} />
+                <Route path="/virtual-tour" element={<VirtualTour />} />
+                
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

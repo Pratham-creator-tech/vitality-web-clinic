@@ -15,7 +15,11 @@ import {
   Save,
   Key,
   Image,
-  CreditCard
+  CreditCard,
+  Activity,
+  Briefcase,
+  UserPlus,
+  Settings
 } from "lucide-react";
 
 import PageLayout from "@/components/layout/PageLayout";
@@ -40,6 +44,13 @@ import {
   TabsTrigger 
 } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Form schemas
 const personalInfoSchema = z.object({
@@ -48,7 +59,14 @@ const personalInfoSchema = z.object({
   phone: z.string().min(10, "Please enter a valid phone number"),
   dateOfBirth: z.string().optional(),
   address: z.string().min(5, "Please provide your address"),
+  city: z.string().min(2, "Please provide your city"),
+  state: z.string().min(2, "Please provide your state/province"),
+  zipCode: z.string().min(4, "Please provide your postal/zip code"),
+  country: z.string().min(2, "Please provide your country"),
   emergencyContact: z.string().optional(),
+  occupation: z.string().optional(),
+  preferredLanguage: z.string().optional(),
+  communicationPreference: z.string().optional(),
   bio: z.string().optional(),
 });
 
@@ -59,6 +77,10 @@ const medicalInfoSchema = z.object({
   insuranceProvider: z.string().optional(),
   insuranceNumber: z.string().optional(),
   primaryPhysician: z.string().optional(),
+  bloodType: z.string().optional(),
+  height: z.string().optional(),
+  weight: z.string().optional(),
+  exerciseFrequency: z.string().optional(),
 });
 
 // Professional info for doctors only
@@ -68,6 +90,8 @@ const professionalInfoSchema = z.object({
   yearsExperience: z.string().min(1, "Please enter years of experience"),
   clinic: z.string().min(2, "Please enter your clinic name"),
   languages: z.string().min(2, "Please list languages you speak"),
+  licensureNumber: z.string().optional(),
+  professionalBio: z.string().optional(),
   consultationFees: z.string().optional(),
   availability: z.string().optional(),
 });
@@ -93,6 +117,13 @@ const Profile = () => {
       phone: "(555) 123-4567",
       dateOfBirth: "1985-05-15",
       address: "123 Main St, Anytown, CA 90210",
+      city: "Anytown",
+      state: "California",
+      zipCode: "90210",
+      country: "United States",
+      occupation: "Software Engineer",
+      preferredLanguage: "English",
+      communicationPreference: "Email",
       emergencyContact: "Jane Doe, (555) 987-6543, Spouse",
       bio: "I enjoy hiking and playing tennis. I'm currently recovering from a knee injury.",
     }
@@ -107,7 +138,11 @@ const Profile = () => {
       medications: "Lisinopril 10mg daily",
       insuranceProvider: "Blue Cross Blue Shield",
       insuranceNumber: "BCB12345678",
-      primaryPhysician: "Dr. Sarah Johnson"
+      primaryPhysician: "Dr. Sarah Johnson",
+      bloodType: "O+",
+      height: "5'10\" / 178 cm",
+      weight: "165 lbs / 75 kg",
+      exerciseFrequency: "2-3 times per week",
     }
   });
 
@@ -120,6 +155,8 @@ const Profile = () => {
       yearsExperience: "12",
       clinic: "Vitality Physio Main Clinic",
       languages: "English, Spanish",
+      licensureNumber: "PT12345",
+      professionalBio: "Specialized in sports injuries with over a decade of experience working with professional athletes.",
       consultationFees: "$150 per session",
       availability: "Mon-Fri, 9:00 AM - 5:00 PM"
     }
@@ -183,8 +220,23 @@ const Profile = () => {
     setIsDoctor(!isDoctor);
   };
 
+  // Quick links for the sidebar
+  const quickLinks = isDoctor ? [
+    { icon: <Calendar className="mr-2 h-4 w-4" />, label: "Appointments", url: "/booking" },
+    { icon: <UserPlus className="mr-2 h-4 w-4" />, label: "My Patients", url: "/patients" },
+    { icon: <Activity className="mr-2 h-4 w-4" />, label: "Patient Analytics", url: "/patients" },
+    { icon: <CreditCard className="mr-2 h-4 w-4" />, label: "Billing", url: "/pricing" },
+    { icon: <Settings className="mr-2 h-4 w-4" />, label: "Account Settings", url: "#" }
+  ] : [
+    { icon: <Calendar className="mr-2 h-4 w-4" />, label: "My Appointments", url: "/booking" },
+    { icon: <Activity className="mr-2 h-4 w-4" />, label: "Pain Tracker", url: "/pain-tracker" },
+    { icon: <Briefcase className="mr-2 h-4 w-4" />, label: "My Exercises", url: "/video-library" },
+    { icon: <CreditCard className="mr-2 h-4 w-4" />, label: "Billing", url: "/pricing" },
+    { icon: <Settings className="mr-2 h-4 w-4" />, label: "Account Settings", url: "#" }
+  ];
+
   return (
-    <PageLayout className="py-10 bg-gray-50">
+    <PageLayout className="py-10 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="flex justify-between items-center mb-6">
           <SectionTitle 
@@ -229,27 +281,27 @@ const Profile = () => {
                 <div className="mt-6 space-y-3">
                   <div className="flex items-center text-sm">
                     <Mail size={16} className="mr-2 text-gray-500" />
-                    <span className="text-gray-700 truncate">
+                    <span className="text-gray-700 dark:text-gray-300 truncate">
                       {isDoctor ? "dr.john@example.com" : "john.doe@example.com"}
                     </span>
                   </div>
                   <div className="flex items-center text-sm">
                     <Phone size={16} className="mr-2 text-gray-500" />
-                    <span className="text-gray-700">
+                    <span className="text-gray-700 dark:text-gray-300">
                       (555) 123-4567
                     </span>
                   </div>
                   {isDoctor ? (
                     <div className="flex items-center text-sm">
                       <MapPin size={16} className="mr-2 text-gray-500" />
-                      <span className="text-gray-700 truncate">
+                      <span className="text-gray-700 dark:text-gray-300 truncate">
                         Vitality Main Clinic
                       </span>
                     </div>
                   ) : (
                     <div className="flex items-center text-sm">
                       <Calendar size={16} className="mr-2 text-gray-500" />
-                      <span className="text-gray-700">
+                      <span className="text-gray-700 dark:text-gray-300">
                         Next Appointment: May 15, 2025
                       </span>
                     </div>
@@ -264,30 +316,24 @@ const Profile = () => {
               </CardContent>
             </Card>
 
-            {/* Additional sidebar card for quick links */}
+            {/* Quick links sidebar card */}
             <Card className="shadow-md mt-4">
               <CardContent className="pt-6">
                 <h3 className="font-medium mb-3">Quick Links</h3>
                 <div className="space-y-2">
-                  <Button variant="ghost" className="w-full justify-start text-sm">
-                    <Key size={16} className="mr-2" />
-                    Change Password
-                  </Button>
-                  <Button variant="ghost" className="w-full justify-start text-sm">
-                    <CreditCard size={16} className="mr-2" />
-                    Billing Information
-                  </Button>
-                  {isDoctor ? (
-                    <Button variant="ghost" className="w-full justify-start text-sm">
-                      <Calendar size={16} className="mr-2" />
-                      Manage Schedule
+                  {quickLinks.map((link, index) => (
+                    <Button 
+                      key={index}
+                      variant="ghost" 
+                      className="w-full justify-start text-sm"
+                      asChild
+                    >
+                      <Link to={link.url} className="flex items-center">
+                        {link.icon}
+                        {link.label}
+                      </Link>
                     </Button>
-                  ) : (
-                    <Button variant="ghost" className="w-full justify-start text-sm">
-                      <Calendar size={16} className="mr-2" />
-                      Appointments
-                    </Button>
-                  )}
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -374,21 +420,149 @@ const Profile = () => {
                               </FormItem>
                             )}
                           />
+
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="occupation"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Occupation</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your occupation" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="preferredLanguage"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Preferred Language</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select language" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="English">English</SelectItem>
+                                    <SelectItem value="Spanish">Spanish</SelectItem>
+                                    <SelectItem value="French">French</SelectItem>
+                                    <SelectItem value="Chinese">Chinese</SelectItem>
+                                    <SelectItem value="Hindi">Hindi</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="communicationPreference"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Communication Preference</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange} 
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select preference" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="Email">Email</SelectItem>
+                                    <SelectItem value="Phone">Phone</SelectItem>
+                                    <SelectItem value="SMS">SMS</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
                         </div>
 
+                        <h3 className="font-medium text-lg mt-6 mb-3">Address Information</h3>
+                        
                         <FormField
                           control={personalInfoForm.control}
                           name="address"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Address</FormLabel>
+                              <FormLabel>Street Address</FormLabel>
                               <FormControl>
-                                <Input placeholder="Your full address" {...field} />
+                                <Input placeholder="Street address" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="city"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>City</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your city" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="state"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>State/Province</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your state or province" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="zipCode"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Postal/ZIP Code</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your postal/ZIP code" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={personalInfoForm.control}
+                            name="country"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Country</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="Your country" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
 
                         <FormField
                           control={personalInfoForm.control}
@@ -468,12 +642,44 @@ const Profile = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormField
                               control={medicalInfoForm.control}
-                              name="insuranceProvider"
+                              name="bloodType"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Insurance Provider</FormLabel>
+                                  <FormLabel>Blood Type</FormLabel>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select blood type" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      <SelectItem value="A+">A+</SelectItem>
+                                      <SelectItem value="A-">A-</SelectItem>
+                                      <SelectItem value="B+">B+</SelectItem>
+                                      <SelectItem value="B-">B-</SelectItem>
+                                      <SelectItem value="AB+">AB+</SelectItem>
+                                      <SelectItem value="AB-">AB-</SelectItem>
+                                      <SelectItem value="O+">O+</SelectItem>
+                                      <SelectItem value="O-">O-</SelectItem>
+                                      <SelectItem value="Unknown">Unknown</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={medicalInfoForm.control}
+                              name="height"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Height</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Your insurance company" {...field} />
+                                    <Input placeholder="Your height (e.g., 5'10\" or 178 cm)" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -482,12 +688,12 @@ const Profile = () => {
 
                             <FormField
                               control={medicalInfoForm.control}
-                              name="insuranceNumber"
+                              name="weight"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Insurance ID/Policy Number</FormLabel>
+                                  <FormLabel>Weight</FormLabel>
                                   <FormControl>
-                                    <Input placeholder="Your insurance ID" {...field} />
+                                    <Input placeholder="Your weight (e.g., 165 lbs or 75 kg)" {...field} />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -496,13 +702,27 @@ const Profile = () => {
 
                             <FormField
                               control={medicalInfoForm.control}
-                              name="primaryPhysician"
+                              name="exerciseFrequency"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Primary Physician</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your doctor's name" {...field} />
-                                  </FormControl>
+                                  <FormLabel>Exercise Frequency</FormLabel>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select frequency" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      <SelectItem value="None">None</SelectItem>
+                                      <SelectItem value="1 time per week">1 time per week</SelectItem>
+                                      <SelectItem value="2-3 times per week">2-3 times per week</SelectItem>
+                                      <SelectItem value="4-5 times per week">4-5 times per week</SelectItem>
+                                      <SelectItem value="Daily">Daily</SelectItem>
+                                    </SelectContent>
+                                  </Select>
                                   <FormMessage />
                                 </FormItem>
                               )}
@@ -563,6 +783,50 @@ const Profile = () => {
                             )}
                           />
 
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField
+                              control={medicalInfoForm.control}
+                              name="insuranceProvider"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Insurance Provider</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Your insurance company" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={medicalInfoForm.control}
+                              name="insuranceNumber"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Insurance ID/Policy Number</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Your insurance ID" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={medicalInfoForm.control}
+                              name="primaryPhysician"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Primary Physician</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Your doctor's name" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+
                           <div className="flex justify-end">
                             <Button 
                               type="submit"
@@ -605,9 +869,26 @@ const Profile = () => {
                               render={({ field }) => (
                                 <FormItem>
                                   <FormLabel>Specialization</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your area of expertise" {...field} />
-                                  </FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange} 
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select specialization" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      <SelectItem value="Sports Rehabilitation">Sports Rehabilitation</SelectItem>
+                                      <SelectItem value="Manual Therapy">Manual Therapy</SelectItem>
+                                      <SelectItem value="Post-Surgical Rehabilitation">Post-Surgical Rehabilitation</SelectItem>
+                                      <SelectItem value="Chronic Pain Management">Chronic Pain Management</SelectItem>
+                                      <SelectItem value="Neurological Rehabilitation">Neurological Rehabilitation</SelectItem>
+                                      <SelectItem value="Strength & Conditioning">Strength & Conditioning</SelectItem>
+                                      <SelectItem value="Geriatric Physical Therapy">Geriatric Physical Therapy</SelectItem>
+                                      <SelectItem value="Pediatric Physical Therapy">Pediatric Physical Therapy</SelectItem>
+                                    </SelectContent>
+                                  </Select>
                                   <FormMessage />
                                 </FormItem>
                               )}
@@ -671,6 +952,20 @@ const Profile = () => {
 
                             <FormField
                               control={professionalInfoForm.control}
+                              name="licensureNumber"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Professional License Number</FormLabel>
+                                  <FormControl>
+                                    <Input placeholder="Your license number" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={professionalInfoForm.control}
                               name="consultationFees"
                               render={({ field }) => (
                                 <FormItem>
@@ -683,6 +978,24 @@ const Profile = () => {
                               )}
                             />
                           </div>
+
+                          <FormField
+                            control={professionalInfoForm.control}
+                            name="professionalBio"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Professional Bio</FormLabel>
+                                <FormControl>
+                                  <Textarea 
+                                    placeholder="Share your professional background and expertise"
+                                    className="min-h-24"
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
                           <FormField
                             control={professionalInfoForm.control}
@@ -761,7 +1074,7 @@ const Profile = () => {
 
                       <div className="pt-6 border-t">
                         <h3 className="text-lg font-medium mb-2">Two-Factor Authentication</h3>
-                        <p className="text-sm text-gray-500 mb-4">
+                        <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">
                           Add an extra layer of security to your account by enabling two-factor authentication.
                         </p>
                         <Button variant="outline">
@@ -771,7 +1084,7 @@ const Profile = () => {
 
                       <div className="pt-6 border-t">
                         <h3 className="text-lg font-medium mb-2">Delete Account</h3>
-                        <p className="text-sm text-gray-500 mb-4">
+                        <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">
                           Permanently delete your account and all associated data. This action cannot be undone.
                         </p>
                         <Button variant="destructive">
