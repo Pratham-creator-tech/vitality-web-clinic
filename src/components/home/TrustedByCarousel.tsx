@@ -3,14 +3,38 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 const partners = [
-  { name: "Mayo Clinic", logo: "/placeholder.svg" },
-  { name: "Johns Hopkins", logo: "/placeholder.svg" },
-  { name: "Cleveland Clinic", logo: "/placeholder.svg" },
-  { name: "NYU Langone", logo: "/placeholder.svg" },
-  { name: "Mass General", logo: "/placeholder.svg" },
-  { name: "UCLA Medical", logo: "/placeholder.svg" },
-  { name: "Stanford Health", logo: "/placeholder.svg" },
-  { name: "UCSF Medical", logo: "/placeholder.svg" },
+  { 
+    name: "Mayo Clinic", 
+    logo: "https://logos-world.net/wp-content/uploads/2021/02/Mayo-Clinic-Logo-700x394.png" 
+  },
+  { 
+    name: "Johns Hopkins", 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Johns_Hopkins_Medicine_logo.svg" 
+  },
+  { 
+    name: "Cleveland Clinic", 
+    logo: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Cleveland_Clinic_logo.svg" 
+  },
+  { 
+    name: "NYU Langone", 
+    logo: "https://logos-download.com/wp-content/uploads/2021/01/NYU_Langone_Health_Logo.png" 
+  },
+  { 
+    name: "Mass General", 
+    logo: "https://upload.wikimedia.org/wikipedia/en/7/7d/Massachusetts_General_Hospital_logo.svg" 
+  },
+  { 
+    name: "UCLA Medical", 
+    logo: "https://brand.ucla.edu/images/logos-and-marks/campus-logos/horizontal/campus-logo-blue-horizontal.svg" 
+  },
+  { 
+    name: "Stanford Health", 
+    logo: "https://med.stanford.edu/etc/designs/sm/images/stanford-health-care-logo.svg" 
+  },
+  { 
+    name: "UCSF Medical", 
+    logo: "https://www.ucsf.edu/sites/default/files/2019-04/ucsf_logo_heritage_blue_rgb.svg" 
+  },
 ];
 
 const TrustedByCarousel = () => {
@@ -57,7 +81,7 @@ const TrustedByCarousel = () => {
                 <img 
                   src={partner.logo} 
                   alt={`${partner.name} logo`} 
-                  className="h-14 w-14 object-contain opacity-70 dark:opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                  className="h-14 w-36 object-contain opacity-70 dark:opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                 />
                 <span className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
                   {partner.name}
@@ -76,7 +100,7 @@ const TrustedByCarousel = () => {
                 <img 
                   src={partner.logo} 
                   alt={`${partner.name} logo`} 
-                  className="h-14 w-14 object-contain opacity-70 dark:opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                  className="h-14 w-36 object-contain opacity-70 dark:opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
                 />
                 <span className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
                   {partner.name}

@@ -74,7 +74,7 @@
     --vitality-950: #eef5ff;
     --brand-softblue: #101827;
     --brand-orange: #ff7a50;
-    --accent: #3169ee;
+    --accent: #4b83f7;
   }
 }
 
@@ -82,8 +82,13 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
@@ -98,4 +103,13 @@
 
 .dark .dark\:invert {
   filter: invert(1);
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }

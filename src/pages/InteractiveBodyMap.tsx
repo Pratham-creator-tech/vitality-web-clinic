@@ -14,9 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-
-// Import SVG as component
-import BodyMapSVG from "@/components/features/BodyMapSVG";
+import Interactive3DBodyMap from "@/components/features/Interactive3DBodyMap";
 
 type BodyPart = {
   id: string;
@@ -204,10 +202,10 @@ const InteractiveBodyMap = () => {
 
   return (
     <PageLayout>
-      <div className="container mx-auto py-16 px-4">
+      <div className="container mx-auto py-16 px-4 max-w-full overflow-x-hidden">
         <SectionTitle
           title="Interactive Body Map"
-          subtitle="Click on any body part to learn about common injuries and treatments"
+          subtitle="Explore the human body and learn about common injuries and treatments"
           center
         />
 
@@ -215,37 +213,20 @@ const InteractiveBodyMap = () => {
           <div className="md:col-span-1 flex flex-col">
             <Card>
               <CardHeader>
-                <CardTitle>Select View</CardTitle>
-                <CardDescription>Choose front or back view of the body</CardDescription>
+                <CardTitle>Instructions</CardTitle>
               </CardHeader>
               <CardContent>
-                <Tabs defaultValue="front" className="w-full" onValueChange={(value) => setView(value as "front" | "back")}>
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="front">Front View</TabsTrigger>
-                    <TabsTrigger value="back">Back View</TabsTrigger>
-                  </TabsList>
-                </Tabs>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  Interact with the 3D model to learn about common injuries and treatments for different body regions.
+                </p>
+                <ul className="list-disc pl-5 space-y-2 text-gray-600 dark:text-gray-300">
+                  <li>Click and drag to rotate the model</li>
+                  <li>Click on any body part for information</li>
+                  <li>Toggle between front and back views</li>
+                  <li>Learn about treatments we offer</li>
+                </ul>
               </CardContent>
             </Card>
-
-            <div className="mt-4 flex-grow">
-              <Card className="h-full">
-                <CardHeader>
-                  <CardTitle>Instructions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 mb-4">
-                    Click on any highlighted area of the body to learn about common injuries and treatments for that region.
-                  </p>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                    <li>Explore different body parts</li>
-                    <li>Learn about common conditions</li>
-                    <li>Discover treatment options</li>
-                    <li>Find relevant services</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
           </div>
 
           <div className="md:col-span-1 flex justify-center items-center">
@@ -253,9 +234,12 @@ const InteractiveBodyMap = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="relative w-full max-w-[300px] h-[600px]"
+              className="relative w-full max-w-[400px] h-[600px]"
             >
-              <BodyMapSVG view={view} onPartClick={handlePartClick} />
+              <Interactive3DBodyMap 
+                bodyPartsData={bodyPartsData} 
+                onPartSelect={handlePartClick}
+              />
             </motion.div>
           </div>
 
@@ -277,23 +261,23 @@ const InteractiveBodyMap = () => {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <p className="text-gray-600 mb-4">{selectedPart.description}</p>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">{selectedPart.description}</p>
                     
-                    <h4 className="font-semibold text-vitality-700 mt-4 mb-2">Common Issues:</h4>
-                    <ul className="list-disc pl-5 space-y-1 text-gray-600 mb-4">
+                    <h4 className="font-semibold text-vitality-700 dark:text-vitality-300 mt-4 mb-2">Common Issues:</h4>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300 mb-4">
                       {selectedPart.commonIssues.map((issue, index) => (
                         <li key={index}>{issue}</li>
                       ))}
                     </ul>
                     
-                    <h4 className="font-semibold text-vitality-700 mt-4 mb-2">Treatment Approaches:</h4>
-                    <ul className="list-disc pl-5 space-y-1 text-gray-600 mb-6">
+                    <h4 className="font-semibold text-vitality-700 dark:text-vitality-300 mt-4 mb-2">Treatment Approaches:</h4>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-600 dark:text-gray-300 mb-6">
                       {selectedPart.treatments.map((treatment, index) => (
                         <li key={index}>{treatment}</li>
                       ))}
                     </ul>
                     
-                    <Button asChild className="w-full mt-4">
+                    <Button asChild className="w-full mt-4 bg-vitality-600 hover:bg-vitality-700 text-white">
                       <Link to={selectedPart.link} className="flex items-center justify-center">
                         View Related Services
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -302,7 +286,7 @@ const InteractiveBodyMap = () => {
                   </motion.div>
                 ) : (
                   <div className="text-center py-12">
-                    <p className="text-gray-500 mb-4">Click on a body part to view information</p>
+                    <p className="text-gray-500 dark:text-gray-400 mb-4">Click on a body part to view information</p>
                   </div>
                 )}
               </CardContent>

@@ -27,13 +27,13 @@ const HeroSection = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Button asChild size="lg" className="bg-accent hover:bg-accent/90">
+              <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
                 <Link to="/booking" className="flex items-center">
                   <CalendarCheck className="mr-2 h-5 w-5" />
                   {t("app.cta.book")}
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="border-vitality-500 text-vitality-600 hover:bg-vitality-50 dark:text-vitality-300 dark:border-vitality-700 dark:hover:bg-vitality-950/30">
                 <Link to="/ai-assistant" className="flex items-center">
                   Chat with AI Assistant
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -58,7 +58,7 @@ const HeroSection = () => {
             
             <div className="flex items-center space-x-4">
               <div className="flex -space-x-4">
-                <div className="w-10 h-10 rounded-full bg-vitality-300 flex items-center justify-center text-white text-xs font-bold">
+                <div className="w-10 h-10 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold">
                   4.9
                 </div>
                 <div className="flex space-x-1 items-center bg-white py-1 px-3 rounded-full shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-700">

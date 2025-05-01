@@ -21,8 +21,8 @@ export const NavbarLinks = () => {
     return pathname === path;
   };
 
-  const linkStyle = "relative flex items-center gap-1.5 text-sm font-medium py-2 px-4 hover:text-vitality-500 transition-colors";
-  const activeLinkStyle = "text-vitality-500";
+  const linkStyle = "relative flex items-center gap-1.5 text-sm font-medium py-2 px-3 hover:text-vitality-500 transition-colors";
+  const activeLinkStyle = "text-vitality-500 font-semibold";
 
   const linkAnimation = {
     initial: { opacity: 0, y: -10 },
@@ -36,13 +36,13 @@ export const NavbarLinks = () => {
       <div className="flex items-center space-x-1">
         <Link
           to="/"
-          className={`${linkStyle} ${isActive("/") ? activeLinkStyle : "text-gray-700"}`}
+          className={`${linkStyle} ${isActive("/") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
         >
           {t("app.header.home")}
           {isActive("/") && (
             <motion.span
               layoutId="navigation-underline"
-              className="absolute left-4 right-4 bottom-0 h-0.5 bg-vitality-400"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
               animate={{ opacity: 1 }}
               initial={{ opacity: 0 }}
             />
@@ -55,11 +55,10 @@ export const NavbarLinks = () => {
               className={`${linkStyle} ${
                 pathname.includes("/about") || pathname.includes("/doctor-benefits")
                   ? activeLinkStyle
-                  : "text-gray-700"
+                  : "text-gray-700 dark:text-gray-200"
               }`}
             >
               <span className="flex items-center">
-                <Info className="h-4 w-4 mr-1" />
                 {t("app.header.about")}
                 <ChevronDown className="h-4 w-4 ml-1" />
               </span>
@@ -90,7 +89,7 @@ export const NavbarLinks = () => {
               className={`${linkStyle} ${
                 pathname.includes("/services")
                   ? activeLinkStyle
-                  : "text-gray-700"
+                  : "text-gray-700 dark:text-gray-200"
               }`}
             >
               <span className="flex items-center">
@@ -140,13 +139,13 @@ export const NavbarLinks = () => {
 
         <Link
           to="/pricing"
-          className={`${linkStyle} ${isActive("/pricing") ? activeLinkStyle : "text-gray-700"}`}
+          className={`${linkStyle} ${isActive("/pricing") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
         >
           {t("app.header.pricing")}
           {isActive("/pricing") && (
             <motion.span
               layoutId="navigation-underline"
-              className="absolute left-4 right-4 bottom-0 h-0.5 bg-vitality-400"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
               animate={{ opacity: 1 }}
               initial={{ opacity: 0 }}
             />
@@ -162,11 +161,11 @@ export const NavbarLinks = () => {
                 pathname.includes("/pain-tracker") || 
                 pathname.includes("/ai-assistant")
                   ? activeLinkStyle
-                  : "text-gray-700"
+                  : "text-gray-700 dark:text-gray-200"
               }`}
             >
               <span className="flex items-center">
-                Resources
+                {t("app.menu.resources")}
                 <ChevronDown className="h-4 w-4 ml-1" />
               </span>
             </button>
@@ -194,12 +193,12 @@ export const NavbarLinks = () => {
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/blog" className="flex items-center">
-                {t("app.header.blog")}
+                Blog
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/faq" className="flex items-center">
-                {t("app.header.faq")}
+                FAQ
               </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -207,14 +206,13 @@ export const NavbarLinks = () => {
 
         <Link
           to="/contact"
-          className={`${linkStyle} ${isActive("/contact") ? activeLinkStyle : "text-gray-700"}`}
+          className={`${linkStyle} ${isActive("/contact") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
         >
-          <Phone className="h-4 w-4 mr-1" />
           {t("app.header.contact")}
           {isActive("/contact") && (
             <motion.span
               layoutId="navigation-underline"
-              className="absolute left-4 right-4 bottom-0 h-0.5 bg-vitality-400"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
               animate={{ opacity: 1 }}
               initial={{ opacity: 0 }}
             />
@@ -225,14 +223,14 @@ export const NavbarLinks = () => {
       {/* Auth & Actions */}
       <div className="flex items-center ml-4">
         {user ? (
-          <Button asChild variant="ghost" size="sm" className="mr-2">
+          <Button asChild variant="ghost" size="sm" className="mr-2 text-gray-700 dark:text-gray-200">
             <Link to="/profile" className="flex items-center gap-1.5">
               <User className="h-4 w-4" />
               {t("app.header.profile")}
             </Link>
           </Button>
         ) : (
-          <Button asChild variant="ghost" size="sm" className="mr-2">
+          <Button asChild variant="ghost" size="sm" className="mr-2 text-gray-700 dark:text-gray-200">
             <Link to="/signin" className="flex items-center gap-1.5">
               <User className="h-4 w-4" />
               {t("app.header.signin")}
@@ -240,7 +238,7 @@ export const NavbarLinks = () => {
           </Button>
         )}
         
-        <Button asChild size="sm" className="bg-accent hover:bg-accent/90">
+        <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-white">
           <Link to="/booking" className="flex items-center gap-1.5">
             <CalendarCheck className="h-4 w-4" />
             {t("app.header.booking")}
