@@ -32,8 +32,8 @@ const Services = () => {
                   .map((service) => (
                     <Link
                       key={service.id}
-                      to={service.link}
-                      className="group bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
+                      to={`/services/${service.id}`}
+                      className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300"
                     >
                       <div className="aspect-video w-full overflow-hidden">
                         <img
@@ -43,14 +43,14 @@ const Services = () => {
                         />
                       </div>
                       <div className="p-6">
-                        <div className="bg-vitality-50 rounded-xl p-4 inline-block mb-4">
+                        <div className="bg-vitality-50 dark:bg-vitality-900/30 rounded-xl p-4 inline-block mb-4">
                           {service.icon}
                         </div>
-                        <h3 className="text-xl font-bold mb-3 text-vitality-700 group-hover:text-vitality-500 transition-colors">
+                        <h3 className="text-xl font-bold mb-3 text-vitality-700 dark:text-vitality-300 group-hover:text-vitality-500 transition-colors">
                           {service.title}
                         </h3>
-                        <p className="text-gray-600 mb-4">{service.description}</p>
-                        <div className="inline-flex items-center text-vitality-500 font-medium group-hover:text-vitality-600">
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">{service.description}</p>
+                        <div className="inline-flex items-center text-vitality-500 dark:text-vitality-400 font-medium group-hover:text-vitality-600 dark:group-hover:text-vitality-300">
                           Learn More
                           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </div>

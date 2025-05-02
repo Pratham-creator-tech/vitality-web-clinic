@@ -1,8 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
-import { CalendarCheck, ChevronDown, Info, Phone, UserRound } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 import { 
@@ -17,6 +16,9 @@ export const NavbarLinks = () => {
   const { t } = useLanguage();
 
   const isActive = (path: string) => {
+    if (path === "/services" && pathname.includes("/services/")) {
+      return true;
+    }
     return pathname === path;
   };
 
@@ -112,61 +114,6 @@ export const NavbarLinks = () => {
                 Strength & Conditioning
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/pediatric-rehabilitation" className="flex items-center">
-                Pediatric Rehabilitation
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/geriatric-rehabilitation" className="flex items-center">
-                Geriatric Rehabilitation
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/womens-health" className="flex items-center">
-                Women's Health
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/postural-alignment" className="flex items-center">
-                Postural Alignment
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/obesity-management" className="flex items-center">
-                Obesity Management & Fitness
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/group-exercises" className="flex items-center">
-                Group Exercises
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/kinesiotaping" className="flex items-center">
-                Kinesiotaping
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/dry-needling" className="flex items-center">
-                Dry Needling Therapy
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/neuro-dynamic" className="flex items-center">
-                Neuro Dynamic Solution
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/cupping-therapy" className="flex items-center">
-                Cupping Therapy
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/services/virtual-physiotherapy" className="flex items-center">
-                Virtual Physiotherapy
-              </Link>
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -190,7 +137,6 @@ export const NavbarLinks = () => {
           to="/patients"
           className={`${linkStyle} ${isActive("/patients") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
         >
-          <UserRound className="h-4 w-4 mr-1" />
           Patients
           {isActive("/patients") && (
             <motion.span
@@ -268,16 +214,6 @@ export const NavbarLinks = () => {
             />
           )}
         </Link>
-      </div>
-
-      {/* Booking Button - Always visible */}
-      <div className="ml-4">
-        <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white hidden lg:flex">
-          <Link to="/booking" className="flex items-center gap-1.5">
-            <CalendarCheck className="h-4 w-4" />
-            {t("app.header.booking")}
-          </Link>
-        </Button>
       </div>
     </div>
   );

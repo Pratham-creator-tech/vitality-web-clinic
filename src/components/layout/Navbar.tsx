@@ -46,36 +46,61 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo - with animation and linked to home */}
           <Link to="/" className="flex items-center group">
-            <motion.span 
-              className="font-display text-xl md:text-2xl font-bold text-vitality-700 dark:text-vitality-300"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
-                YASHA's Physiocare
-              </span>
+            <div className="flex items-center">
+              {/* Logo Image */}
+              <div className="w-10 h-10 mr-3 overflow-hidden">
+                <motion.img 
+                  src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
+                  alt="YASHA's Physiocare Logo"
+                  className="w-full h-full object-contain"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotate: [0, -2, 2, -2, 0],
+                    transition: { duration: 0.5 }
+                  }}
+                />
+              </div>
+              
+              {/* Text Logo */}
               <motion.span 
-                className="text-accent inline-block"
-                animate={{ 
-                  rotate: [0, 8, -5, 0],
-                  scale: [1, 1.2, 0.9, 1] 
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatDelay: 5
-                }}
-              >.</motion.span>
-            </motion.span>
+                className="font-display text-xl md:text-2xl font-bold"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
+                  YASHA's Physiocare
+                </span>
+                <motion.span 
+                  className="text-accent inline-block"
+                  animate={{ 
+                    rotate: [0, 8, -5, 0],
+                    scale: [1, 1.2, 0.9, 1] 
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    repeatDelay: 5
+                  }}
+                >.</motion.span>
+              </motion.span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
           <NavbarLinks />
 
-          {/* Right Side: Theme, Language, Avatar */}
+          {/* Right Side: Theme, Language, Avatar, Book Appointment */}
           <div className="flex items-center gap-2">
+            {/* Book Appointment Button - Always visible */}
+            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white hidden md:flex">
+              <Link to="/booking">Book Appointment</Link>
+            </Button>
+
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -135,17 +160,10 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex gap-2">
-                <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
-                  <Link to="/signin">Sign In / Sign Up</Link>
-                </Button>
-              </div>
+              <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
+                <Link to="/signin">Sign In / Sign Up</Link>
+              </Button>
             )}
-
-            {/* Booking Button - Make sure it's always visible */}
-            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white hidden md:flex">
-              <Link to="/booking">Book Appointment</Link>
-            </Button>
 
             {/* Mobile Menu Button */}
             <Button

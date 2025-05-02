@@ -3,11 +3,8 @@ import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import gsap from 'gsap';
 
 type BodyPart = {
@@ -114,7 +111,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
     animate();
 
     // Load 3D model
-    loadModel();
+    loadHumanModel();
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -152,118 +149,274 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
     }
   }, [viewMode]);
 
-  const loadModel = () => {
+  // Create a more realistic human figure using primitives
+  const loadHumanModel = () => {
     setIsLoading(true);
     
-    // Load a placeholder 3D human model (for now using a basic shape)
-    const geometry = new THREE.CylinderGeometry(0.6, 0.6, 2, 32);
-    const material = new THREE.MeshStandardMaterial({ color: 0x9cc2fe });
-    const humanBody = new THREE.Mesh(geometry, material);
+    if (!sceneRef.current) return;
     
-    // Creating body parts
-    const parts: Record<string, THREE.Mesh> = {
-      head: new THREE.Mesh(
-        new THREE.SphereGeometry(0.3, 32, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      neck: new THREE.Mesh(
-        new THREE.CylinderGeometry(0.15, 0.2, 0.2, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      leftShoulder: new THREE.Mesh(
-        new THREE.SphereGeometry(0.2, 32, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      rightShoulder: new THREE.Mesh(
-        new THREE.SphereGeometry(0.2, 32, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      leftArm: new THREE.Mesh(
-        new THREE.CylinderGeometry(0.1, 0.1, 0.6, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      rightArm: new THREE.Mesh(
-        new THREE.CylinderGeometry(0.1, 0.1, 0.6, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      leftHand: new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 0.25, 0.1),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      rightHand: new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 0.25, 0.1),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      hip: new THREE.Mesh(
-        new THREE.CylinderGeometry(0.4, 0.4, 0.4, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      leftLeg: new THREE.Mesh(
-        new THREE.CylinderGeometry(0.15, 0.15, 0.8, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      rightLeg: new THREE.Mesh(
-        new THREE.CylinderGeometry(0.15, 0.15, 0.8, 32),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      leftFoot: new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 0.1, 0.3),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-      rightFoot: new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 0.1, 0.3),
-        new THREE.MeshStandardMaterial({ color: 0x9cc2fe })
-      ),
-    };
-
-    // Position parts
-    parts.head.position.set(0, 1.3, 0);
-    parts.neck.position.set(0, 1.1, 0);
-    parts.leftShoulder.position.set(-0.3, 0.9, 0);
-    parts.rightShoulder.position.set(0.3, 0.9, 0);
-    parts.leftArm.position.set(-0.5, 0.6, 0);
-    parts.rightArm.position.set(0.5, 0.6, 0);
-    parts.leftHand.position.set(-0.5, 0.2, 0);
-    parts.rightHand.position.set(0.5, 0.2, 0);
-    parts.hip.position.set(0, -0.8, 0);
-    parts.leftLeg.position.set(-0.2, -1.3, 0);
-    parts.rightLeg.position.set(0.2, -1.3, 0);
-    parts.leftFoot.position.set(-0.2, -1.8, 0.1);
-    parts.rightFoot.position.set(0.2, -1.8, 0.1);
-
-    // Map part names to body part IDs
-    const partMapping: Record<string, string> = {
-      head: "neck",  // Using neck data for head
-      neck: "neck",
-      leftShoulder: "shoulder",
-      rightShoulder: "shoulder",
-      leftArm: "elbow",
-      rightArm: "elbow",
-      leftHand: "wrist",
-      rightHand: "wrist",
-      hip: "hip",
-      leftLeg: "knee",
-      rightLeg: "knee",
-      leftFoot: "ankle",
-      rightFoot: "ankle",
-    };
-
-    // Add user data for raycasting
-    Object.entries(parts).forEach(([partName, mesh]) => {
-      mesh.userData.partId = partMapping[partName];
-      mesh.userData.name = partName;
-      
-      // For hover effect
-      (mesh.material as THREE.MeshStandardMaterial).emissive = new THREE.Color(0x000000);
-      
-      // The original colors
-      mesh.userData.originalColor = (mesh.material as THREE.MeshStandardMaterial).color.clone();
+    // Colors
+    const skinColor = new THREE.Color(0xE0B69B); // Natural skin tone
+    const highlightColor = new THREE.Color(0x3169ee); // Blue highlight for selection
+    
+    // Create body parts and add to an object for organization
+    const humanFigure = new THREE.Group();
+    
+    // Head
+    const headGeometry = new THREE.SphereGeometry(0.25, 32, 32);
+    const headMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
     });
+    const head = new THREE.Mesh(headGeometry, headMaterial);
+    head.position.set(0, 1.5, 0);
+    head.userData.partId = "neck"; // Map to neck in our data
+    head.userData.name = "Head";
+    humanFigure.add(head);
 
-    // Add to scene
-    Object.values(parts).forEach(part => {
-      if (sceneRef.current) {
-        sceneRef.current.add(part);
+    // Neck
+    const neckGeometry = new THREE.CylinderGeometry(0.12, 0.15, 0.2, 16);
+    const neckMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const neck = new THREE.Mesh(neckGeometry, neckMaterial);
+    neck.position.set(0, 1.3, 0);
+    neck.userData.partId = "neck";
+    neck.userData.name = "Neck";
+    humanFigure.add(neck);
+
+    // Torso
+    const torsoGeometry = new THREE.CylinderGeometry(0.35, 0.3, 0.7, 16);
+    const torsoMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const torso = new THREE.Mesh(torsoGeometry, torsoMaterial);
+    torso.position.set(0, 0.9, 0);
+    torso.userData.partId = "back";
+    torso.userData.name = "Torso";
+    humanFigure.add(torso);
+
+    // Lower torso
+    const lowerTorsoGeometry = new THREE.CylinderGeometry(0.3, 0.35, 0.5, 16);
+    const lowerTorsoMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const lowerTorso = new THREE.Mesh(lowerTorsoGeometry, lowerTorsoMaterial);
+    lowerTorso.position.set(0, 0.3, 0);
+    lowerTorso.userData.partId = "hip";
+    lowerTorso.userData.name = "Lower Torso";
+    humanFigure.add(lowerTorso);
+
+    // Left Shoulder
+    const shoulderGeometry = new THREE.SphereGeometry(0.12, 16, 16);
+    const shoulderMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftShoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial);
+    leftShoulder.position.set(-0.35, 1.15, 0);
+    leftShoulder.userData.partId = "shoulder";
+    leftShoulder.userData.name = "Left Shoulder";
+    humanFigure.add(leftShoulder);
+
+    // Right Shoulder
+    const rightShoulder = new THREE.Mesh(shoulderGeometry, shoulderMaterial.clone());
+    rightShoulder.position.set(0.35, 1.15, 0);
+    rightShoulder.userData.partId = "shoulder";
+    rightShoulder.userData.name = "Right Shoulder";
+    humanFigure.add(rightShoulder);
+
+    // Left Upper Arm
+    const upperArmGeometry = new THREE.CylinderGeometry(0.08, 0.07, 0.35, 16);
+    const armMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftUpperArm = new THREE.Mesh(upperArmGeometry, armMaterial);
+    leftUpperArm.position.set(-0.45, 0.95, 0);
+    leftUpperArm.rotation.z = Math.PI / 8;
+    leftUpperArm.userData.partId = "elbow";
+    leftUpperArm.userData.name = "Left Upper Arm";
+    humanFigure.add(leftUpperArm);
+
+    // Right Upper Arm
+    const rightUpperArm = new THREE.Mesh(upperArmGeometry, armMaterial.clone());
+    rightUpperArm.position.set(0.45, 0.95, 0);
+    rightUpperArm.rotation.z = -Math.PI / 8;
+    rightUpperArm.userData.partId = "elbow";
+    rightUpperArm.userData.name = "Right Upper Arm";
+    humanFigure.add(rightUpperArm);
+
+    // Left Elbow
+    const elbowGeometry = new THREE.SphereGeometry(0.07, 16, 16);
+    const elbowMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftElbow = new THREE.Mesh(elbowGeometry, elbowMaterial);
+    leftElbow.position.set(-0.55, 0.75, 0);
+    leftElbow.userData.partId = "elbow";
+    leftElbow.userData.name = "Left Elbow";
+    humanFigure.add(leftElbow);
+
+    // Right Elbow
+    const rightElbow = new THREE.Mesh(elbowGeometry, elbowMaterial.clone());
+    rightElbow.position.set(0.55, 0.75, 0);
+    rightElbow.userData.partId = "elbow";
+    rightElbow.userData.name = "Right Elbow";
+    humanFigure.add(rightElbow);
+
+    // Left Lower Arm
+    const lowerArmGeometry = new THREE.CylinderGeometry(0.07, 0.06, 0.35, 16);
+    const leftLowerArm = new THREE.Mesh(lowerArmGeometry, armMaterial.clone());
+    leftLowerArm.position.set(-0.65, 0.55, 0);
+    leftLowerArm.rotation.z = Math.PI / 12;
+    leftLowerArm.userData.partId = "wrist";
+    leftLowerArm.userData.name = "Left Lower Arm";
+    humanFigure.add(leftLowerArm);
+
+    // Right Lower Arm
+    const rightLowerArm = new THREE.Mesh(lowerArmGeometry, armMaterial.clone());
+    rightLowerArm.position.set(0.65, 0.55, 0);
+    rightLowerArm.rotation.z = -Math.PI / 12;
+    rightLowerArm.userData.partId = "wrist";
+    rightLowerArm.userData.name = "Right Lower Arm";
+    humanFigure.add(rightLowerArm);
+
+    // Left Hand
+    const handGeometry = new THREE.SphereGeometry(0.06, 16, 16);
+    handGeometry.scale(1, 1.2, 0.8);
+    const handMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftHand = new THREE.Mesh(handGeometry, handMaterial);
+    leftHand.position.set(-0.75, 0.38, 0);
+    leftHand.userData.partId = "wrist";
+    leftHand.userData.name = "Left Hand";
+    humanFigure.add(leftHand);
+
+    // Right Hand
+    const rightHand = new THREE.Mesh(handGeometry, handMaterial.clone());
+    rightHand.position.set(0.75, 0.38, 0);
+    rightHand.userData.partId = "wrist";
+    rightHand.userData.name = "Right Hand";
+    humanFigure.add(rightHand);
+
+    // Left Hip Joint
+    const hipJointGeometry = new THREE.SphereGeometry(0.12, 16, 16);
+    const hipJointMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftHipJoint = new THREE.Mesh(hipJointGeometry, hipJointMaterial);
+    leftHipJoint.position.set(-0.18, 0.05, 0);
+    leftHipJoint.userData.partId = "hip";
+    leftHipJoint.userData.name = "Left Hip";
+    humanFigure.add(leftHipJoint);
+
+    // Right Hip Joint
+    const rightHipJoint = new THREE.Mesh(hipJointGeometry, hipJointMaterial.clone());
+    rightHipJoint.position.set(0.18, 0.05, 0);
+    rightHipJoint.userData.partId = "hip";
+    rightHipJoint.userData.name = "Right Hip";
+    humanFigure.add(rightHipJoint);
+
+    // Left Upper Leg
+    const upperLegGeometry = new THREE.CylinderGeometry(0.11, 0.09, 0.5, 16);
+    const legMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftUpperLeg = new THREE.Mesh(upperLegGeometry, legMaterial);
+    leftUpperLeg.position.set(-0.18, -0.25, 0);
+    leftUpperLeg.userData.partId = "knee";
+    leftUpperLeg.userData.name = "Left Upper Leg";
+    humanFigure.add(leftUpperLeg);
+
+    // Right Upper Leg
+    const rightUpperLeg = new THREE.Mesh(upperLegGeometry, legMaterial.clone());
+    rightUpperLeg.position.set(0.18, -0.25, 0);
+    rightUpperLeg.userData.partId = "knee";
+    rightUpperLeg.userData.name = "Right Upper Leg";
+    humanFigure.add(rightUpperLeg);
+
+    // Left Knee
+    const kneeGeometry = new THREE.SphereGeometry(0.09, 16, 16);
+    const kneeMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftKnee = new THREE.Mesh(kneeGeometry, kneeMaterial);
+    leftKnee.position.set(-0.18, -0.5, 0);
+    leftKnee.userData.partId = "knee";
+    leftKnee.userData.name = "Left Knee";
+    humanFigure.add(leftKnee);
+
+    // Right Knee
+    const rightKnee = new THREE.Mesh(kneeGeometry, kneeMaterial.clone());
+    rightKnee.position.set(0.18, -0.5, 0);
+    rightKnee.userData.partId = "knee";
+    rightKnee.userData.name = "Right Knee";
+    humanFigure.add(rightKnee);
+
+    // Left Lower Leg
+    const lowerLegGeometry = new THREE.CylinderGeometry(0.09, 0.07, 0.5, 16);
+    const leftLowerLeg = new THREE.Mesh(lowerLegGeometry, legMaterial.clone());
+    leftLowerLeg.position.set(-0.18, -0.8, 0);
+    leftLowerLeg.userData.partId = "ankle";
+    leftLowerLeg.userData.name = "Left Lower Leg";
+    humanFigure.add(leftLowerLeg);
+
+    // Right Lower Leg
+    const rightLowerLeg = new THREE.Mesh(lowerLegGeometry, legMaterial.clone());
+    rightLowerLeg.position.set(0.18, -0.8, 0);
+    rightLowerLeg.userData.partId = "ankle";
+    rightLowerLeg.userData.name = "Right Lower Leg";
+    humanFigure.add(rightLowerLeg);
+
+    // Left Ankle/Foot
+    const footGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.22);
+    const footMaterial = new THREE.MeshStandardMaterial({ 
+      color: skinColor,
+      roughness: 0.7,
+      metalness: 0.1
+    });
+    const leftFoot = new THREE.Mesh(footGeometry, footMaterial);
+    leftFoot.position.set(-0.18, -1.1, 0.05);
+    leftFoot.userData.partId = "ankle";
+    leftFoot.userData.name = "Left Foot";
+    humanFigure.add(leftFoot);
+
+    // Right Ankle/Foot
+    const rightFoot = new THREE.Mesh(footGeometry, footMaterial.clone());
+    rightFoot.position.set(0.18, -1.1, 0.05);
+    rightFoot.userData.partId = "ankle";
+    rightFoot.userData.name = "Right Foot";
+    humanFigure.add(rightFoot);
+    
+    // Add the whole human figure to the scene
+    sceneRef.current.add(humanFigure);
+    
+    // For all meshes, store original color for hover effect
+    humanFigure.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.userData.originalColor = (child.material as THREE.MeshStandardMaterial).color.clone();
+        (child.material as THREE.MeshStandardMaterial).emissive = new THREE.Color(0x000000);
       }
     });
 
@@ -301,7 +454,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
 
     raycasterRef.current.setFromCamera(mouseRef.current, cameraRef.current);
     
-    const intersects = raycasterRef.current.intersectObjects(sceneRef.current.children);
+    const intersects = raycasterRef.current.intersectObjects(sceneRef.current.children, true);
     
     // Reset previously hovered object
     if (selectedPartRef.current) {
