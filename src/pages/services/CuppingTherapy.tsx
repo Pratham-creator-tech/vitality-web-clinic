@@ -1,180 +1,121 @@
 
-import React from 'react';
+import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Info } from "lucide-react";
+import { ArrowRight, Grid, CalendarCheck, Clock, CheckCircle, ThumbsUp } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const CuppingTherapy = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <SectionTitle
-                title="Cupping Therapy"
-                subtitle="Ancient healing technique for modern pain relief and recovery"
-              />
-              <p className="mt-6 text-gray-600 dark:text-gray-300">
-                Cupping therapy is a traditional practice that has evolved into an effective modern treatment 
-                for various musculoskeletal conditions. Using specially designed cups that create suction on the 
-                skin, this therapy helps increase blood flow, reduce pain, loosen tight muscles, and promote 
-                healing by drawing stagnant fluids and toxins to the surface.
-              </p>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Enhanced blood circulation and tissue healing</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Release of tight muscles and fascial tissue</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Reduction of pain and inflammation</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Improved recovery after intense training</p>
-                </div>
-              </div>
+        <div className="max-w-4xl mx-auto">
+          <SectionTitle
+            title="Cupping Therapy"
+            subtitle="Traditional therapy for muscle tension and circulation"
+            center
+          />
 
-              <div className="mt-10">
-                <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-                  <Link to="/booking" className="flex items-center">
-                    Book Cupping Session
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-xl overflow-hidden shadow-lg"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=2070&auto=format&fit=crop" 
-              alt="Cupping therapy treatment on patient's back" 
-              className="w-full h-[400px] object-cover"
+          <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
+            <img
+              src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80"
+              alt="Cupping Therapy"
+              className="w-full h-full object-cover"
             />
-          </motion.div>
-        </div>
+          </div>
 
-        <div className="mt-16 max-w-3xl mx-auto bg-vitality-50 dark:bg-gray-800/50 p-6 rounded-xl border border-vitality-100 dark:border-gray-700">
-          <div className="flex items-start">
-            <Info className="h-6 w-6 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <Clock className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Session Duration</h3>
+              <p>30-45 minutes</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CalendarCheck className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Recommended Frequency</h3>
+              <p>Weekly or as needed</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <ThumbsUp className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Expected Results</h3>
+              <p>Often immediate relief</p>
+            </div>
+          </div>
+
+          <div className="prose dark:prose-invert max-w-none mb-12">
+            <h2 className="text-2xl font-bold mb-4 text-vitality-700 dark:text-vitality-300">About Cupping Therapy</h2>
+            <p>
+              Cupping therapy is an ancient healing practice that has gained modern recognition for its effectiveness in treating muscle pain and tension. The therapy involves placing specialized cups on the skin to create suction, which increases blood flow to the area, relieves muscle tension, and promotes cellular repair. At YASHA's Physiocare, we integrate cupping therapy with modern physiotherapy principles for optimal results.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Conditions We Treat with Cupping</h3>
+            <ul>
+              <li>Muscle tension and stiffness</li>
+              <li>Myofascial pain syndrome</li>
+              <li>Back and neck pain</li>
+              <li>Shoulder tension and pain</li>
+              <li>Athletic recovery</li>
+              <li>Trigger points</li>
+              <li>Fibromyalgia symptoms</li>
+              <li>Poor circulation</li>
+            </ul>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Our Approach</h3>
+            <p>
+              We use modern cupping techniques including silicone and pneumatic cups that allow precise control of suction levels. Treatment may involve static cupping, where cups remain in place, or dynamic cupping, where cups are moved along muscle groups with massage oil. We often combine cupping with other physiotherapy techniques for comprehensive treatment. Our physiotherapists are specially trained in cupping and carefully assess each patient to determine if cupping is appropriate.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Benefits of Cupping Therapy</h3>
+            <ul>
+              <li>Rapid pain relief</li>
+              <li>Release of deep muscle tension</li>
+              <li>Enhanced blood circulation</li>
+              <li>Reduced muscle inflammation</li>
+              <li>Fascial release</li>
+              <li>Lymphatic drainage</li>
+              <li>Relaxation and stress reduction</li>
+              <li>Complementary to other treatments</li>
+            </ul>
+          </div>
+
+          <div className="bg-vitality-100 dark:bg-vitality-900/50 p-8 rounded-xl mb-12">
+            <div className="flex items-center mb-4">
+              <Grid className="h-8 w-8 text-vitality-600 mr-4" />
+              <h3 className="text-xl font-bold text-vitality-700 dark:text-vitality-300">What to Expect</h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Cupping therapy typically leaves circular marks on the skin that may range from light pink to dark purple, depending on the level of stagnation in the tissues. These marks are not bruises and are not painful. They typically fade within 2-7 days. Our therapists will explain this process and ensure you're comfortable with it before proceeding.
+            </p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <h4 className="font-bold mb-3">Patient Testimonial</h4>
+              <p className="italic">
+                "I've had chronic upper back tension for years due to my desk job. After just one session of cupping therapy, I felt relief that lasted for days. Now I incorporate regular cupping sessions into my wellness routine, and the difference in my pain levels and mobility is remarkable."
+              </p>
+              <p className="mt-3 font-medium">— Elena S., chronic tension patient</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-8">
             <div>
-              <h4 className="text-lg font-bold mb-2 text-vitality-600 dark:text-vitality-400">About Cupping Marks</h4>
-              <p className="text-gray-600 dark:text-gray-300">
-                Cupping therapy often leaves circular marks that can appear as bruises. These marks are not painful and typically 
-                fade within a few days to a week. The color and intensity of these marks can provide diagnostic information about 
-                the condition of the tissues and circulation in the treated area.
-              </p>
+              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Experience Cupping Therapy</h3>
+              <p className="text-gray-600 dark:text-gray-400">Book a session with our cupping specialists.</p>
+            </div>
+            <div className="flex gap-4">
+              <Button asChild variant="outline">
+                <Link to="/contact" className="flex items-center">
+                  Contact Us
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link to="/booking" className="flex items-center">
+                  Book Session
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
-        </div>
-
-        <div className="mt-20">
-          <SectionTitle
-            title="Our Cupping Approach"
-            subtitle="Modern techniques based on traditional wisdom"
-            center
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Static Cupping</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Cups are placed on specific points and left in position for several minutes to create localized therapeutic effects.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Dynamic Cupping</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Cups are moved along muscle groups while maintaining suction, combining the benefits of massage and cupping.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Flash Cupping</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Quick application and removal of cups to stimulate blood flow without leaving significant marks, ideal for sensitive areas.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-
-        <div className="mt-20">
-          <SectionTitle
-            title="Conditions Benefiting from Cupping"
-            subtitle="This therapy can help with a variety of musculoskeletal issues"
-            center
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Back and neck pain</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Shoulder tension and frozen shoulder</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Muscle fatigue and delayed onset muscle soreness</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Myofascial pain and trigger points</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Athletic performance recovery</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Respiratory conditions (when combined with other treatments)</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-20 text-center">
-          <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-            <Link to="/booking" className="flex items-center">
-              Schedule an Appointment
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
         </div>
       </div>
     </PageLayout>

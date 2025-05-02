@@ -1,129 +1,120 @@
 
-import React from 'react';
+import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, Baby, CalendarCheck, Clock, CheckCircle, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const PediatricRehabilitation = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <SectionTitle
-                title="Pediatric Rehabilitation"
-                subtitle="Specialized physical therapy for children of all ages"
-              />
-              <p className="mt-6 text-gray-600 dark:text-gray-300">
-                Our pediatric rehabilitation services are specifically designed to meet the unique needs of infants, children, and adolescents. 
-                We focus on improving mobility, enhancing developmental skills, and helping children reach their full potential.
-              </p>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Developmental delay and coordination disorders</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Neurological conditions like cerebral palsy and spina bifida</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Post-surgical rehabilitation for children</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Sports injuries and orthopedic conditions</p>
-                </div>
-              </div>
-
-              <div className="mt-10">
-                <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-                  <Link to="/booking" className="flex items-center">
-                    Book Pediatric Consultation
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-xl overflow-hidden shadow-lg"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1964&auto=format&fit=crop" 
-              alt="Pediatric physiotherapist working with a child" 
-              className="w-full h-[400px] object-cover"
-            />
-          </motion.div>
-        </div>
-
-        <div className="mt-20">
+        <div className="max-w-4xl mx-auto">
           <SectionTitle
-            title="Our Pediatric Approach"
-            subtitle="Child-centered therapy that makes rehabilitation fun and engaging"
+            title="Pediatric Rehabilitation"
+            subtitle="Specialized care for children's development and rehabilitation needs"
             center
           />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Play-Based Therapy</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We incorporate games and fun activities into our sessions to keep children engaged while working on their therapeutic goals.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Family-Centered Care</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We work closely with parents and caregivers, providing education and home exercise programs to continue progress between sessions.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Developmental Monitoring</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We track milestones and progress, adjusting treatment plans as your child grows and develops new skills and abilities.
-              </p>
-            </motion.div>
-          </div>
-        </div>
 
-        <div className="mt-20 text-center">
-          <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-            <Link to="/booking" className="flex items-center">
-              Schedule an Appointment
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
+            <img
+              src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80"
+              alt="Pediatric Rehabilitation"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <Clock className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Treatment Duration</h3>
+              <p>45-60 minutes per session</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CalendarCheck className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Recommended Frequency</h3>
+              <p>1-3 sessions per week</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CheckCircle className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Expected Recovery</h3>
+              <p>Varies by condition, typically 2-6 months</p>
+            </div>
+          </div>
+
+          <div className="prose dark:prose-invert max-w-none mb-12">
+            <h2 className="text-2xl font-bold mb-4 text-vitality-700 dark:text-vitality-300">About Pediatric Rehabilitation</h2>
+            <p>
+              Our pediatric rehabilitation program is designed to help children overcome developmental challenges, recover from injuries, and manage chronic conditions. Our specialized pediatric physiotherapists work with children of all ages, from infants to adolescents, to improve their physical functioning and quality of life.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Conditions We Treat</h3>
+            <ul>
+              <li>Developmental delays and disorders</li>
+              <li>Cerebral palsy and neuromuscular disorders</li>
+              <li>Torticollis and plagiocephaly</li>
+              <li>Sports injuries in young athletes</li>
+              <li>Post-surgical rehabilitation</li>
+              <li>Coordination and balance issues</li>
+              <li>Gait abnormalities</li>
+              <li>Orthopedic conditions</li>
+            </ul>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Our Approach</h3>
+            <p>
+              We take a child-friendly, play-based approach to pediatric physiotherapy. Our sessions are engaging and fun, helping children stay motivated while working toward their goals. We involve parents and caregivers in the treatment process, providing education and home exercise programs to support continued progress.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Benefits of Pediatric Rehabilitation</h3>
+            <ul>
+              <li>Improved motor skills and coordination</li>
+              <li>Enhanced strength, flexibility, and endurance</li>
+              <li>Better posture and movement patterns</li>
+              <li>Increased independence in daily activities</li>
+              <li>Reduced pain and discomfort</li>
+              <li>Prevention of secondary complications</li>
+              <li>Support for developmental milestones</li>
+            </ul>
+          </div>
+
+          <div className="bg-vitality-100 dark:bg-vitality-900/50 p-8 rounded-xl mb-12">
+            <div className="flex items-center mb-4">
+              <Baby className="h-8 w-8 text-vitality-600 mr-4" />
+              <h3 className="text-xl font-bold text-vitality-700 dark:text-vitality-300">Child-Centered Care</h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Our pediatric specialists create a supportive, nurturing environment where children feel comfortable and engaged. We adapt our treatment methods to each child's needs, interests, and developmental stage to ensure the best possible outcomes.
+            </p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <h4 className="font-bold mb-3">Parent Testimonial</h4>
+              <p className="italic">
+                "The pediatric team at YASHA's Physiocare has been incredible with my daughter. They made therapy something she looks forward to, and the progress she's made in just a few months has been remarkable. I highly recommend their services to any parent whose child needs physical therapy."
+              </p>
+              <p className="mt-3 font-medium">— Sarah T., parent of a 6-year-old patient</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-8">
+            <div>
+              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Ready to Schedule?</h3>
+              <p className="text-gray-600 dark:text-gray-400">Book an appointment with our pediatric specialists.</p>
+            </div>
+            <div className="flex gap-4">
+              <Button asChild variant="outline">
+                <Link to="/contact" className="flex items-center">
+                  Contact Us
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link to="/booking" className="flex items-center">
+                  Book Appointment
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </PageLayout>

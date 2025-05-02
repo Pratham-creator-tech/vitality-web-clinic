@@ -25,6 +25,7 @@ import {
   User,
   X, 
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface MobileNavProps {
   open: boolean;
@@ -40,8 +41,19 @@ export const MobileNav = ({ open, onClose }: MobileNavProps) => {
       <SheetContent className="w-[300px] sm:w-[350px] pt-10 pb-20 overflow-y-auto">
         <SheetHeader className="mb-6">
           <div className="flex justify-between items-center">
-            <SheetTitle className="font-display text-2xl font-bold text-vitality-700">
-              Vitality<span className="text-accent">.</span>
+            <SheetTitle className="font-display text-2xl font-bold">
+              <div className="flex items-center">
+                <div className="w-8 h-8 mr-2 overflow-hidden">
+                  <motion.img 
+                    src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
+                    alt="YASHA's Physiocare Logo"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
+                  YASHA's Physiocare
+                </span>
+              </div>
             </SheetTitle>
             <SheetClose asChild>
               <Button variant="ghost" size="icon" className="h-6 w-6">
@@ -221,9 +233,9 @@ export const MobileNav = ({ open, onClose }: MobileNavProps) => {
               </>
             )}
             <SheetClose asChild>
-              <Link to="/booking" className="flex items-center justify-center py-2 px-3 mt-4 rounded-md bg-accent text-white hover:bg-accent/90">
+              <Link to="/booking" className="flex items-center justify-center py-2 px-3 mt-4 rounded-md bg-vitality-600 text-white hover:bg-vitality-700">
                 <CalendarCheck className="mr-2 h-5 w-5" />
-                <span>{t("app.header.booking")}</span>
+                <span>Book Appointment</span>
               </Link>
             </SheetClose>
           </div>

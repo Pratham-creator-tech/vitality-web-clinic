@@ -1,180 +1,121 @@
 
-import React from 'react';
+import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowRight, Syringe, CalendarCheck, Clock, CheckCircle, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const DryNeedling = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <SectionTitle
-                title="Dry Needling Therapy"
-                subtitle="Targeted treatment for muscular pain and dysfunction"
-              />
-              <p className="mt-6 text-gray-600 dark:text-gray-300">
-                Dry needling is a specialized technique where thin monofilament needles are inserted into 
-                myofascial trigger points (knots), tight muscles, or near nerves to stimulate a healing response. 
-                This technique helps release muscle tension, improve blood flow, and reduce pain by targeting 
-                specific trigger points in the muscle tissue.
-              </p>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Relief from chronic muscular pain</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Improved range of motion and flexibility</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Treatment of myofascial trigger points</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Enhanced recovery from sports injuries</p>
-                </div>
-              </div>
+        <div className="max-w-4xl mx-auto">
+          <SectionTitle
+            title="Dry Needling Therapy"
+            subtitle="Precision treatment for muscle pain and tension"
+            center
+          />
 
-              <div className="mt-10">
-                <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-                  <Link to="/booking" className="flex items-center">
-                    Book Dry Needling Session
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-xl overflow-hidden shadow-lg"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1598885159329-9377168ac375?q=80&w=1774&auto=format&fit=crop" 
-              alt="Physiotherapist performing dry needling therapy" 
-              className="w-full h-[400px] object-cover"
+          <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
+            <img
+              src="https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
+              alt="Dry Needling Therapy"
+              className="w-full h-full object-cover"
             />
-          </motion.div>
-        </div>
-
-        <div className="mt-20">
-          <SectionTitle
-            title="How Dry Needling Works"
-            subtitle="Scientific approach to relieving pain and muscle dysfunction"
-            center
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Trigger Point Release</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                The needle creates a small lesion in the trigger point, disrupting the dysfunctional pattern and allowing the muscle to reset to a normal state.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Increased Blood Flow</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Needling stimulates increased blood circulation to the area, bringing oxygen and nutrients that help repair damaged tissues.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Neurological Effects</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Dry needling can help normalize the chemical environment around peripheral nerves and block pain signals from reaching the brain.
-              </p>
-            </motion.div>
           </div>
-        </div>
 
-        <div className="mt-16 max-w-3xl mx-auto bg-orange-50 dark:bg-gray-800/50 p-6 rounded-xl border border-orange-200 dark:border-gray-700">
-          <div className="flex items-start">
-            <AlertCircle className="h-6 w-6 text-orange-500 mt-1 mr-3 flex-shrink-0" />
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <Clock className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Session Duration</h3>
+              <p>30-45 minutes</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CalendarCheck className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Recommended Course</h3>
+              <p>2-6 sessions</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CheckCircle className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Relief Onset</h3>
+              <p>Often within 24-48 hours</p>
+            </div>
+          </div>
+
+          <div className="prose dark:prose-invert max-w-none mb-12">
+            <h2 className="text-2xl font-bold mb-4 text-vitality-700 dark:text-vitality-300">About Dry Needling Therapy</h2>
+            <p>
+              Dry needling is an advanced technique where our specially trained physiotherapists insert thin monofilament needles into myofascial trigger points (painful knots in muscles) to release tension and reduce pain. Unlike acupuncture, which is based on traditional Chinese medicine principles, dry needling is based on Western medicine principles and targets specific anatomical structures.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Conditions We Treat with Dry Needling</h3>
+            <ul>
+              <li>Myofascial pain syndrome</li>
+              <li>Neck and back pain</li>
+              <li>Headaches and migraines</li>
+              <li>Shoulder impingement</li>
+              <li>Tennis/golfer's elbow</li>
+              <li>Hip and gluteal pain</li>
+              <li>Knee pain</li>
+              <li>Plantar fasciitis</li>
+            </ul>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Our Approach</h3>
+            <p>
+              Dry needling at YASHA's Physiocare is always performed by physiotherapists with advanced certification in the technique. We begin with a comprehensive assessment to determine if dry needling is appropriate for your condition. The treatment is typically integrated with other physiotherapy techniques such as manual therapy, exercise, and education to provide a complete approach to your recovery.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Benefits of Dry Needling</h3>
+            <ul>
+              <li>Immediate or rapid reduction in pain</li>
+              <li>Release of muscle tension and trigger points</li>
+              <li>Improved range of motion and flexibility</li>
+              <li>Enhanced blood flow to affected areas</li>
+              <li>Accelerated healing in injured tissues</li>
+              <li>Reduced muscle spasm and cramping</li>
+              <li>Normalization of dysfunction in the motor endplate (where nerve meets muscle)</li>
+              <li>Complementary to other physiotherapy treatments</li>
+            </ul>
+          </div>
+
+          <div className="bg-vitality-100 dark:bg-vitality-900/50 p-8 rounded-xl mb-12">
+            <div className="flex items-center mb-4">
+              <Syringe className="h-8 w-8 text-vitality-600 mr-4" />
+              <h3 className="text-xl font-bold text-vitality-700 dark:text-vitality-300">What to Expect</h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              During your dry needling session, you may experience a brief moment of discomfort as the needle contacts a trigger point, often described as a small cramp or ache. This is actually a positive sign called a "local twitch response" that indicates the treatment is targeting the right spot. After treatment, some mild soreness for 24-48 hours is normal, similar to what you might feel after exercise.
+            </p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <h4 className="font-bold mb-3">Patient Testimonial</h4>
+              <p className="italic">
+                "I had been dealing with chronic shoulder pain for years when my physiotherapist suggested trying dry needling. I was nervous at first, but it wasn't nearly as uncomfortable as I expected. After just three sessions, I had more mobility in my shoulder than I'd had in years, and the constant pain was finally gone."
+              </p>
+              <p className="mt-3 font-medium">— James R., chronic shoulder pain patient</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-8">
             <div>
-              <h4 className="text-lg font-bold mb-2 text-orange-700 dark:text-orange-400">Important Note</h4>
-              <p className="text-gray-600 dark:text-gray-300">
-                Dry needling is different from acupuncture. While both use similar tools, dry needling is based on Western medicine principles and 
-                specifically targets muscular trigger points, while acupuncture is based on traditional Chinese medicine and works with energy 
-                meridians in the body. Our practitioners are specifically trained and certified in dry needling techniques.
-              </p>
+              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Ready to Try Dry Needling?</h3>
+              <p className="text-gray-600 dark:text-gray-400">Book an appointment with our certified practitioners.</p>
+            </div>
+            <div className="flex gap-4">
+              <Button asChild variant="outline">
+                <Link to="/contact" className="flex items-center">
+                  Contact Us
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link to="/booking" className="flex items-center">
+                  Book Appointment
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
-        </div>
-
-        <div className="mt-20">
-          <SectionTitle
-            title="Conditions Treated"
-            subtitle="Dry needling can be effective for a range of musculoskeletal issues"
-            center
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Neck pain and tension headaches</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Low back pain and sciatica</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Shoulder and rotator cuff issues</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Tennis and golfer's elbow</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">IT band syndrome and runner's knee</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Plantar fasciitis and foot pain</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-20 text-center">
-          <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-            <Link to="/booking" className="flex items-center">
-              Schedule an Appointment
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
         </div>
       </div>
     </PageLayout>

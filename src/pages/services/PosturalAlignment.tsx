@@ -1,130 +1,121 @@
 
-import React from 'react';
+import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, UserPlus, CalendarCheck, Clock, CheckCircle, Ruler } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const PosturalAlignment = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <SectionTitle
-                title="Postural Alignment Therapy"
-                subtitle="Correct imbalances and improve body mechanics for better health and performance"
-              />
-              <p className="mt-6 text-gray-600 dark:text-gray-300">
-                Our postural alignment therapy addresses the root causes of pain and dysfunction by correcting imbalances 
-                in how your body is aligned and how it moves. Poor posture can lead to pain, reduced mobility, and decreased 
-                performance in daily activities and sports.
-              </p>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Comprehensive postural assessment</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Treatment for tech neck and desk-related posture issues</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Scoliosis management and spinal alignment</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Postural retraining for chronic pain conditions</p>
-                </div>
-              </div>
-
-              <div className="mt-10">
-                <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-                  <Link to="/booking" className="flex items-center">
-                    Book Postural Assessment
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-xl overflow-hidden shadow-lg"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1740&auto=format&fit=crop" 
-              alt="Physiotherapist correcting patient's posture" 
-              className="w-full h-[400px] object-cover"
-            />
-          </motion.div>
-        </div>
-
-        <div className="mt-20">
+        <div className="max-w-4xl mx-auto">
           <SectionTitle
-            title="Our Postural Alignment Approach"
-            subtitle="Comprehensive assessment and personalized treatment to restore optimal alignment"
+            title="Postural Alignment"
+            subtitle="Correct posture problems and improve ergonomic wellness"
             center
           />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Biomechanical Assessment</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We analyze your posture, movement patterns, and muscle balance to identify the specific factors contributing to your posture issues.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Targeted Manual Therapy</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Our therapists use hands-on techniques to release tight muscles, improve joint mobility, and realign the body's structure.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Corrective Exercises</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We provide personalized exercise programs to strengthen weak muscles, improve flexibility, and reinforce proper posture in daily activities.
-              </p>
-            </motion.div>
-          </div>
-        </div>
 
-        <div className="mt-20 text-center">
-          <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-            <Link to="/booking" className="flex items-center">
-              Schedule an Appointment
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
+            <img
+              src="https://images.unsplash.com/photo-1489659639091-8b687bc4386e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1773&q=80"
+              alt="Postural Alignment"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <Clock className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Treatment Duration</h3>
+              <p>45-60 minutes per session</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CalendarCheck className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Recommended Frequency</h3>
+              <p>1-2 sessions per week initially</p>
+            </div>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CheckCircle className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Expected Results</h3>
+              <p>Noticeable improvement in 4-8 weeks</p>
+            </div>
+          </div>
+
+          <div className="prose dark:prose-invert max-w-none mb-12">
+            <h2 className="text-2xl font-bold mb-4 text-vitality-700 dark:text-vitality-300">About Postural Alignment Therapy</h2>
+            <p>
+              Our Postural Alignment program helps correct poor posture that can lead to pain, restricted movement, and reduced quality of life. Whether your posture issues stem from workplace ergonomics, lifestyle habits, or an underlying condition, our therapists can help you achieve better alignment, reduce pain, and prevent future problems.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Common Postural Issues We Address</h3>
+            <ul>
+              <li>Forward head posture ("text neck")</li>
+              <li>Rounded shoulders</li>
+              <li>Anterior pelvic tilt</li>
+              <li>Kyphosis (excessive rounding of the upper back)</li>
+              <li>Lordosis (excessive inward curve of the lower back)</li>
+              <li>Scoliosis management</li>
+              <li>Computer/desk-related postural dysfunction</li>
+              <li>Postural issues during pregnancy</li>
+            </ul>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Our Approach</h3>
+            <p>
+              We begin with a comprehensive postural assessment using specialized tools and techniques to identify specific alignment issues. From there, we develop a personalized treatment plan that may include targeted exercises, manual therapy, ergonomic advice, movement retraining, and education about maintaining good posture throughout daily activities.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Benefits of Postural Alignment Therapy</h3>
+            <ul>
+              <li>Reduced neck, back, and joint pain</li>
+              <li>Improved breathing efficiency</li>
+              <li>Enhanced core stability</li>
+              <li>Better balance and coordination</li>
+              <li>Reduced risk of injury</li>
+              <li>Improved athletic performance</li>
+              <li>Greater confidence and body awareness</li>
+              <li>Long-term spinal health</li>
+            </ul>
+          </div>
+
+          <div className="bg-vitality-100 dark:bg-vitality-900/50 p-8 rounded-xl mb-12">
+            <div className="flex items-center mb-4">
+              <Ruler className="h-8 w-8 text-vitality-600 mr-4" />
+              <h3 className="text-xl font-bold text-vitality-700 dark:text-vitality-300">Workplace Ergonomics Service</h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              We offer specialized workplace ergonomic assessments where our experts can visit your office or workplace to evaluate desk setups, identify postural risk factors, and provide practical recommendations to create a healthier work environment.
+            </p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <h4 className="font-bold mb-3">Client Testimonial</h4>
+              <p className="italic">
+                "Years of desk work left me with chronic neck and shoulder pain. The postural alignment program at YASHA's has been transformative. They didn't just treat my symptoms—they helped me understand the root causes and gave me practical tools to maintain better posture throughout my day."
+              </p>
+              <p className="mt-3 font-medium">— David L., IT professional</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-8">
+            <div>
+              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Ready to Improve Your Posture?</h3>
+              <p className="text-gray-600 dark:text-gray-400">Book an appointment with our postural specialists.</p>
+            </div>
+            <div className="flex gap-4">
+              <Button asChild variant="outline">
+                <Link to="/contact" className="flex items-center">
+                  Contact Us
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link to="/booking" className="flex items-center">
+                  Book Appointment
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </PageLayout>

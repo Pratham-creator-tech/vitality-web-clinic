@@ -1,166 +1,121 @@
 
-import React from 'react';
+import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle } from "lucide-react";
+import { ArrowRight, Zap, CalendarCheck, Clock, CheckCircle, Brain } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const NeuroDynamic = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <SectionTitle
-                title="Neuro Dynamic Solution"
-                subtitle="Advanced treatment for nerve-related pain and mobility issues"
-              />
-              <p className="mt-6 text-gray-600 dark:text-gray-300">
-                Neuro Dynamic Solution (NDS) is a specialized approach to assessing and treating nerve-related 
-                disorders. This technique focuses on the movement and tension of the nervous system within the body, 
-                helping to restore proper nerve function, reduce pain, and improve mobility in patients suffering 
-                from nerve entrapments, tension or irritation.
-              </p>
-              
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Relief from radiating pain and nerve symptoms</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Improved nerve mobility and function</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Treatment for chronic nerve entrapments</p>
-                </div>
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-                  <p className="text-gray-600 dark:text-gray-300">Enhanced recovery from nerve injuries</p>
-                </div>
-              </div>
+        <div className="max-w-4xl mx-auto">
+          <SectionTitle
+            title="Neuro Dynamic Solutions"
+            subtitle="Advanced treatment for nerve-related conditions"
+            center
+          />
 
-              <div className="mt-10">
-                <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-                  <Link to="/booking" className="flex items-center">
-                    Book NDS Consultation
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-xl overflow-hidden shadow-lg"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1740&auto=format&fit=crop" 
-              alt="Physiotherapist performing neuro dynamic treatment" 
-              className="w-full h-[400px] object-cover"
+          <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
+            <img
+              src="https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
+              alt="Neuro Dynamic Solutions"
+              className="w-full h-full object-cover"
             />
-          </motion.div>
-        </div>
-
-        <div className="mt-20">
-          <SectionTitle
-            title="How Neuro Dynamic Solution Works"
-            subtitle="Evidence-based approach to neural mobilization and treatment"
-            center
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Neural Assessment</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We conduct specialized tests to evaluate how your nerves move and respond to tension, identifying restrictions or irritations.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Neural Mobilization</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Gentle, precise techniques help restore normal sliding and gliding of nerves through surrounding tissues.
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6"
-            >
-              <h3 className="text-xl font-bold mb-4 text-vitality-600 dark:text-vitality-400">Interface Management</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                We address issues where nerves interact with surrounding tissues like muscles, tendons, and bones to reduce friction and compression.
-              </p>
-            </motion.div>
           </div>
-        </div>
 
-        <div className="mt-20">
-          <SectionTitle
-            title="Conditions Treated"
-            subtitle="Neuro Dynamic Solution can help with various nerve-related issues"
-            center
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10 max-w-4xl mx-auto">
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Sciatica and lumbar radiculopathy</p>
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <Clock className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Session Duration</h3>
+              <p>45-60 minutes</p>
             </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Carpal tunnel syndrome</p>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CalendarCheck className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Treatment Course</h3>
+              <p>6-12 sessions typical</p>
             </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Cubital tunnel syndrome (ulnar nerve entrapment)</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Thoracic outlet syndrome</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Cervical radiculopathy (pinched nerve in neck)</p>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-5 w-5 text-vitality-500 mt-1 mr-3 flex-shrink-0" />
-              <p className="text-gray-600 dark:text-gray-300">Double crush syndrome</p>
+            <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
+              <CheckCircle className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Specialist Care</h3>
+              <p>Advanced certified practitioners</p>
             </div>
           </div>
-        </div>
 
-        <div className="mt-20 text-center">
-          <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-            <Link to="/booking" className="flex items-center">
-              Schedule an Appointment
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </Button>
+          <div className="prose dark:prose-invert max-w-none mb-12">
+            <h2 className="text-2xl font-bold mb-4 text-vitality-700 dark:text-vitality-300">About Neuro Dynamic Solutions</h2>
+            <p>
+              Neuro Dynamic Solutions (NDS) is an advanced physiotherapy approach that focuses on the assessment and treatment of neural tissue and its surrounding interfaces. This specialized technique addresses how nerves interact with surrounding tissues during movement, and treats dysfunctions in the nervous system that can cause pain, tingling, numbness, and weakness.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Conditions We Treat with NDS</h3>
+            <ul>
+              <li>Sciatica and radiculopathy</li>
+              <li>Carpal tunnel syndrome</li>
+              <li>Cubital tunnel syndrome</li>
+              <li>Thoracic outlet syndrome</li>
+              <li>Cervical radiculopathy (pinched nerve in neck)</li>
+              <li>Brachial plexus injuries</li>
+              <li>Nerve entrapment syndromes</li>
+              <li>Post-surgical nerve irritation</li>
+            </ul>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Our Approach</h3>
+            <p>
+              Our neurodynamic specialists begin with a detailed assessment of your neural tension, movement patterns, and symptom reproduction. We use specialized tests to determine how your nervous system is moving within your body during different activities. Treatment involves precise manual techniques and specific exercises designed to improve nerve gliding, reduce nerve compression, and restore normal function to the nervous system.
+            </p>
+            
+            <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Benefits of Neurodynamic Treatment</h3>
+            <ul>
+              <li>Relief from nerve-related pain, tingling, and numbness</li>
+              <li>Improved mobility and flexibility</li>
+              <li>Reduced nerve irritation and inflammation</li>
+              <li>Better nerve signal conduction</li>
+              <li>Prevention of chronic nerve problems</li>
+              <li>Restored function to affected areas</li>
+              <li>Effective non-surgical option for nerve entrapment</li>
+              <li>Personalized self-management techniques</li>
+            </ul>
+          </div>
+
+          <div className="bg-vitality-100 dark:bg-vitality-900/50 p-8 rounded-xl mb-12">
+            <div className="flex items-center mb-4">
+              <Brain className="h-8 w-8 text-vitality-600 mr-4" />
+              <h3 className="text-xl font-bold text-vitality-700 dark:text-vitality-300">Specialized Expertise</h3>
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 mb-6">
+              Our Neuro Dynamic Solutions practitioners have completed extensive post-graduate training in neurodynamics and nerve mobilization techniques. This advanced knowledge allows us to effectively treat complex nerve conditions that may have been resistant to other forms of therapy.
+            </p>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <h4 className="font-bold mb-3">Patient Success Story</h4>
+              <p className="italic">
+                "After months of tingling down my arm and numbness in my fingers that several doctors couldn't resolve, I was referred to YASHA's Physiocare for neurodynamic treatment. The therapist identified exactly where my nerve was getting compressed and used specialized techniques that gave me immediate relief. After completing the full treatment program, my symptoms are completely gone."
+              </p>
+              <p className="mt-3 font-medium">— Rachel K., recovered from chronic nerve compression</p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-8">
+            <div>
+              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Experiencing Nerve Symptoms?</h3>
+              <p className="text-gray-600 dark:text-gray-400">Book an assessment with our neurodynamic specialists.</p>
+            </div>
+            <div className="flex gap-4">
+              <Button asChild variant="outline">
+                <Link to="/contact" className="flex items-center">
+                  Contact Us
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild>
+                <Link to="/booking" className="flex items-center">
+                  Book Assessment
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </PageLayout>
