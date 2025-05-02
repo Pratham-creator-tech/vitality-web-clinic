@@ -3,13 +3,20 @@ import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Syringe, CalendarCheck, Clock, CheckCircle, Heart } from "lucide-react";
+import { ArrowLeft, ArrowRight, Syringe, CalendarCheck, Clock, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const DryNeedling = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
+        <Button asChild variant="outline" className="mb-8">
+          <Link to="/services" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+        
         <div className="max-w-4xl mx-auto">
           <SectionTitle
             title="Dry Needling Therapy"

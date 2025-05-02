@@ -3,13 +3,20 @@ import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, UserPlus, CalendarCheck, Clock, CheckCircle, Ruler } from "lucide-react";
+import { ArrowLeft, ArrowRight, UserPlus, CalendarCheck, Clock, CheckCircle, Ruler } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const PosturalAlignment = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
+        <Button asChild variant="outline" className="mb-8">
+          <Link to="/services" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+        
         <div className="max-w-4xl mx-auto">
           <SectionTitle
             title="Postural Alignment"
@@ -19,7 +26,7 @@ const PosturalAlignment = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="https://images.unsplash.com/photo-1489659639091-8b687bc4386e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1773&q=80"
+              src="/lovable-uploads/dd2ac8e5-f657-457c-955c-665ea3f1f4ea.png"
               alt="Postural Alignment"
               className="w-full h-full object-cover"
             />

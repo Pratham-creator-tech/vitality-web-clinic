@@ -3,13 +3,20 @@ import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Grid, CalendarCheck, Clock, CheckCircle, ThumbsUp } from "lucide-react";
+import { ArrowLeft, ArrowRight, Grid, CalendarCheck, Clock, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const CuppingTherapy = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
+        <Button asChild variant="outline" className="mb-8">
+          <Link to="/services" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+        
         <div className="max-w-4xl mx-auto">
           <SectionTitle
             title="Cupping Therapy"
@@ -29,53 +36,53 @@ const CuppingTherapy = () => {
             <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
               <Clock className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
               <h3 className="font-bold text-lg mb-2">Session Duration</h3>
-              <p>30-45 minutes</p>
+              <p>20-30 minutes</p>
             </div>
             <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
               <CalendarCheck className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
               <h3 className="font-bold text-lg mb-2">Recommended Frequency</h3>
-              <p>Weekly or as needed</p>
+              <p>Once every 1-2 weeks</p>
             </div>
             <div className="bg-vitality-50 dark:bg-vitality-900/30 p-6 rounded-lg text-center">
-              <ThumbsUp className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
-              <h3 className="font-bold text-lg mb-2">Expected Results</h3>
-              <p>Often immediate relief</p>
+              <CheckCircle className="h-10 w-10 mx-auto mb-4 text-vitality-600" />
+              <h3 className="font-bold text-lg mb-2">Initial Results</h3>
+              <p>Often felt immediately</p>
             </div>
           </div>
 
           <div className="prose dark:prose-invert max-w-none mb-12">
             <h2 className="text-2xl font-bold mb-4 text-vitality-700 dark:text-vitality-300">About Cupping Therapy</h2>
             <p>
-              Cupping therapy is an ancient healing practice that has gained modern recognition for its effectiveness in treating muscle pain and tension. The therapy involves placing specialized cups on the skin to create suction, which increases blood flow to the area, relieves muscle tension, and promotes cellular repair. At YASHA's Physiocare, we integrate cupping therapy with modern physiotherapy principles for optimal results.
+              Cupping therapy is an ancient technique that has been modernized and integrated into contemporary physiotherapy practice. It involves placing specialized cups on the skin to create suction, which increases blood flow, releases fascial restrictions, and promotes healing. At YASHA's Physiocare, we use both traditional and modern cupping approaches as part of a comprehensive treatment plan.
             </p>
             
             <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Conditions We Treat with Cupping</h3>
             <ul>
-              <li>Muscle tension and stiffness</li>
+              <li>Chronic muscle tension and knots</li>
               <li>Myofascial pain syndrome</li>
               <li>Back and neck pain</li>
-              <li>Shoulder tension and pain</li>
-              <li>Athletic recovery</li>
-              <li>Trigger points</li>
-              <li>Fibromyalgia symptoms</li>
+              <li>Shoulder stiffness</li>
+              <li>Sports injuries</li>
               <li>Poor circulation</li>
+              <li>Tension headaches</li>
+              <li>Fibromyalgia symptoms</li>
             </ul>
             
             <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Our Approach</h3>
             <p>
-              We use modern cupping techniques including silicone and pneumatic cups that allow precise control of suction levels. Treatment may involve static cupping, where cups remain in place, or dynamic cupping, where cups are moved along muscle groups with massage oil. We often combine cupping with other physiotherapy techniques for comprehensive treatment. Our physiotherapists are specially trained in cupping and carefully assess each patient to determine if cupping is appropriate.
+              We use several cupping techniques depending on your specific needs. Static cupping involves leaving cups in place for several minutes, while dynamic cupping involves moving the cups across lubricated skin. We may also use a combination approach with other therapies like massage or dry needling for maximum benefit. Our physiotherapists are fully trained in both traditional and modern cupping methods.
             </p>
             
             <h3 className="text-xl font-bold mt-6 mb-3 text-vitality-700 dark:text-vitality-300">Benefits of Cupping Therapy</h3>
             <ul>
-              <li>Rapid pain relief</li>
-              <li>Release of deep muscle tension</li>
-              <li>Enhanced blood circulation</li>
-              <li>Reduced muscle inflammation</li>
-              <li>Fascial release</li>
-              <li>Lymphatic drainage</li>
-              <li>Relaxation and stress reduction</li>
-              <li>Complementary to other treatments</li>
+              <li>Increased blood flow to tight or painful areas</li>
+              <li>Release of fascial restrictions</li>
+              <li>Reduction in muscle tension</li>
+              <li>Decreased pain and inflammation</li>
+              <li>Improved tissue mobility</li>
+              <li>Enhanced removal of toxins and metabolic waste</li>
+              <li>Complementary effect to other physiotherapy treatments</li>
+              <li>Potential to reach deeper tissues than manual therapy alone</li>
             </ul>
           </div>
 
@@ -85,32 +92,32 @@ const CuppingTherapy = () => {
               <h3 className="text-xl font-bold text-vitality-700 dark:text-vitality-300">What to Expect</h3>
             </div>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
-              Cupping therapy typically leaves circular marks on the skin that may range from light pink to dark purple, depending on the level of stagnation in the tissues. These marks are not bruises and are not painful. They typically fade within 2-7 days. Our therapists will explain this process and ensure you're comfortable with it before proceeding.
+              During a cupping session, you may experience a tight sensation where the cups are placed, but it shouldn't be painful. After treatment, circular marks often appear where the cups were placed. These marks are not bruises but rather a result of bringing blood to the surface; they typically fade within a few days to a week. The treatment itself is relaxing for most people, with many reporting immediate relief from tension.
             </p>
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-              <h4 className="font-bold mb-3">Patient Testimonial</h4>
+              <h4 className="font-bold mb-3">Client Experience</h4>
               <p className="italic">
-                "I've had chronic upper back tension for years due to my desk job. After just one session of cupping therapy, I felt relief that lasted for days. Now I incorporate regular cupping sessions into my wellness routine, and the difference in my pain levels and mobility is remarkable."
+                "I was hesitant to try cupping at first, but my persistent upper back tightness wasn't responding to regular massage. After just one cupping session, I felt a release that I hadn't experienced in months. Yes, I had the circular marks for about 5 days, but the relief I felt was absolutely worth it. Now I include cupping in my regular maintenance treatments."
               </p>
-              <p className="mt-3 font-medium">— Elena S., chronic tension patient</p>
+              <p className="mt-3 font-medium">— Lisa M., office worker</p>
             </div>
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-gray-200 dark:border-gray-700 pt-8">
             <div>
-              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Experience Cupping Therapy</h3>
-              <p className="text-gray-600 dark:text-gray-400">Book a session with our cupping specialists.</p>
+              <h3 className="text-xl font-bold mb-2 text-vitality-700 dark:text-vitality-300">Ready to Try Cupping?</h3>
+              <p className="text-gray-600 dark:text-gray-400">Book an appointment with our cupping specialists.</p>
             </div>
             <div className="flex gap-4">
               <Button asChild variant="outline">
                 <Link to="/contact" className="flex items-center">
-                  Contact Us
+                  Learn More
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
               <Button asChild>
                 <Link to="/booking" className="flex items-center">
-                  Book Session
+                  Book Appointment
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>

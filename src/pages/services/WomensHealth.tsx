@@ -3,13 +3,20 @@ import React from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Heart, CalendarCheck, Clock, CheckCircle, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, CalendarCheck, Clock, CheckCircle, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const WomensHealth = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-16 px-4">
+        <Button asChild variant="outline" className="mb-8">
+          <Link to="/services" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+        
         <div className="max-w-4xl mx-auto">
           <SectionTitle
             title="Women's Health Physiotherapy"
@@ -19,7 +26,7 @@ const WomensHealth = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="https://images.unsplash.com/photo-1518310952931-b1de897abd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
+              src="/lovable-uploads/15bba306-a1f7-4b1f-a92f-9874fd19d0a8.png"
               alt="Women's Health Physiotherapy"
               className="w-full h-full object-cover"
             />

@@ -4,11 +4,20 @@ import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { CTASection } from "@/components/ui/cta-section";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Dumbbell } from "lucide-react";
+import { ArrowLeft, CheckCircle, Dumbbell } from "lucide-react";
 
 const StrengthConditioning = () => {
   return (
     <PageLayout>
+      <div className="container mx-auto py-16 px-4">
+        <Button asChild variant="outline" className="mb-8">
+          <Link to="/services" className="flex items-center">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Services
+          </Link>
+        </Button>
+      </div>
+      
       {/* Hero Section */}
       <section className="bg-vitality-50 py-16 md:py-24">
         <div className="container mx-auto px-4">
