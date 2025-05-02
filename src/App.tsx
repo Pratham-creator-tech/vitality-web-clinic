@@ -22,7 +22,8 @@ import NotFound from "./pages/NotFound";
 import DoctorRegistration from "./pages/DoctorRegistration";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
+import AccountSettings from "./pages/AccountSettings";
+import Billing from "./pages/Billing";
 import SportsRehabilitation from "./pages/services/SportsRehabilitation";
 import ManualTherapy from "./pages/services/ManualTherapy";
 import PostSurgical from "./pages/services/PostSurgical";
@@ -74,7 +75,8 @@ const App = () => (
                 <Route path="/doctor-registration" element={<DoctorRegistration />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
+                <Route path="/account-settings" element={<AccountSettings />} />
+                <Route path="/billing" element={<Billing />} />
                 <Route path="/patients" element={<PatientsList />} />
                 
                 {/* Service specific pages */}

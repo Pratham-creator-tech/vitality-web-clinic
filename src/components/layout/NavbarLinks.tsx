@@ -2,7 +2,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { CalendarCheck, ChevronDown, Info, Phone, User, UserRound } from "lucide-react";
+import { CalendarCheck, ChevronDown, Info, Phone, UserRound } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 import { 
@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const NavbarLinks = () => {
-  const { user, userRole } = useAuth();
   const { pathname } = useLocation();
   const { t } = useLanguage();
 
@@ -24,31 +23,10 @@ export const NavbarLinks = () => {
   const linkStyle = "relative flex items-center gap-1.5 text-sm font-medium py-2 px-3 hover:text-vitality-500 transition-colors";
   const activeLinkStyle = "text-vitality-500 font-semibold";
 
-  const linkAnimation = {
-    initial: { opacity: 0, y: -10 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.2 }
-  };
-
   return (
     <div className="hidden lg:flex items-center space-x-1">
       {/* Main Navigation */}
       <div className="flex items-center space-x-1">
-        <Link
-          to="/"
-          className={`${linkStyle} ${isActive("/") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
-        >
-          {t("app.header.home")}
-          {isActive("/") && (
-            <motion.span
-              layoutId="navigation-underline"
-              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-            />
-          )}
-        </Link>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button 
@@ -207,7 +185,7 @@ export const NavbarLinks = () => {
           )}
         </Link>
 
-        {/* Add Patients link for all users */}
+        {/* Patients link for all users */}
         <Link
           to="/patients"
           className={`${linkStyle} ${isActive("/patients") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
@@ -292,30 +270,8 @@ export const NavbarLinks = () => {
         </Link>
       </div>
 
-      {/* Auth & Actions */}
-      <div className="flex items-center ml-4">
-        {user ? (
-          <Button asChild variant="ghost" size="sm" className="mr-2 text-gray-700 dark:text-gray-200">
-            <Link to="/profile" className="flex items-center gap-1.5">
-              <User className="h-4 w-4" />
-              {t("app.header.profile")}
-            </Link>
-          </Button>
-        ) : (
-          <div className="hidden lg:flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
-              <Link to="/signin" className="flex items-center gap-1.5">
-                <User className="h-4 w-4" />
-                {t("app.header.signin")}
-              </Link>
-            </Button>
-
-            <Button asChild variant="outline" size="sm" className="text-gray-700 dark:text-gray-200">
-              <Link to="/signup">Sign Up</Link>
-            </Button>
-          </div>
-        )}
-        
+      {/* Booking Button - Always visible */}
+      <div className="ml-4">
         <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white hidden lg:flex">
           <Link to="/booking" className="flex items-center gap-1.5">
             <CalendarCheck className="h-4 w-4" />

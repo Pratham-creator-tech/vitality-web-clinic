@@ -1,1102 +1,531 @@
 
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
-import { 
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  MapPin,
-  FileEdit,
-  Save,
-  Key,
-  Image,
-  CreditCard,
-  Activity,
-  Briefcase,
-  UserPlus,
-  Settings
-} from "lucide-react";
-
-import PageLayout from "@/components/layout/PageLayout";
-import { SectionTitle } from "@/components/ui/section-title";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Tabs, 
-  TabsContent, 
-  TabsList, 
-  TabsTrigger 
-} from "@/components/ui/tabs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CalendarIcon, Edit, Lock, Video, BarChart, BookOpen, ClipboardList, Clock } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import PageLayout from "@/components/layout/PageLayout";
 
-// Form schemas
-const personalInfoSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  dateOfBirth: z.string().optional(),
-  address: z.string().min(5, "Please provide your address"),
-  city: z.string().min(2, "Please provide your city"),
-  state: z.string().min(2, "Please provide your state/province"),
-  zipCode: z.string().min(4, "Please provide your postal/zip code"),
-  country: z.string().min(2, "Please provide your country"),
-  emergencyContact: z.string().optional(),
-  occupation: z.string().optional(),
-  preferredLanguage: z.string().optional(),
-  communicationPreference: z.string().optional(),
-  bio: z.string().optional(),
-});
+interface Appointment {
+  id: string;
+  date: string;
+  time: string;
+  doctor: string;
+  status: "upcoming" | "completed" | "cancelled";
+  type: string;
+}
 
-const medicalInfoSchema = z.object({
-  medicalConditions: z.string().optional(),
-  allergies: z.string().optional(),
-  medications: z.string().optional(),
-  insuranceProvider: z.string().optional(),
-  insuranceNumber: z.string().optional(),
-  primaryPhysician: z.string().optional(),
-  bloodType: z.string().optional(),
-  height: z.string().optional(),
-  weight: z.string().optional(),
-  exerciseFrequency: z.string().optional(),
-});
-
-// Professional info for doctors only
-const professionalInfoSchema = z.object({
-  specialization: z.string().min(2, "Please select a specialization"),
-  qualifications: z.string().min(5, "Please provide your qualifications"),
-  yearsExperience: z.string().min(1, "Please enter years of experience"),
-  clinic: z.string().min(2, "Please enter your clinic name"),
-  languages: z.string().min(2, "Please list languages you speak"),
-  licensureNumber: z.string().optional(),
-  professionalBio: z.string().optional(),
-  consultationFees: z.string().optional(),
-  availability: z.string().optional(),
-});
-
-type PersonalInfoValues = z.infer<typeof personalInfoSchema>;
-type MedicalInfoValues = z.infer<typeof medicalInfoSchema>;
-type ProfessionalInfoValues = z.infer<typeof professionalInfoSchema>;
+interface ProgressData {
+  date: string;
+  painLevel: number;
+  mobility: number;
+  strength: number;
+}
 
 const Profile = () => {
-  const [isDoctor, setIsDoctor] = useState(false); // Toggle for profile type
-  const [isPersonalInfoSubmitting, setIsPersonalInfoSubmitting] = useState(false);
-  const [isMedicalInfoSubmitting, setIsMedicalInfoSubmitting] = useState(false);
-  const [isProfessionalInfoSubmitting, setIsProfessionalInfoSubmitting] = useState(false);
-  
-  const navigate = useNavigate();
+  const { user, userRole } = useAuth();
+  const { toast } = useToast();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [progressData, setProgressData] = useState<ProgressData[]>([]);
 
-  // Personal info form
-  const personalInfoForm = useForm<PersonalInfoValues>({
-    resolver: zodResolver(personalInfoSchema),
-    defaultValues: {
-      fullName: "John Doe",
-      email: "john.doe@example.com",
-      phone: "(555) 123-4567",
-      dateOfBirth: "1985-05-15",
-      address: "123 Main St, Anytown, CA 90210",
-      city: "Anytown",
-      state: "California",
-      zipCode: "90210",
-      country: "United States",
-      occupation: "Software Engineer",
-      preferredLanguage: "English",
-      communicationPreference: "Email",
-      emergencyContact: "Jane Doe, (555) 987-6543, Spouse",
-      bio: "I enjoy hiking and playing tennis. I'm currently recovering from a knee injury.",
-    }
-  });
+  useEffect(() => {
+    // Check if user has subscription
+    const checkSubscription = async () => {
+      if (user) {
+        try {
+          // For demo purposes, we're hardcoding the subscription status
+          // In a real app, you would check this from the database
+          setIsSubscribed(false);
+        } catch (error) {
+          console.error("Error checking subscription:", error);
+        }
+      }
+    };
 
-  // Medical info form (for patients)
-  const medicalInfoForm = useForm<MedicalInfoValues>({
-    resolver: zodResolver(medicalInfoSchema),
-    defaultValues: {
-      medicalConditions: "Mild hypertension, Knee injury (ACL tear, recovering)",
-      allergies: "Penicillin, Shellfish",
-      medications: "Lisinopril 10mg daily",
-      insuranceProvider: "Blue Cross Blue Shield",
-      insuranceNumber: "BCB12345678",
-      primaryPhysician: "Dr. Sarah Johnson",
-      bloodType: "O+",
-      height: "5'10\" / 178 cm",
-      weight: "165 lbs / 75 kg",
-      exerciseFrequency: "2-3 times per week",
-    }
-  });
+    // Fetch user's appointments
+    const fetchAppointments = async () => {
+      if (user) {
+        try {
+          // Simulated appointment data - in a real app, fetch from Supabase
+          setAppointments([
+            {
+              id: "1",
+              date: "2025-05-10",
+              time: "10:00 AM",
+              doctor: "Dr. Sarah Johnson",
+              status: "upcoming",
+              type: "Initial Assessment"
+            },
+            {
+              id: "2",
+              date: "2025-04-25",
+              time: "2:30 PM",
+              doctor: "Dr. Michael Chen",
+              status: "completed",
+              type: "Follow-up"
+            },
+            {
+              id: "3",
+              date: "2025-04-15",
+              time: "3:45 PM",
+              doctor: "Dr. Sarah Johnson",
+              status: "completed",
+              type: "Treatment Session"
+            }
+          ]);
+        } catch (error) {
+          console.error("Error fetching appointments:", error);
+        }
+      }
+    };
 
-  // Professional info form (for doctors)
-  const professionalInfoForm = useForm<ProfessionalInfoValues>({
-    resolver: zodResolver(professionalInfoSchema),
-    defaultValues: {
-      specialization: "Sports Rehabilitation",
-      qualifications: "DPT, OCS, CSCS",
-      yearsExperience: "12",
-      clinic: "Vitality Physio Main Clinic",
-      languages: "English, Spanish",
-      licensureNumber: "PT12345",
-      professionalBio: "Specialized in sports injuries with over a decade of experience working with professional athletes.",
-      consultationFees: "$150 per session",
-      availability: "Mon-Fri, 9:00 AM - 5:00 PM"
-    }
-  });
+    // Fetch progress data
+    const fetchProgressData = async () => {
+      if (user) {
+        try {
+          // Simulated progress data - in a real app, fetch from Supabase
+          setProgressData([
+            { date: "2025-04-15", painLevel: 7, mobility: 4, strength: 3 },
+            { date: "2025-04-22", painLevel: 6, mobility: 5, strength: 4 },
+            { date: "2025-04-29", painLevel: 5, mobility: 6, strength: 5 },
+            { date: "2025-05-06", painLevel: 3, mobility: 7, strength: 6 }
+          ]);
+        } catch (error) {
+          console.error("Error fetching progress data:", error);
+        }
+      }
+    };
 
-  const onPersonalInfoSubmit = async (data: PersonalInfoValues) => {
-    setIsPersonalInfoSubmitting(true);
-    try {
-      // In a real app, this would be an API call to update user profile
-      console.log("Personal info update:", data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      toast.success("Personal information updated successfully!");
-    } catch (error) {
-      console.error("Update error:", error);
-      toast.error("There was a problem updating your information.");
-    } finally {
-      setIsPersonalInfoSubmitting(false);
-    }
+    checkSubscription();
+    fetchAppointments();
+    fetchProgressData();
+  }, [user]);
+
+  const handleUpgradeClick = () => {
+    toast({
+      title: "Upgrade to Premium",
+      description: "Visit the billing page to upgrade your plan and access exercises.",
+    });
   };
 
-  const onMedicalInfoSubmit = async (data: MedicalInfoValues) => {
-    setIsMedicalInfoSubmitting(true);
-    try {
-      // In a real app, this would be an API call
-      console.log("Medical info update:", data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      toast.success("Medical information updated successfully!");
-    } catch (error) {
-      console.error("Update error:", error);
-      toast.error("There was a problem updating your medical information.");
-    } finally {
-      setIsMedicalInfoSubmitting(false);
-    }
-  };
-
-  const onProfessionalInfoSubmit = async (data: ProfessionalInfoValues) => {
-    setIsProfessionalInfoSubmitting(true);
-    try {
-      // In a real app, this would be an API call
-      console.log("Professional info update:", data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      toast.success("Professional information updated successfully!");
-    } catch (error) {
-      console.error("Update error:", error);
-      toast.error("There was a problem updating your professional information.");
-    } finally {
-      setIsProfessionalInfoSubmitting(false);
-    }
-  };
-
-  const toggleProfileType = () => {
-    setIsDoctor(!isDoctor);
-  };
-
-  // Quick links for the sidebar
-  const quickLinks = isDoctor ? [
-    { icon: <Calendar className="mr-2 h-4 w-4" />, label: "Appointments", url: "/booking" },
-    { icon: <UserPlus className="mr-2 h-4 w-4" />, label: "My Patients", url: "/patients" },
-    { icon: <Activity className="mr-2 h-4 w-4" />, label: "Patient Analytics", url: "/patients" },
-    { icon: <CreditCard className="mr-2 h-4 w-4" />, label: "Billing", url: "/pricing" },
-    { icon: <Settings className="mr-2 h-4 w-4" />, label: "Account Settings", url: "#" }
-  ] : [
-    { icon: <Calendar className="mr-2 h-4 w-4" />, label: "My Appointments", url: "/booking" },
-    { icon: <Activity className="mr-2 h-4 w-4" />, label: "Pain Tracker", url: "/pain-tracker" },
-    { icon: <Briefcase className="mr-2 h-4 w-4" />, label: "My Exercises", url: "/video-library" },
-    { icon: <CreditCard className="mr-2 h-4 w-4" />, label: "Billing", url: "/pricing" },
-    { icon: <Settings className="mr-2 h-4 w-4" />, label: "Account Settings", url: "#" }
-  ];
+  if (!user) {
+    return (
+      <PageLayout>
+        <div className="container py-10">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Please sign in to view your profile</h1>
+            <Button asChild>
+              <Link to="/signin">Sign In</Link>
+            </Button>
+          </div>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
-    <PageLayout className="py-10 bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4 max-w-5xl">
-        <div className="flex justify-between items-center mb-6">
-          <SectionTitle 
-            title={isDoctor ? "Doctor Profile" : "Patient Profile"} 
-            subtitle="Manage your personal information and preferences."
-          />
-          
-          <Button 
-            variant="outline" 
-            onClick={toggleProfileType}
-            className="hidden md:flex"
-          >
-            Switch to {isDoctor ? "Patient" : "Doctor"} View
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Sidebar - Profile Summary */}
-          <div className="md:col-span-1">
-            <Card className="shadow-md">
-              <CardContent className="pt-6">
-                <div className="flex flex-col items-center">
-                  <Avatar className="h-24 w-24 mb-4">
+    <PageLayout>
+      <div className="container py-10">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Profile Sidebar */}
+            <div className="md:col-span-1 space-y-6">
+              <Card>
+                <CardHeader className="text-center">
+                  <Avatar className="h-24 w-24 mx-auto">
                     <AvatarImage src="/placeholder.svg" alt="Profile picture" />
-                    <AvatarFallback>
-                      {isDoctor ? "DR" : "JD"}
+                    <AvatarFallback className="text-xl bg-vitality-100 text-vitality-700 dark:bg-vitality-800 dark:text-vitality-300">
+                      {user.email ? user.email.charAt(0).toUpperCase() : "U"}
                     </AvatarFallback>
                   </Avatar>
-                  <h3 className="text-xl font-bold">
-                    {isDoctor ? "Dr. John Smith" : "John Doe"}
-                  </h3>
-                  <p className="text-gray-500 text-sm">
-                    {isDoctor ? "Physiotherapist" : "Patient"}
-                  </p>
-                  
-                  <Button variant="outline" size="sm" className="mt-4 w-full">
-                    <Image size={16} className="mr-2" />
-                    Change Photo
-                  </Button>
-                </div>
-
-                <div className="mt-6 space-y-3">
-                  <div className="flex items-center text-sm">
-                    <Mail size={16} className="mr-2 text-gray-500" />
-                    <span className="text-gray-700 dark:text-gray-300 truncate">
-                      {isDoctor ? "dr.john@example.com" : "john.doe@example.com"}
-                    </span>
-                  </div>
-                  <div className="flex items-center text-sm">
-                    <Phone size={16} className="mr-2 text-gray-500" />
-                    <span className="text-gray-700 dark:text-gray-300">
-                      (555) 123-4567
-                    </span>
-                  </div>
-                  {isDoctor ? (
-                    <div className="flex items-center text-sm">
-                      <MapPin size={16} className="mr-2 text-gray-500" />
-                      <span className="text-gray-700 dark:text-gray-300 truncate">
-                        Vitality Main Clinic
+                  <CardTitle className="mt-4">{user.user_metadata?.full_name || user.email}</CardTitle>
+                  <CardDescription>
+                    {userRole === "doctor" ? "Physiotherapist" : "Patient"}
+                    <Badge variant="outline" className="ml-2 bg-vitality-50 text-vitality-700 dark:bg-vitality-900 dark:text-vitality-300">
+                      {isSubscribed ? "Premium" : "Free Plan"}
+                    </Badge>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Email:</span>
+                      <span className="text-sm font-medium">{user.email}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Member since:</span>
+                      <span className="text-sm font-medium">
+                        {new Date(user.created_at).toLocaleDateString()}
                       </span>
                     </div>
-                  ) : (
-                    <div className="flex items-center text-sm">
-                      <Calendar size={16} className="mr-2 text-gray-500" />
-                      <span className="text-gray-700 dark:text-gray-300">
-                        Next Appointment: May 15, 2025
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-6">
-                  <Button className="w-full md:hidden" onClick={toggleProfileType}>
-                    Switch to {isDoctor ? "Patient" : "Doctor"} View
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-center">
+                  <Button asChild variant="outline" size="sm" className="w-full">
+                    <Link to="/account-settings" className="flex items-center gap-2 justify-center">
+                      <Edit className="h-4 w-4" />
+                      Edit Profile
+                    </Link>
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Quick links sidebar card */}
-            <Card className="shadow-md mt-4">
-              <CardContent className="pt-6">
-                <h3 className="font-medium mb-3">Quick Links</h3>
-                <div className="space-y-2">
-                  {quickLinks.map((link, index) => (
-                    <Button 
-                      key={index}
-                      variant="ghost" 
-                      className="w-full justify-start text-sm"
-                      asChild
-                    >
-                      <Link to={link.url} className="flex items-center">
-                        {link.icon}
-                        {link.label}
+                </CardFooter>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button asChild variant="outline" className="w-full justify-start">
+                    <Link to="/booking">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      Book Appointment
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full justify-start">
+                    <Link to="/pain-tracker">
+                      <BarChart className="mr-2 h-4 w-4" />
+                      Track Pain & Recovery
+                    </Link>
+                  </Button>
+                  {isSubscribed ? (
+                    <Button asChild variant="outline" className="w-full justify-start">
+                      <Link to="/video-library">
+                        <Video className="mr-2 h-4 w-4" />
+                        Exercise Videos
                       </Link>
                     </Button>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Content */}
-          <div className="md:col-span-3">
-            <Tabs defaultValue="personal" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="personal">Personal Info</TabsTrigger>
-                {isDoctor ? (
-                  <TabsTrigger value="professional">Professional Info</TabsTrigger>
-                ) : (
-                  <TabsTrigger value="medical">Medical Info</TabsTrigger>
-                )}
-                <TabsTrigger value="security">Security</TabsTrigger>
-              </TabsList>
-
-              {/* Personal Information Tab */}
-              <TabsContent value="personal">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
-                    <CardDescription>
-                      Update your personal details and contact information.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Form {...personalInfoForm}>
-                      <form onSubmit={personalInfoForm.handleSubmit(onPersonalInfoSubmit)} className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="fullName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Full Name</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your full name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="email"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl>
-                                  <Input type="email" placeholder="Your email address" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="phone"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Phone Number</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your phone number" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="dateOfBirth"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Date of Birth</FormLabel>
-                                <FormControl>
-                                  <Input type="date" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="occupation"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Occupation</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your occupation" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="preferredLanguage"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Preferred Language</FormLabel>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select language" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="English">English</SelectItem>
-                                    <SelectItem value="Spanish">Spanish</SelectItem>
-                                    <SelectItem value="French">French</SelectItem>
-                                    <SelectItem value="Chinese">Chinese</SelectItem>
-                                    <SelectItem value="Hindi">Hindi</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="communicationPreference"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Communication Preference</FormLabel>
-                                <Select 
-                                  onValueChange={field.onChange} 
-                                  defaultValue={field.value}
-                                >
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select preference" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="Email">Email</SelectItem>
-                                    <SelectItem value="Phone">Phone</SelectItem>
-                                    <SelectItem value="SMS">SMS</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        <h3 className="font-medium text-lg mt-6 mb-3">Address Information</h3>
-                        
-                        <FormField
-                          control={personalInfoForm.control}
-                          name="address"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Street Address</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Street address" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="city"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>City</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your city" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="state"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>State/Province</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your state or province" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="zipCode"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Postal/ZIP Code</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your postal/ZIP code" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={personalInfoForm.control}
-                            name="country"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Country</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Your country" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        <FormField
-                          control={personalInfoForm.control}
-                          name="emergencyContact"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Emergency Contact</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="Name, Phone number, Relationship" 
-                                  {...field} 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={personalInfoForm.control}
-                          name="bio"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Bio / Additional Information</FormLabel>
-                              <FormControl>
-                                <Textarea 
-                                  placeholder="Tell us a little about yourself"
-                                  className="min-h-24"
-                                  {...field} 
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <div className="flex justify-end">
-                          <Button 
-                            type="submit"
-                            disabled={isPersonalInfoSubmitting}
-                          >
-                            {isPersonalInfoSubmitting ? (
-                              "Saving..."
-                            ) : (
-                              <>
-                                <Save size={16} className="mr-2" />
-                                Save Changes
-                              </>
-                            )}
-                          </Button>
-                        </div>
-                      </form>
-                    </Form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Medical Information Tab (for patients) */}
-              {!isDoctor && (
-                <TabsContent value="medical">
+                  ) : (
+                    <Button variant="outline" className="w-full justify-start" onClick={handleUpgradeClick}>
+                      <Lock className="mr-2 h-4 w-4" />
+                      Exercise Videos
+                      <Badge variant="outline" className="ml-auto bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                        Premium
+                      </Badge>
+                    </Button>
+                  )}
+                  {userRole === "doctor" && (
+                    <Button asChild variant="outline" className="w-full justify-start">
+                      <Link to="/patients">
+                        <ClipboardList className="mr-2 h-4 w-4" />
+                        View Patients
+                      </Link>
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Main Content Area */}
+            <div className="md:col-span-2">
+              <Tabs defaultValue="appointments" className="space-y-6">
+                <TabsList className="w-full grid grid-cols-3">
+                  <TabsTrigger value="appointments">Appointments</TabsTrigger>
+                  <TabsTrigger value="progress">Progress</TabsTrigger>
+                  <TabsTrigger value="exercises">My Exercises</TabsTrigger>
+                </TabsList>
+                
+                {/* Appointments Tab */}
+                <TabsContent value="appointments" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Medical Information</CardTitle>
+                      <div className="flex justify-between">
+                        <div>
+                          <CardTitle>Upcoming Appointments</CardTitle>
+                          <CardDescription>
+                            Your scheduled appointments
+                          </CardDescription>
+                        </div>
+                        <Button asChild size="sm">
+                          <Link to="/booking">Book New</Link>
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      {appointments.filter(app => app.status === "upcoming").length > 0 ? (
+                        <div className="space-y-4">
+                          {appointments
+                            .filter(app => app.status === "upcoming")
+                            .map(appointment => (
+                              <Card key={appointment.id}>
+                                <CardContent className="p-4">
+                                  <div className="flex justify-between items-center flex-wrap gap-4">
+                                    <div className="flex items-center gap-4">
+                                      <div className="bg-vitality-100 dark:bg-vitality-900 p-3 rounded-full">
+                                        <CalendarIcon className="h-6 w-6 text-vitality-700 dark:text-vitality-300" />
+                                      </div>
+                                      <div>
+                                        <h4 className="font-medium">{appointment.type}</h4>
+                                        <div className="flex items-center text-sm text-muted-foreground">
+                                          <Clock className="mr-1 h-3 w-3" />
+                                          {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
+                                        </div>
+                                        <p className="text-sm">With {appointment.doctor}</p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                                        Confirmed
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <p className="text-muted-foreground">No upcoming appointments</p>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Schedule your next session to continue your treatment
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Past Appointments</CardTitle>
                       <CardDescription>
-                        Manage your medical details for better care coordination.
+                        Your appointment history
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Form {...medicalInfoForm}>
-                        <form onSubmit={medicalInfoForm.handleSubmit(onMedicalInfoSubmit)} className="space-y-4">
-                          <Alert className="mb-6">
-                            <AlertDescription>
-                              This information is securely stored and only shared with your healthcare providers.
-                            </AlertDescription>
-                          </Alert>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="bloodType"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Blood Type</FormLabel>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                  >
-                                    <FormControl>
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Select blood type" />
-                                      </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                      <SelectItem value="A+">A+</SelectItem>
-                                      <SelectItem value="A-">A-</SelectItem>
-                                      <SelectItem value="B+">B+</SelectItem>
-                                      <SelectItem value="B-">B-</SelectItem>
-                                      <SelectItem value="AB+">AB+</SelectItem>
-                                      <SelectItem value="AB-">AB-</SelectItem>
-                                      <SelectItem value="O+">O+</SelectItem>
-                                      <SelectItem value="O-">O-</SelectItem>
-                                      <SelectItem value="Unknown">Unknown</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="height"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Height</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your height (e.g., 5'10&quot; or 178 cm)" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="weight"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Weight</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your weight (e.g., 165 lbs or 75 kg)" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="exerciseFrequency"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Exercise Frequency</FormLabel>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                  >
-                                    <FormControl>
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Select frequency" />
-                                      </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                      <SelectItem value="None">None</SelectItem>
-                                      <SelectItem value="1 time per week">1 time per week</SelectItem>
-                                      <SelectItem value="2-3 times per week">2-3 times per week</SelectItem>
-                                      <SelectItem value="4-5 times per week">4-5 times per week</SelectItem>
-                                      <SelectItem value="Daily">Daily</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-
-                          <FormField
-                            control={medicalInfoForm.control}
-                            name="medicalConditions"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Medical Conditions</FormLabel>
-                                <FormControl>
-                                  <Textarea 
-                                    placeholder="List any medical conditions, injuries, or surgeries"
-                                    className="min-h-20"
-                                    {...field} 
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={medicalInfoForm.control}
-                            name="allergies"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Allergies</FormLabel>
-                                <FormControl>
-                                  <Textarea 
-                                    placeholder="List any allergies you have"
-                                    className="min-h-20"
-                                    {...field} 
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={medicalInfoForm.control}
-                            name="medications"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Current Medications</FormLabel>
-                                <FormControl>
-                                  <Textarea 
-                                    placeholder="List any medications you're currently taking"
-                                    className="min-h-20"
-                                    {...field} 
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="insuranceProvider"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Insurance Provider</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your insurance company" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="insuranceNumber"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Insurance ID/Policy Number</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your insurance ID" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={medicalInfoForm.control}
-                              name="primaryPhysician"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Primary Physician</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your doctor's name" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-                          </div>
-
-                          <div className="flex justify-end">
-                            <Button 
-                              type="submit"
-                              disabled={isMedicalInfoSubmitting}
-                            >
-                              {isMedicalInfoSubmitting ? (
-                                "Saving..."
-                              ) : (
-                                <>
-                                  <Save size={16} className="mr-2" />
-                                  Save Medical Information
-                                </>
-                              )}
-                            </Button>
-                          </div>
-                        </form>
-                      </Form>
+                      {appointments.filter(app => app.status === "completed").length > 0 ? (
+                        <div className="space-y-4">
+                          {appointments
+                            .filter(app => app.status === "completed")
+                            .map(appointment => (
+                              <Card key={appointment.id}>
+                                <CardContent className="p-4">
+                                  <div className="flex justify-between items-center flex-wrap gap-4">
+                                    <div className="flex items-center gap-4">
+                                      <div className="bg-gray-100 dark:bg-gray-800 p-3 rounded-full">
+                                        <CalendarIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+                                      </div>
+                                      <div>
+                                        <h4 className="font-medium">{appointment.type}</h4>
+                                        <div className="flex items-center text-sm text-muted-foreground">
+                                          <Clock className="mr-1 h-3 w-3" />
+                                          {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
+                                        </div>
+                                        <p className="text-sm">With {appointment.doctor}</p>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <Badge variant="outline" className="bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                        Completed
+                                      </Badge>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <p className="text-muted-foreground">No past appointments</p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
-              )}
-
-              {/* Professional Information Tab (for doctors) */}
-              {isDoctor && (
-                <TabsContent value="professional">
+                
+                {/* Progress Tab */}
+                <TabsContent value="progress" className="space-y-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Professional Information</CardTitle>
+                      <CardTitle>Recovery Progress</CardTitle>
                       <CardDescription>
-                        Update your professional details and practice information.
+                        Track your healing journey
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Form {...professionalInfoForm}>
-                        <form onSubmit={professionalInfoForm.handleSubmit(onProfessionalInfoSubmit)} className="space-y-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="specialization"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Specialization</FormLabel>
-                                  <Select 
-                                    onValueChange={field.onChange} 
-                                    defaultValue={field.value}
-                                  >
-                                    <FormControl>
-                                      <SelectTrigger>
-                                        <SelectValue placeholder="Select specialization" />
-                                      </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                      <SelectItem value="Sports Rehabilitation">Sports Rehabilitation</SelectItem>
-                                      <SelectItem value="Manual Therapy">Manual Therapy</SelectItem>
-                                      <SelectItem value="Post-Surgical Rehabilitation">Post-Surgical Rehabilitation</SelectItem>
-                                      <SelectItem value="Chronic Pain Management">Chronic Pain Management</SelectItem>
-                                      <SelectItem value="Neurological Rehabilitation">Neurological Rehabilitation</SelectItem>
-                                      <SelectItem value="Strength & Conditioning">Strength & Conditioning</SelectItem>
-                                      <SelectItem value="Geriatric Physical Therapy">Geriatric Physical Therapy</SelectItem>
-                                      <SelectItem value="Pediatric Physical Therapy">Pediatric Physical Therapy</SelectItem>
-                                    </SelectContent>
-                                  </Select>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="qualifications"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Qualifications</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your degrees and certifications" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="yearsExperience"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Years of Experience</FormLabel>
-                                  <FormControl>
-                                    <Input type="number" min="0" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="clinic"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Clinic/Hospital</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your practice location" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="languages"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Languages Spoken</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Languages you speak" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="licensureNumber"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Professional License Number</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your license number" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
-
-                            <FormField
-                              control={professionalInfoForm.control}
-                              name="consultationFees"
-                              render={({ field }) => (
-                                <FormItem>
-                                  <FormLabel>Consultation Fees</FormLabel>
-                                  <FormControl>
-                                    <Input placeholder="Your standard fees" {...field} />
-                                  </FormControl>
-                                  <FormMessage />
-                                </FormItem>
-                              )}
-                            />
+                      {progressData.length > 0 ? (
+                        <div className="space-y-6">
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Pain Level Trend</h4>
+                            <div className="h-12 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex items-end">
+                              {progressData.map((data, index) => (
+                                <div 
+                                  key={index} 
+                                  className="bg-red-500 h-full transition-all duration-500"
+                                  style={{ 
+                                    width: `${100 / progressData.length}%`,
+                                    opacity: 0.4 + ((10 - data.painLevel) / 10) * 0.6,
+                                    height: `${data.painLevel * 10}%`
+                                  }}
+                                  title={`${data.date}: Pain level ${data.painLevel}/10`}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              Your pain level has decreased from {progressData[0].painLevel}/10 to {progressData[progressData.length - 1].painLevel}/10
+                            </p>
                           </div>
-
-                          <FormField
-                            control={professionalInfoForm.control}
-                            name="professionalBio"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Professional Bio</FormLabel>
-                                <FormControl>
-                                  <Textarea 
-                                    placeholder="Share your professional background and expertise"
-                                    className="min-h-24"
-                                    {...field} 
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={professionalInfoForm.control}
-                            name="availability"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Availability</FormLabel>
-                                <FormControl>
-                                  <Textarea 
-                                    placeholder="Your working hours and days"
-                                    className="min-h-20"
-                                    {...field} 
-                                  />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <div className="flex justify-end">
-                            <Button 
-                              type="submit"
-                              disabled={isProfessionalInfoSubmitting}
-                            >
-                              {isProfessionalInfoSubmitting ? (
-                                "Saving..."
-                              ) : (
-                                <>
-                                  <Save size={16} className="mr-2" />
-                                  Save Professional Information
-                                </>
-                              )}
+                          
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Mobility Improvement</h4>
+                            <div className="h-12 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex items-end">
+                              {progressData.map((data, index) => (
+                                <div 
+                                  key={index} 
+                                  className="bg-green-500 transition-all duration-500"
+                                  style={{ 
+                                    width: `${100 / progressData.length}%`,
+                                    height: `${data.mobility * 10}%`
+                                  }}
+                                  title={`${data.date}: Mobility ${data.mobility}/10`}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              Your mobility has improved from {progressData[0].mobility}/10 to {progressData[progressData.length - 1].mobility}/10
+                            </p>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Strength Progress</h4>
+                            <div className="h-12 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden flex items-end">
+                              {progressData.map((data, index) => (
+                                <div 
+                                  key={index} 
+                                  className="bg-blue-500 transition-all duration-500"
+                                  style={{ 
+                                    width: `${100 / progressData.length}%`,
+                                    height: `${data.strength * 10}%`
+                                  }}
+                                  title={`${data.date}: Strength ${data.strength}/10`}
+                                />
+                              ))}
+                            </div>
+                            <p className="text-sm text-muted-foreground">
+                              Your strength has improved from {progressData[0].strength}/10 to {progressData[progressData.length - 1].strength}/10
+                            </p>
+                          </div>
+                          
+                          <div className="flex justify-center">
+                            <Button asChild size="sm">
+                              <Link to="/pain-tracker">View Detailed Progress</Link>
                             </Button>
                           </div>
-                        </form>
-                      </Form>
+                        </div>
+                      ) : (
+                        <div className="text-center py-8">
+                          <p className="text-muted-foreground">No progress data available yet</p>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            Complete assessments to track your recovery journey
+                          </p>
+                        </div>
+                      )}
                     </CardContent>
                   </Card>
                 </TabsContent>
-              )}
-
-              {/* Security Tab */}
-              <TabsContent value="security">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Security Settings</CardTitle>
-                    <CardDescription>
-                      Manage your account security and privacy preferences.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium">Change Password</h3>
-                        <div className="grid grid-cols-1 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium mb-1">Current Password</label>
-                            <Input type="password" placeholder="Enter your current password" />
+                
+                {/* Exercises Tab */}
+                <TabsContent value="exercises" className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Prescribed Exercises</CardTitle>
+                      <CardDescription>
+                        Your personalized exercise plan
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {!isSubscribed ? (
+                        <div className="text-center py-10 space-y-6">
+                          <div className="mx-auto w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
+                            <Lock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
                           </div>
                           <div>
-                            <label className="block text-sm font-medium mb-1">New Password</label>
-                            <Input type="password" placeholder="Enter your new password" />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-1">Confirm New Password</label>
-                            <Input type="password" placeholder="Confirm your new password" />
+                            <h3 className="text-xl font-medium mb-2">Premium Feature</h3>
+                            <p className="text-muted-foreground mb-6">
+                              Upgrade to our Premium plan to access personalized exercises and video tutorials
+                            </p>
+                            <Button asChild>
+                              <Link to="/billing">Upgrade to Premium</Link>
+                            </Button>
                           </div>
                         </div>
-                        <div className="mt-4">
-                          <Button>
-                            <Key size={16} className="mr-2" />
-                            Update Password
-                          </Button>
+                      ) : (
+                        <div className="space-y-4">
+                          {/* This content would only be visible to subscribed users */}
+                          <div className="text-center py-8">
+                            <p className="text-muted-foreground">No exercises assigned yet</p>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              Your therapist will assign exercises after your next session
+                            </p>
+                          </div>
                         </div>
-                      </div>
-
-                      <div className="pt-6 border-t">
-                        <h3 className="text-lg font-medium mb-2">Two-Factor Authentication</h3>
-                        <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">
-                          Add an extra layer of security to your account by enabling two-factor authentication.
-                        </p>
-                        <Button variant="outline">
-                          Enable Two-Factor Authentication
-                        </Button>
-                      </div>
-
-                      <div className="pt-6 border-t">
-                        <h3 className="text-lg font-medium mb-2">Delete Account</h3>
-                        <p className="text-sm text-gray-500 mb-4 dark:text-gray-400">
-                          Permanently delete your account and all associated data. This action cannot be undone.
-                        </p>
-                        <Button variant="destructive">
-                          Delete Account
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                      )}
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Exercise Resources</CardTitle>
+                      <CardDescription>
+                        Educational materials to support your recovery
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      {!isSubscribed ? (
+                        <div className="text-center py-10 space-y-6">
+                          <div className="mx-auto w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center">
+                            <Lock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-medium mb-2">Premium Feature</h3>
+                            <p className="text-muted-foreground mb-6">
+                              Upgrade to our Premium plan to access our extensive library of exercise resources
+                            </p>
+                            <Button asChild>
+                              <Link to="/billing">Upgrade to Premium</Link>
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <Card>
+                            <CardContent className="p-4 flex items-center gap-4">
+                              <div className="bg-vitality-100 dark:bg-vitality-900 p-2 rounded">
+                                <BookOpen className="h-5 w-5 text-vitality-700 dark:text-vitality-300" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-medium">Shoulder Recovery Exercises</h4>
+                                <p className="text-sm text-muted-foreground">PDF guide with illustrated techniques</p>
+                              </div>
+                              <Button size="sm" variant="outline">View</Button>
+                            </CardContent>
+                          </Card>
+                          
+                          <Card>
+                            <CardContent className="p-4 flex items-center gap-4">
+                              <div className="bg-vitality-100 dark:bg-vitality-900 p-2 rounded">
+                                <Video className="h-5 w-5 text-vitality-700 dark:text-vitality-300" />
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-medium">Lower Back Pain Relief</h4>
+                                <p className="text-sm text-muted-foreground">Video tutorials series (10 videos)</p>
+                              </div>
+                              <Button size="sm" variant="outline">Watch</Button>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
           </div>
         </div>
       </div>
