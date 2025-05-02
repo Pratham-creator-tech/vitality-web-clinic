@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { serviceData } from "@/data/services";
+import { getServiceUrl } from "@/utils/serviceUtils";
 
 const Services = () => {
   return (
@@ -32,7 +33,7 @@ const Services = () => {
                   .map((service) => (
                     <Link
                       key={service.id}
-                      to={`/services/${service.id}`}
+                      to={service.link}
                       className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-300"
                     >
                       <div className="aspect-video w-full overflow-hidden">
