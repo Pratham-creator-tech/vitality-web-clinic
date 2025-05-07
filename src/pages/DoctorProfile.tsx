@@ -1,303 +1,394 @@
 
-import { useParams, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  Phone, 
+  Mail, 
+  Award, 
+  GraduationCap,
+  CheckCircle,
+  Loader2,
+  X,
+  Languages
+} from "lucide-react";
 import PageLayout from "@/components/layout/PageLayout";
-import { SectionTitle } from "@/components/ui/section-title";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Calendar, Clock, Award, MapPin, Phone, Mail, Stethoscope, BookOpen, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
-// Import doctor data from DoctorsPage
-import { doctors } from "./DoctorsPage";
+interface Education {
+  id: string;
+  institution: string;
+  degree: string;
+  field_of_study: string;
+  start_date: string;
+  end_date: string | null;
+}
+
+interface Certification {
+  id: string;
+  certification_name: string;
+  issuing_organization: string;
+  issue_date: string;
+  expiry_date: string | null;
+}
+
+interface Schedule {
+  id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  is_available: boolean;
+}
+
+interface Doctor {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  specialization: string | null;
+  clinic_address: string | null;
+  about: string | null;
+  profile_image: string | null;
+  experience_years: number | null;
+  languages: string[] | null;
+  services: string[] | null;
+  awards: string[] | null;
+  professional_memberships: string[] | null;
+}
 
 const DoctorProfile = () => {
   const { id } = useParams<{ id: string }>();
-  const doctor = doctors.find(doc => doc.id.toString() === id);
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [educations, setEducations] = useState<Education[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  if (!doctor) {
+  useEffect(() => {
+    const fetchDoctorData = async () => {
+      try {
+        setIsLoading(true);
+
+        if (!id) {
+          throw new Error("Doctor ID is missing");
+        }
+
+        // Fetch doctor profile
+        const { data: doctorData, error: doctorError } = await supabase
+          .from('doctors')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (doctorError) throw doctorError;
+        
+        setDoctor(doctorData);
+
+        // Fetch doctor education
+        const { data: educationData, error: educationError } = await supabase
+          .from('doctor_education')
+          .select('*')
+          .eq('doctor_id', id);
+
+        if (educationError) throw educationError;
+        setEducations(educationData || []);
+
+        // Fetch doctor certifications
+        const { data: certificationData, error: certificationError } = await supabase
+          .from('doctor_certifications')
+          .select('*')
+          .eq('doctor_id', id);
+
+        if (certificationError) throw certificationError;
+        setCertifications(certificationData || []);
+
+        // Fetch doctor schedule
+        const { data: scheduleData, error: scheduleError } = await supabase
+          .from('doctor_schedule')
+          .select('*')
+          .eq('doctor_id', id);
+
+        if (scheduleError) throw scheduleError;
+        setSchedules(scheduleData || []);
+
+      } catch (error: any) {
+        console.error("Error fetching doctor data:", error);
+        setError(error.message || "Error loading doctor profile");
+        toast({
+          title: "Error",
+          description: "Could not load doctor profile. Please try again later.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDoctorData();
+  }, [id, toast]);
+
+  // Generate initials from name
+  const getInitials = (name: string = "") => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  };
+
+  const getDayName = (day: number) => {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[day];
+  };
+
+  if (isLoading) {
     return (
       <PageLayout>
-        <div className="container mx-auto py-16 px-4 text-center">
-          <h1 className="text-2xl font-bold mb-4">Doctor not found</h1>
-          <p className="mb-6">The doctor you're looking for doesn't exist or may have been removed.</p>
-          <Button asChild>
-            <Link to="/doctors">Back to All Doctors</Link>
-          </Button>
+        <div className="container mx-auto py-32 flex flex-col items-center justify-center">
+          <Loader2 className="h-12 w-12 animate-spin text-vitality-500 mb-4" />
+          <span>Loading doctor profile...</span>
         </div>
       </PageLayout>
     );
   }
 
-  // Sample education data - in a real app, this would come from the database
-  const education = [
-    { degree: "Doctor of Physical Therapy", university: "University of California", year: "2012" },
-    { degree: "Master's in Sports Medicine", university: "Stanford University", year: "2010" },
-    { degree: "Bachelor of Science in Kinesiology", university: "University of Michigan", year: "2008" }
-  ];
-
-  // Sample certifications data
-  const certifications = [
-    "Board Certified Specialist in Sports Physical Therapy",
-    "Manual Therapy Certification",
-    "Orthopedic Clinical Specialist",
-    "Certified Strength and Conditioning Specialist"
-  ];
-
-  // Sample specializations
-  const specializations = [
-    "Post-surgical rehabilitation",
-    "Sports injury management",
-    "Therapeutic exercise",
-    "Manual therapy techniques",
-    "Injury prevention strategies"
-  ];
+  if (error || !doctor) {
+    return (
+      <PageLayout>
+        <div className="container mx-auto py-20 px-4">
+          <Card className="max-w-2xl mx-auto">
+            <CardContent className="pt-6 flex flex-col items-center">
+              <X className="h-16 w-16 text-red-500 mb-4" />
+              <h2 className="text-2xl font-bold text-center mb-2">Doctor Not Found</h2>
+              <p className="text-gray-600 text-center mb-6">
+                The doctor profile you're looking for doesn't exist or may have been removed.
+              </p>
+              <Button asChild>
+                <Link to="/doctors">View All Doctors</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
-      <div className="container mx-auto py-16 px-4">
-        {/* Back Button */}
-        <Link 
-          to="/doctors" 
-          className="inline-flex items-center text-vitality-600 hover:text-vitality-700 mb-6 transition-colors"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to All Doctors
-        </Link>
-
+      <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Doctor Info */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24">
-              <CardContent className="pt-6 text-center">
-                <Avatar className="h-40 w-40 mx-auto mb-4 border-4 border-vitality-100">
-                  <AvatarImage src={doctor.image} alt={doctor.name} className="object-cover" />
-                  <AvatarFallback>{doctor.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                </Avatar>
+            <Card className="mb-6 overflow-hidden">
+              <div className="h-48 bg-gradient-to-r from-vitality-600 to-vitality-400 flex items-center justify-center">
+                {doctor.profile_image ? (
+                  <img 
+                    src={doctor.profile_image} 
+                    alt={doctor.full_name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Avatar className="h-32 w-32 border-4 border-white">
+                    <AvatarFallback className="text-4xl bg-vitality-700 text-white">
+                      {getInitials(doctor.full_name)}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
+              <CardContent className="pt-6">
+                <h1 className="text-2xl font-bold text-vitality-700 mb-1">{doctor.full_name}</h1>
+                <p className="text-gray-600 font-medium mb-4">{doctor.specialization || "General Physiotherapy"}</p>
                 
-                <h1 className="text-2xl font-bold text-vitality-700 dark:text-vitality-300 mb-1">{doctor.name}</h1>
-                <Badge className="mb-4 bg-vitality-100 text-vitality-700 dark:bg-vitality-900 dark:text-vitality-300">
-                  {doctor.specialty}
-                </Badge>
+                <div className="flex items-center mb-4">
+                  <Badge className="bg-vitality-500">
+                    {doctor.experience_years} {doctor.experience_years === 1 ? 'Year' : 'Years'} Experience
+                  </Badge>
+                </div>
+
+                <Separator className="my-4" />
                 
-                <div className="space-y-3 text-left mt-6">
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <MapPin className="h-5 w-5 mr-3 text-vitality-500" />
-                    <span>{doctor.location}</span>
-                  </div>
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Phone className="h-5 w-5 mr-3 text-vitality-500" />
-                    <span>{doctor.phone}</span>
-                  </div>
-                  <div className="flex items-center text-gray-700 dark:text-gray-300">
-                    <Mail className="h-5 w-5 mr-3 text-vitality-500" />
+                <div className="space-y-3 mt-4">
+                  {doctor.clinic_address && (
+                    <div className="flex items-center">
+                      <MapPin className="h-5 w-5 mr-2 text-vitality-500" />
+                      <span>{doctor.clinic_address}</span>
+                    </div>
+                  )}
+                  
+                  {doctor.phone && (
+                    <div className="flex items-center">
+                      <Phone className="h-5 w-5 mr-2 text-vitality-500" />
+                      <span>{doctor.phone}</span>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center">
+                    <Mail className="h-5 w-5 mr-2 text-vitality-500" />
                     <span>{doctor.email}</span>
                   </div>
+
+                  {doctor.languages && doctor.languages.length > 0 && (
+                    <div className="flex items-start">
+                      <Languages className="h-5 w-5 mr-2 text-vitality-500 flex-shrink-0 mt-1" />
+                      <span>{doctor.languages.join(', ')}</span>
+                    </div>
+                  )}
                 </div>
-              </CardContent>
-              
-              <CardFooter className="flex flex-col space-y-3 pt-0">
-                <Button asChild className="w-full">
-                  <Link to="/booking" className="flex items-center justify-center">
+
+                <Button className="w-full mt-6 mb-2" asChild>
+                  <Link to="/booking">
                     <Calendar className="mr-2 h-4 w-4" />
                     Book Appointment
                   </Link>
                 </Button>
-              </CardFooter>
+              </CardContent>
+            </Card>
+
+            {/* Schedule Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center text-lg">
+                  <Clock className="mr-2 h-5 w-5 text-vitality-500" />
+                  Working Hours
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {schedules.length > 0 ? (
+                  <div className="space-y-2">
+                    {schedules.map((schedule) => (
+                      <div key={schedule.id} className="flex items-center justify-between">
+                        <span className="font-medium">{getDayName(schedule.day_of_week)}</span>
+                        <span>
+                          {schedule.start_time.substring(0, 5)} - {schedule.end_time.substring(0, 5)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-center py-4">No schedule information available</p>
+                )}
+              </CardContent>
             </Card>
           </div>
-          
-          {/* Right Column - Tabs with details */}
-          <div className="lg:col-span-2">
-            <Tabs defaultValue="about" className="space-y-8">
-              <TabsList className="grid grid-cols-3 md:grid-cols-4 w-full">
-                <TabsTrigger value="about">About</TabsTrigger>
-                <TabsTrigger value="experience">Experience</TabsTrigger>
-                <TabsTrigger value="education">Education</TabsTrigger>
-                <TabsTrigger value="schedule">Schedule</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="about" className="space-y-6">
-                <Card>
-                  <CardContent className="pt-6">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center">
-                      <Stethoscope className="h-5 w-5 mr-2 text-vitality-500" />
-                      Biography
-                    </h2>
-                    <div className="space-y-4 text-gray-700 dark:text-gray-300">
-                      <p>{doctor.bio}</p>
-                      <p>With years of experience in {doctor.specialty.toLowerCase()}, {doctor.name.split(' ')[0]} has helped countless patients recover from injuries and manage chronic conditions. {doctor.name.split(' ')[0]}'s evidence-based approach combines cutting-edge techniques with compassionate care to deliver optimal outcomes for all patients.</p>
-                      <p>{doctor.name.split(' ')[0]} is committed to continuing education and staying at the forefront of advancements in physical therapy to provide the highest quality care.</p>
-                    </div>
-                    
-                    <h2 className="text-xl font-semibold mt-8 mb-4 flex items-center">
-                      <Award className="h-5 w-5 mr-2 text-vitality-500" />
-                      Specializations
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                      {specializations.map((specialization, index) => (
-                        <Badge key={index} variant="outline" className="bg-gray-50 dark:bg-gray-800">
-                          {specialization}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="experience" className="space-y-6">
-                <Card>
-                  <CardContent className="pt-6">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center">
-                      <Users className="h-5 w-5 mr-2 text-vitality-500" />
-                      Professional Experience
-                    </h2>
-                    
-                    <div className="space-y-8">
-                      <div className="relative pl-8 border-l-2 border-vitality-100 dark:border-vitality-900">
-                        <div className="absolute w-4 h-4 bg-vitality-500 rounded-full -left-[9px] top-0"></div>
-                        <div className="mb-1">
-                          <span className="font-medium">Senior Physical Therapist</span>
-                          <Badge className="ml-2 bg-vitality-50 text-vitality-700">Current</Badge>
+
+          {/* Right Column - Bio & Qualifications */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* About */}
+            <Card>
+              <CardHeader>
+                <CardTitle>About</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  {doctor.about || "No biography information available."}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Education */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <GraduationCap className="mr-2 h-5 w-5 text-vitality-500" />
+                  Education
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {educations.length > 0 ? (
+                  <div className="space-y-6">
+                    {educations.map((education) => (
+                      <div key={education.id} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                        <h3 className="font-bold text-lg">{education.degree}</h3>
+                        <p className="text-vitality-600">{education.field_of_study}</p>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-gray-600">{education.institution}</span>
+                          <span className="text-sm text-gray-500">
+                            {new Date(education.start_date).getFullYear()} - {education.end_date ? new Date(education.end_date).getFullYear() : 'Present'}
+                          </span>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">YASHA's Physiocare</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-500">2018 - Present</p>
-                        <p className="mt-2 text-gray-700 dark:text-gray-300">
-                          Leading rehabilitation programs for patients with various conditions, specializing in {doctor.specialty.toLowerCase()}.
-                        </p>
                       </div>
-                      
-                      <div className="relative pl-8 border-l-2 border-vitality-100 dark:border-vitality-900">
-                        <div className="absolute w-4 h-4 bg-gray-300 dark:bg-gray-700 rounded-full -left-[9px] top-0"></div>
-                        <div className="mb-1">
-                          <span className="font-medium">Physical Therapist</span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-center py-4">No education information available</p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Certifications */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Award className="mr-2 h-5 w-5 text-vitality-500" />
+                  Certifications & Licenses
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {certifications.length > 0 ? (
+                  <div className="space-y-4">
+                    {certifications.map((certification) => (
+                      <div key={certification.id} className="flex items-start">
+                        <CheckCircle className="h-5 w-5 mr-3 text-green-500 mt-1 flex-shrink-0" />
+                        <div>
+                          <h3 className="font-bold">{certification.certification_name}</h3>
+                          <p className="text-sm text-gray-600">{certification.issuing_organization}</p>
+                          <p className="text-xs text-gray-500">
+                            Issued: {new Date(certification.issue_date).toLocaleDateString()}
+                            {certification.expiry_date && ` • Expires: ${new Date(certification.expiry_date).toLocaleDateString()}`}
+                          </p>
                         </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">City General Hospital</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-500">2014 - 2018</p>
-                        <p className="mt-2 text-gray-700 dark:text-gray-300">
-                          Provided comprehensive physical therapy services in an inpatient and outpatient setting.
-                        </p>
                       </div>
-                      
-                      <div className="relative pl-8 border-l-2 border-vitality-100 dark:border-vitality-900">
-                        <div className="absolute w-4 h-4 bg-gray-300 dark:bg-gray-700 rounded-full -left-[9px] top-0"></div>
-                        <div className="mb-1">
-                          <span className="font-medium">Junior Physical Therapist</span>
-                        </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Sports Medicine Center</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-500">2012 - 2014</p>
-                        <p className="mt-2 text-gray-700 dark:text-gray-300">
-                          Assisted in rehabilitation of athletes and sports injury management.
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <h2 className="text-xl font-semibold mt-8 mb-4 flex items-center">
-                      <Award className="h-5 w-5 mr-2 text-vitality-500" />
-                      Certifications
-                    </h2>
-                    <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-                      {certifications.map((cert, index) => (
-                        <li key={index}>{cert}</li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="education" className="space-y-6">
-                <Card>
-                  <CardContent className="pt-6">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center">
-                      <BookOpen className="h-5 w-5 mr-2 text-vitality-500" />
-                      Academic Background
-                    </h2>
-                    
-                    <div className="space-y-8">
-                      {education.map((edu, index) => (
-                        <div key={index} className="relative pl-8 border-l-2 border-vitality-100 dark:border-vitality-900">
-                          <div className="absolute w-4 h-4 bg-vitality-300 dark:bg-vitality-700 rounded-full -left-[9px] top-0"></div>
-                          <div className="mb-1 font-medium">{edu.degree}</div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{edu.university}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-500">Class of {edu.year}</p>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    <h2 className="text-xl font-semibold mt-8 mb-4 flex items-center">
-                      <Award className="h-5 w-5 mr-2 text-vitality-500" />
-                      Continuing Education
-                    </h2>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">
-                      {doctor.name.split(' ')[0]} regularly attends conferences and workshops to stay current with the latest advancements in physiotherapy.
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800">Therapeutic Taping</Badge>
-                      <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800">Vestibular Rehabilitation</Badge>
-                      <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800">Advanced Manual Therapy</Badge>
-                      <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800">Pain Science</Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              
-              <TabsContent value="schedule" className="space-y-6">
-                <Card>
-                  <CardContent className="pt-6">
-                    <h2 className="text-xl font-semibold mb-4 flex items-center">
-                      <Clock className="h-5 w-5 mr-2 text-vitality-500" />
-                      Working Hours
-                    </h2>
-                    
-                    <div className="space-y-3">
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="font-medium">Monday</span>
-                        <span>9:00 AM - 5:00 PM</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="font-medium">Tuesday</span>
-                        <span>9:00 AM - 5:00 PM</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="font-medium">Wednesday</span>
-                        <span>9:00 AM - 5:00 PM</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="font-medium">Thursday</span>
-                        <span>9:00 AM - 5:00 PM</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="font-medium">Friday</span>
-                        <span>9:00 AM - 4:00 PM</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="font-medium">Saturday</span>
-                        <span className="text-gray-500">By Appointment Only</span>
-                      </div>
-                      <div className="flex justify-between py-2">
-                        <span className="font-medium">Sunday</span>
-                        <span className="text-gray-500">Closed</span>
-                      </div>
-                    </div>
-                    
-                    <h2 className="text-xl font-semibold mt-8 mb-4 flex items-center">
-                      <Calendar className="h-5 w-5 mr-2 text-vitality-500" />
-                      Book an Appointment
-                    </h2>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">
-                      Select a convenient time for your appointment with {doctor.name}. New patients are always welcome.
-                    </p>
-                    <Button asChild className="w-full">
-                      <Link to="/booking" className="flex items-center justify-center">
-                        <Calendar className="mr-2 h-4 w-4" />
-                        View Available Time Slots
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-center py-4">No certification information available</p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Services */}
+            {doctor.services && doctor.services.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Services Offered</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2">
+                    {doctor.services.map((service, index) => (
+                      <Badge key={index} variant="outline" className="bg-vitality-50 text-vitality-700 border-vitality-200">
+                        {service}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Awards */}
+            {doctor.awards && doctor.awards.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Award className="mr-2 h-5 w-5 text-vitality-500" />
+                    Awards & Recognition
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc list-inside pl-2 space-y-2">
+                    {doctor.awards.map((award, index) => (
+                      <li key={index}>{award}</li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

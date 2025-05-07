@@ -57,16 +57,147 @@ export type Database = {
           },
         ]
       }
+      doctor_certifications: {
+        Row: {
+          certification_name: string
+          created_at: string
+          doctor_id: string
+          expiry_date: string | null
+          id: string
+          issue_date: string
+          issuing_organization: string
+          updated_at: string
+        }
+        Insert: {
+          certification_name: string
+          created_at?: string
+          doctor_id: string
+          expiry_date?: string | null
+          id?: string
+          issue_date: string
+          issuing_organization: string
+          updated_at?: string
+        }
+        Update: {
+          certification_name?: string
+          created_at?: string
+          doctor_id?: string
+          expiry_date?: string | null
+          id?: string
+          issue_date?: string
+          issuing_organization?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_certifications_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_education: {
+        Row: {
+          created_at: string
+          degree: string
+          doctor_id: string
+          end_date: string | null
+          field_of_study: string
+          id: string
+          institution: string
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          degree: string
+          doctor_id: string
+          end_date?: string | null
+          field_of_study: string
+          id?: string
+          institution: string
+          start_date: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          degree?: string
+          doctor_id?: string
+          end_date?: string | null
+          field_of_study?: string
+          id?: string
+          institution?: string
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_education_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_schedule: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          doctor_id: string
+          end_time: string
+          id: string
+          is_available: boolean
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          doctor_id: string
+          end_time: string
+          id?: string
+          is_available?: boolean
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          doctor_id?: string
+          end_time?: string
+          id?: string
+          is_available?: boolean
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_schedule_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctors: {
         Row: {
           about: string | null
+          awards: string[] | null
+          clinic_address: string | null
           created_at: string
           email: string
           experience_years: number | null
           full_name: string
           id: string
+          languages: string[] | null
           phone: string | null
+          professional_memberships: string[] | null
           profile_image: string | null
+          services: string[] | null
           specialization: string | null
           subscription_end_date: string | null
           subscription_start_date: string | null
@@ -77,13 +208,18 @@ export type Database = {
         }
         Insert: {
           about?: string | null
+          awards?: string[] | null
+          clinic_address?: string | null
           created_at?: string
           email: string
           experience_years?: number | null
           full_name: string
           id?: string
+          languages?: string[] | null
           phone?: string | null
+          professional_memberships?: string[] | null
           profile_image?: string | null
+          services?: string[] | null
           specialization?: string | null
           subscription_end_date?: string | null
           subscription_start_date?: string | null
@@ -94,13 +230,18 @@ export type Database = {
         }
         Update: {
           about?: string | null
+          awards?: string[] | null
+          clinic_address?: string | null
           created_at?: string
           email?: string
           experience_years?: number | null
           full_name?: string
           id?: string
+          languages?: string[] | null
           phone?: string | null
+          professional_memberships?: string[] | null
           profile_image?: string | null
+          services?: string[] | null
           specialization?: string | null
           subscription_end_date?: string | null
           subscription_start_date?: string | null

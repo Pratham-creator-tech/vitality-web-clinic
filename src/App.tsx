@@ -46,6 +46,7 @@ import DoctorUSP from "./pages/DoctorUSP";
 import PatientsList from "./pages/PatientsList";
 import DoctorsPage from "./pages/DoctorsPage";
 import DoctorProfile from "./pages/DoctorProfile";
+import DoctorOnboarding from "./pages/DoctorOnboarding";
 import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import PainTracker from "./pages/PainTracker";
 import VideoLibrary from "./pages/VideoLibrary";
@@ -75,6 +76,7 @@ const App = () => (
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
                 <Route path="/doctor-registration" element={<DoctorRegistration />} />
+                <Route path="/doctor-onboarding" element={<DoctorOnboarding />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/account-settings" element={<AccountSettings />} />
