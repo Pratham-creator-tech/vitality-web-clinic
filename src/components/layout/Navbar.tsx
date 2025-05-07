@@ -46,9 +46,9 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo - with animation and linked to home */}
           <Link to="/" className="flex items-center group">
-            <div className="flex items-center">
+            <div className="flex flex-col items-center">
               {/* Logo Image - Larger size */}
-              <div className="w-12 h-12 mr-3 overflow-hidden">
+              <div className="w-16 h-16 overflow-hidden">
                 <motion.img 
                   src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
                   alt="YASHA's Physiocare Logo"
@@ -64,16 +64,15 @@ const Navbar = () => {
                 />
               </div>
               
-              {/* Text Logo - Hidden on mobile */}
+              {/* Text Logo - Below the image */}
               <motion.span 
-                className="hidden md:block font-display text-xl md:text-2xl font-bold"
+                className="hidden md:block font-display text-lg font-bold -mt-1"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                whileHover={{ scale: 1.05 }}
               >
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
-                  YASHA's Physiocare
+                  Physiocare
                 </span>
                 <motion.span 
                   className="text-accent inline-block"
@@ -98,7 +97,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             {/* Book Appointment Button - Visible on both desktop and mobile */}
             <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white">
-              <Link to="/booking">Book</Link>
+              <Link to="/booking">Book Appointment</Link>
             </Button>
 
             {user ? (
@@ -132,6 +131,11 @@ const Navbar = () => {
                     {userRole === "doctor" && (
                       <DropdownMenuItem asChild>
                         <Link to="/patients">My Patients</Link>
+                      </DropdownMenuItem>
+                    )}
+                    {userRole === "patient" && (
+                      <DropdownMenuItem asChild>
+                        <Link to="/doctors">Find Doctors</Link>
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuItem asChild>

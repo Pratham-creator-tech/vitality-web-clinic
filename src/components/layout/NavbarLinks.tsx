@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import { 
   DropdownMenu,
@@ -14,6 +15,7 @@ import {
 export const NavbarLinks = () => {
   const { pathname } = useLocation();
   const { t } = useLanguage();
+  const { user, userRole } = useAuth();
 
   const isActive = (path: string) => {
     if (path === "/services" && pathname.includes("/services/")) {
@@ -132,37 +134,38 @@ export const NavbarLinks = () => {
           )}
         </Link>
 
-        {/* Doctors link for all users */}
-        <Link
-          to="/doctors"
-          className={`${linkStyle} ${isActive("/doctors") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
-        >
-          Our Doctors
-          {isActive("/doctors") && (
-            <motion.span
-              layoutId="navigation-underline"
-              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-            />
-          )}
-        </Link>
-
-        {/* Patients link for all users */}
-        <Link
-          to="/patients"
-          className={`${linkStyle} ${isActive("/patients") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
-        >
-          Patients
-          {isActive("/patients") && (
-            <motion.span
-              layoutId="navigation-underline"
-              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-            />
-          )}
-        </Link>
+        {/* Conditionally show Doctors/Patients links based on user role */}
+        {user && userRole === "doctor" ? (
+          <Link
+            to="/patients"
+            className={`${linkStyle} ${isActive("/patients") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+          >
+            Patients
+            {isActive("/patients") && (
+              <motion.span
+                layoutId="navigation-underline"
+                className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+              />
+            )}
+          </Link>
+        ) : user && userRole === "patient" ? (
+          <Link
+            to="/doctors"
+            className={`${linkStyle} ${isActive("/doctors") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+          >
+            Our Doctors
+            {isActive("/doctors") && (
+              <motion.span
+                layoutId="navigation-underline"
+                className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+              />
+            )}
+          </Link>
+        ) : null}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

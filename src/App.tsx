@@ -45,6 +45,7 @@ import AIAssistant from "./pages/AIAssistant";
 import DoctorUSP from "./pages/DoctorUSP";
 import PatientsList from "./pages/PatientsList";
 import DoctorsPage from "./pages/DoctorsPage";
+import DoctorProfile from "./pages/DoctorProfile";
 import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import PainTracker from "./pages/PainTracker";
 import VideoLibrary from "./pages/VideoLibrary";
@@ -80,6 +81,7 @@ const App = () => (
                 <Route path="/billing" element={<Billing />} />
                 <Route path="/patients" element={<PatientsList />} />
                 <Route path="/doctors" element={<DoctorsPage />} />
+                <Route path="/doctor/:id" element={<DoctorProfile />} />
                 
                 {/* Service specific pages */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

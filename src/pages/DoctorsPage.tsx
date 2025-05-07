@@ -9,7 +9,7 @@ import { Calendar, MapPin, Phone, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Sample doctors data - in a real app, this would come from the database
-const doctors = [
+export const doctors = [
   {
     id: 1,
     name: "Dr. Sarah Johnson",
