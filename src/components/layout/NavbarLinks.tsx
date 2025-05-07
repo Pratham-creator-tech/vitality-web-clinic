@@ -132,6 +132,22 @@ export const NavbarLinks = () => {
           )}
         </Link>
 
+        {/* Doctors link for all users */}
+        <Link
+          to="/doctors"
+          className={`${linkStyle} ${isActive("/doctors") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+        >
+          Our Doctors
+          {isActive("/doctors") && (
+            <motion.span
+              layoutId="navigation-underline"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+            />
+          )}
+        </Link>
+
         {/* Patients link for all users */}
         <Link
           to="/patients"

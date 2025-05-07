@@ -44,6 +44,7 @@ import VirtualPhysiotherapy from "./pages/services/VirtualPhysiotherapy";
 import AIAssistant from "./pages/AIAssistant";
 import DoctorUSP from "./pages/DoctorUSP";
 import PatientsList from "./pages/PatientsList";
+import DoctorsPage from "./pages/DoctorsPage";
 import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import PainTracker from "./pages/PainTracker";
 import VideoLibrary from "./pages/VideoLibrary";
@@ -78,6 +79,7 @@ const App = () => (
                 <Route path="/account-settings" element={<AccountSettings />} />
                 <Route path="/billing" element={<Billing />} />
                 <Route path="/patients" element={<PatientsList />} />
+                <Route path="/doctors" element={<DoctorsPage />} />
                 
                 {/* Service specific pages */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
@@ -86,8 +88,8 @@ const App = () => (
                 <Route path="/services/chronic-pain" element={<ChronicPain />} />
                 <Route path="/services/neurological" element={<Neurological />} />
                 <Route path="/services/strength-conditioning" element={<StrengthConditioning />} />
-                <Route path="/services/pediatric-rehabilitation" element={<PediatricRehabilitation />} />
-                <Route path="/services/geriatric-rehabilitation" element={<GeriatricRehabilitation />} />
+                <Route path="/services/pediatric-rehab" element={<PediatricRehabilitation />} />
+                <Route path="/services/geriatric-rehab" element={<GeriatricRehabilitation />} />
                 <Route path="/services/womens-health" element={<WomensHealth />} />
                 <Route path="/services/postural-alignment" element={<PosturalAlignment />} />
                 <Route path="/services/obesity-management" element={<ObesityManagement />} />

@@ -47,8 +47,8 @@ const Navbar = () => {
           {/* Logo - with animation and linked to home */}
           <Link to="/" className="flex items-center group">
             <div className="flex items-center">
-              {/* Logo Image */}
-              <div className="w-10 h-10 mr-3 overflow-hidden">
+              {/* Logo Image - Larger size */}
+              <div className="w-12 h-12 mr-3 overflow-hidden">
                 <motion.img 
                   src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
                   alt="YASHA's Physiocare Logo"
@@ -64,9 +64,9 @@ const Navbar = () => {
                 />
               </div>
               
-              {/* Text Logo */}
+              {/* Text Logo - Hidden on mobile */}
               <motion.span 
-                className="font-display text-xl md:text-2xl font-bold"
+                className="hidden md:block font-display text-xl md:text-2xl font-bold"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -96,9 +96,9 @@ const Navbar = () => {
 
           {/* Right Side: Theme, Language, Avatar, Book Appointment */}
           <div className="flex items-center gap-2">
-            {/* Book Appointment Button - Always visible */}
-            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white hidden md:flex">
-              <Link to="/booking">Book Appointment</Link>
+            {/* Book Appointment Button - Visible on both desktop and mobile */}
+            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white">
+              <Link to="/booking">Book</Link>
             </Button>
 
             {user ? (
