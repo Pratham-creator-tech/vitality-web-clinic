@@ -51,6 +51,9 @@ import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import PainTracker from "./pages/PainTracker";
 import VideoLibrary from "./pages/VideoLibrary";
 import VirtualTour from "./pages/VirtualTour";
+import PatientDetail from "./pages/PatientDetail";
+import InsuranceList from "./pages/InsuranceList";
+import InvoiceDetail from "./pages/InvoiceDetail";
 
 const queryClient = new QueryClient();
 
@@ -82,8 +85,11 @@ const App = () => (
                 <Route path="/account-settings" element={<AccountSettings />} />
                 <Route path="/billing" element={<Billing />} />
                 <Route path="/patients" element={<PatientsList />} />
+                <Route path="/patient/:id" element={<PatientDetail />} />
                 <Route path="/doctors" element={<DoctorsPage />} />
                 <Route path="/doctor/:id" element={<DoctorProfile />} />
+                <Route path="/insurance" element={<InsuranceList />} />
+                <Route path="/invoices/:id" element={<InvoiceDetail />} />
                 
                 {/* Service specific pages */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

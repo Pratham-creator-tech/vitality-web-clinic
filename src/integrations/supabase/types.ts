@@ -57,6 +57,57 @@ export type Database = {
           },
         ]
       }
+      diagnoses: {
+        Row: {
+          condition: string
+          created_at: string
+          description: string | null
+          diagnosis_date: string
+          doctor_id: string
+          id: string
+          patient_id: string
+          treatment_plan: string | null
+          updated_at: string
+        }
+        Insert: {
+          condition: string
+          created_at?: string
+          description?: string | null
+          diagnosis_date?: string
+          doctor_id: string
+          id?: string
+          patient_id: string
+          treatment_plan?: string | null
+          updated_at?: string
+        }
+        Update: {
+          condition?: string
+          created_at?: string
+          description?: string | null
+          diagnosis_date?: string
+          doctor_id?: string
+          id?: string
+          patient_id?: string
+          treatment_plan?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnoses_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diagnoses_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctor_certifications: {
         Row: {
           certification_name: string
@@ -252,6 +303,124 @@ export type Database = {
         }
         Relationships: []
       }
+      insurance_providers: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          coverage_details: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          logo_url: string | null
+          name: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          coverage_details?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          coverage_details?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      invoices: {
+        Row: {
+          amount: number
+          appointment_id: string | null
+          created_at: string
+          doctor_id: string
+          due_date: string
+          id: string
+          invoice_date: string
+          invoice_number: string
+          patient_id: string
+          payment_date: string | null
+          payment_status: string
+          services: Json
+          tax: number | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          appointment_id?: string | null
+          created_at?: string
+          doctor_id: string
+          due_date: string
+          id?: string
+          invoice_date?: string
+          invoice_number: string
+          patient_id: string
+          payment_date?: string | null
+          payment_status?: string
+          services: Json
+          tax?: number | null
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          appointment_id?: string | null
+          created_at?: string
+          doctor_id?: string
+          due_date?: string
+          id?: string
+          invoice_date?: string
+          invoice_number?: string
+          patient_id?: string
+          payment_date?: string | null
+          payment_status?: string
+          services?: Json
+          tax?: number | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patients: {
         Row: {
           address: string | null
@@ -262,6 +431,7 @@ export type Database = {
           id: string
           medical_history: string | null
           phone: string | null
+          profile_image: string | null
           updated_at: string
           user_id: string
         }
@@ -274,6 +444,7 @@ export type Database = {
           id?: string
           medical_history?: string | null
           phone?: string | null
+          profile_image?: string | null
           updated_at?: string
           user_id: string
         }
@@ -286,10 +457,75 @@ export type Database = {
           id?: string
           medical_history?: string | null
           phone?: string | null
+          profile_image?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: []
+      }
+      prescriptions: {
+        Row: {
+          appointment_id: string | null
+          created_at: string
+          doctor_id: string
+          id: string
+          instructions: string | null
+          medicines: Json | null
+          patient_id: string
+          prescription_date: string
+          treatments: Json | null
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          appointment_id?: string | null
+          created_at?: string
+          doctor_id: string
+          id?: string
+          instructions?: string | null
+          medicines?: Json | null
+          patient_id: string
+          prescription_date?: string
+          treatments?: Json | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          appointment_id?: string | null
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          instructions?: string | null
+          medicines?: Json | null
+          patient_id?: string
+          prescription_date?: string
+          treatments?: Json | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prescriptions_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prescriptions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
