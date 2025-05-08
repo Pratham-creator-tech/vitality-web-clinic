@@ -46,29 +46,27 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo - with animation and linked to home */}
           <Link to="/" className="flex items-center group">
-            <div className="flex flex-col items-center">
-              {/* Logo Image - Larger size */}
-              <div className="w-16 h-16 overflow-hidden">
-                <motion.img 
-                  src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
-                  alt="YASHA's Physiocare Logo"
-                  className="w-full h-full object-contain"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    rotate: [0, -2, 2, -2, 0],
-                    transition: { duration: 0.5 }
-                  }}
-                />
-              </div>
+            <div className="flex items-center">
+              {/* Logo Image - No background box, matches navbar background */}
+              <motion.img 
+                src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
+                alt="YASHA's Physiocare Logo"
+                className="h-12 w-12 object-contain"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  rotate: [0, -2, 2, -2, 0],
+                  transition: { duration: 0.5 }
+                }}
+              />
               
-              {/* Text Logo - Below the image */}
-              <motion.span 
-                className="hidden md:block font-display text-lg font-bold -mt-1"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
+              {/* Text Logo - Right of the image */}
+              <motion.div 
+                className="ml-2 font-display text-xl font-bold"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5 }}
               >
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
@@ -86,7 +84,7 @@ const Navbar = () => {
                     repeatDelay: 5
                   }}
                 >.</motion.span>
-              </motion.span>
+              </motion.div>
             </div>
           </Link>
 
