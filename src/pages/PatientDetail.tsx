@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -471,7 +470,7 @@ const PatientDetail = () => {
                                 </p>
                               </div>
                               <div className="text-right">
-                                <Badge variant={invoice.payment_status === "paid" ? "success" : "destructive"}>
+                                <Badge variant={invoice.payment_status === "paid" ? "default" : "destructive"}>
                                   {invoice.payment_status === "paid" ? "Paid" : "Unpaid"}
                                 </Badge>
                                 <div className="text-xs text-gray-500 mt-1">
