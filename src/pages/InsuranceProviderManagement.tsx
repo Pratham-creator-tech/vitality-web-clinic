@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, UploadCloud, Shield, ExternalLink, Phone, Mail, Link as LinkIcon } from "lucide-react";
+import { Loader2, UploadCloud, Shield, ExternalLink, Phone, Mail, Link as LinkIcon, Plus } from "lucide-react";
 import { 
   Form,
   FormControl,
@@ -26,6 +26,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Schema for insurance provider submission
 const insuranceProviderSchema = z.object({
@@ -45,7 +46,12 @@ const InsuranceProviderManagement = () => {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [insuranceProviders, setInsuranceProviders] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState("browse");
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const tabFromUrl = queryParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabFromUrl === "add" ? "add" : "browse");
+  
   const { user, userRole } = useAuth();
   const { toast } = useToast();
 
@@ -60,6 +66,19 @@ const InsuranceProviderManagement = () => {
       coverage_details: "",
     },
   });
+
+  // Update tab state when URL param changes
+  useEffect(() => {
+    if (tabFromUrl === "add") {
+      setActiveTab("add");
+    }
+  }, [tabFromUrl]);
+
+  // Update URL when tab changes
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    navigate(`/admin/insurance${value === "add" ? "?tab=add" : ""}`, { replace: true });
+  };
 
   // Fetch insurance providers on component mount
   useEffect(() => {
@@ -179,7 +198,7 @@ const InsuranceProviderManagement = () => {
       fetchInsuranceProviders();
       
       // Switch to browse tab
-      setActiveTab("browse");
+      handleTabChange("browse");
 
     } catch (error: any) {
       console.error("Error adding insurance provider:", error);
@@ -196,14 +215,24 @@ const InsuranceProviderManagement = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-12 px-4">
-        <SectionTitle 
-          title="Insurance Providers" 
-          subtitle="Browse available insurance providers or submit a new one"
-          center
-        />
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
+          <SectionTitle 
+            title="Insurance Providers" 
+            subtitle="Browse available providers or submit a new one"
+          />
+          
+          {userRole === "admin" && activeTab === "browse" && (
+            <div className="mt-4 md:mt-0">
+              <Button className="flex items-center" onClick={() => handleTabChange("add")}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Insurance Provider
+              </Button>
+            </div>
+          )}
+        </div>
 
         <div className="max-w-6xl mx-auto mt-8">
-          <Tabs defaultValue="browse" value={activeTab} onValueChange={setActiveTab}>
+          <Tabs value={activeTab} onValueChange={handleTabChange}>
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="browse">Browse Providers</TabsTrigger>
               {userRole === "admin" && (
@@ -227,7 +256,7 @@ const InsuranceProviderManagement = () => {
                   {userRole === "admin" && (
                     <Button 
                       className="mt-4"
-                      onClick={() => setActiveTab("add")}
+                      onClick={() => handleTabChange("add")}
                     >
                       Add Provider
                     </Button>
@@ -440,7 +469,7 @@ const InsuranceProviderManagement = () => {
                             form.reset();
                             setLogoFile(null);
                             setLogoPreview(null);
-                            setActiveTab("browse");
+                            handleTabChange("browse");
                           }}
                         >
                           Cancel

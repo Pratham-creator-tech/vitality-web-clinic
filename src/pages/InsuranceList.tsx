@@ -7,8 +7,10 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
-import { Loader2, Mail, Globe, Phone, Search, Info } from "lucide-react";
+import { Loader2, Mail, Globe, Phone, Search, Info, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useAuth } from "@/context/AuthContext";
 
 interface InsuranceProvider {
   id: string;
@@ -27,7 +29,9 @@ const InsuranceList = () => {
   const [filteredProviders, setFilteredProviders] = useState<InsuranceProvider[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("providers");
   const { toast } = useToast();
+  const { userRole } = useAuth();
 
   useEffect(() => {
     const fetchInsuranceProviders = async () => {
@@ -75,11 +79,29 @@ const InsuranceList = () => {
   return (
     <PageLayout>
       <div className="container mx-auto py-12 px-4">
-        <SectionTitle
-          title="Insurance Providers"
-          subtitle="Explore insurance plans that cover physiotherapy services"
-          center
-        />
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
+          <SectionTitle
+            title="Insurance Providers"
+            subtitle="Browse available insurance plans that cover physiotherapy services"
+          />
+          
+          {userRole === "admin" && (
+            <div className="mt-4 md:mt-0">
+              <Button asChild className="flex items-center">
+                <Link to="/admin/insurance?tab=add">
+                  <Plus className="mr-2 h-4 w-4" />
+                  New Insurance Provider
+                </Link>
+              </Button>
+            </div>
+          )}
+        </div>
+        
+        <Tabs defaultValue="providers" value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-1">
+            <TabsTrigger value="providers">Browse Providers</TabsTrigger>
+          </TabsList>
+        </Tabs>
 
         <div className="mt-8 max-w-lg mx-auto relative mb-12">
           <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -110,6 +132,13 @@ const InsuranceList = () => {
               <Button variant="outline" onClick={() => setSearchTerm("")}>
                 Clear Search
               </Button>
+            )}
+            {userRole === "admin" && !searchTerm && (
+              <div className="mt-4">
+                <Button asChild>
+                  <Link to="/admin/insurance?tab=add">Add Insurance Provider</Link>
+                </Button>
+              </div>
             )}
           </div>
         ) : (

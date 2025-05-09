@@ -70,6 +70,8 @@ const PatientDetail = () => {
         <PatientHeader 
           patientId={id || ''}
           userRole={userRole || ''}
+          patientName={patient.full_name}
+          patientPhone={patient.phone}
           onNewDiagnosis={handleNewDiagnosis}
           onNewPrescription={handleNewPrescription}
         />

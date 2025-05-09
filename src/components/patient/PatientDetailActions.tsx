@@ -5,10 +5,13 @@ import {
   FileText, 
   PlusCircle, 
   Pill, 
-  Phone
+  Phone,
+  Plus, 
+  WhatsApp 
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useSendWhatsAppNotification } from "@/utils/whatsappService";
+import { useFormatters } from "@/hooks/useFormatters";
 
 interface PatientDetailActionsProps {
   patientId: string;
@@ -29,6 +32,7 @@ const PatientDetailActions = ({
 }: PatientDetailActionsProps) => {
   const { toast } = useToast();
   const { sendNotification } = useSendWhatsAppNotification();
+  const { formatPhoneNumber } = useFormatters();
   
   const handleContactViaWhatsApp = () => {
     if (!patientPhone) {
@@ -44,6 +48,11 @@ const PatientDetailActions = ({
       patientPhone,
       `Hello ${patientName}, this is a message from your healthcare provider at Vitality Physio. How may we assist you today?`
     );
+    
+    toast({
+      title: "WhatsApp Message Initiated",
+      description: `Opening WhatsApp chat with ${patientName}.`,
+    });
   };
   
   return (
@@ -74,7 +83,7 @@ const PatientDetailActions = ({
               className="flex items-center"
               onClick={handleContactViaWhatsApp}
             >
-              <Phone className="h-4 w-4 mr-2" />
+              <WhatsApp className="h-4 w-4 mr-2" />
               WhatsApp
             </Button>
           )}
@@ -88,7 +97,7 @@ const PatientDetailActions = ({
             className="flex items-center"
             onClick={onNewDiagnosis}
           >
-            <PlusCircle className="h-4 w-4 mr-2" />
+            <Plus className="h-4 w-4 mr-2" />
             Add Diagnosis
           </Button>
           
@@ -98,8 +107,8 @@ const PatientDetailActions = ({
               className="flex items-center"
               onClick={handleContactViaWhatsApp}
             >
-              <Phone className="h-4 w-4 mr-2" />
-              WhatsApp
+              <WhatsApp className="h-4 w-4 mr-2" />
+              WhatsApp {formatPhoneNumber ? formatPhoneNumber(patientPhone) : patientPhone}
             </Button>
           )}
         </>

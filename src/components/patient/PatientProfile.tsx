@@ -15,13 +15,31 @@ import { format } from "date-fns";
 
 interface PatientProfileProps {
   patient: any;
+  calculateAge?: (dobString: string | null) => string;
+  formatDate?: (dateString: string) => string;
+  getInitials?: (name?: string) => string;
 }
 
-const PatientProfile = ({ patient }: PatientProfileProps) => {
+const PatientProfile = ({ 
+  patient, 
+  calculateAge, 
+  formatDate, 
+  getInitials 
+}: PatientProfileProps) => {
   // Format date of birth if available
   const formattedDob = patient.dob 
-    ? format(new Date(patient.dob), "PPP")
+    ? (formatDate ? formatDate(patient.dob) : format(new Date(patient.dob), "PPP"))
     : "Not provided";
+  
+  // Use calculateAge if provided, otherwise just display DOB
+  const ageDisplay = patient.dob && calculateAge 
+    ? `${calculateAge(patient.dob)} (${formattedDob})`
+    : formattedDob;
+  
+  // Get initials for avatar
+  const initials = getInitials 
+    ? getInitials(patient.full_name)
+    : (patient.full_name?.charAt(0)?.toUpperCase() || "P");
   
   return (
     <div className="space-y-6">
@@ -36,7 +54,7 @@ const PatientProfile = ({ patient }: PatientProfileProps) => {
                   alt={patient.full_name}
                 />
                 <AvatarFallback className="text-xl bg-vitality-100 text-vitality-700">
-                  {patient.full_name?.charAt(0)?.toUpperCase() || "P"}
+                  {initials}
                 </AvatarFallback>
               </Avatar>
               
@@ -84,7 +102,7 @@ const PatientProfile = ({ patient }: PatientProfileProps) => {
                 <Calendar className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
                 <div>
                   <p className="text-sm text-gray-500">Date of Birth</p>
-                  <p className="font-medium">{formattedDob}</p>
+                  <p className="font-medium">{ageDisplay}</p>
                 </div>
               </div>
             </div>

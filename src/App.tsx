@@ -90,7 +90,11 @@ const App = () => (
                 <Route path="/patient/:id" element={<PatientDetail />} />
                 <Route path="/doctors" element={<DoctorsPage />} />
                 <Route path="/doctor/:id" element={<DoctorProfile />} />
-                <Route path="/insurance" element={<InsuranceProviderManagement />} />
+                
+                {/* Insurance routes */}
+                <Route path="/insurance" element={<InsuranceList />} />
+                <Route path="/admin/insurance" element={<InsuranceProviderManagement />} />
+                
                 <Route path="/invoices/:id" element={<InvoiceDetail />} />
                 <Route path="/complete-profile" element={<CompleteProfile />} />
                 

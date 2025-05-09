@@ -23,7 +23,7 @@ const PatientHeader = ({
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
       <SectionTitle 
-        title="Patient Details" 
+        title={patientName ? `Patient: ${patientName}` : "Patient Details"} 
         subtitle="Complete patient information and medical history"
       />
       
