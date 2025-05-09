@@ -29,6 +29,7 @@ const PatientDetailActions = ({
         New Diagnosis
       </Button>
       <Button 
+        variant="default"
         onClick={onNewPrescription}
         className="flex items-center gap-2"
       >

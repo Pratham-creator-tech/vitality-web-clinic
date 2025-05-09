@@ -30,6 +30,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ProfileImageUpload from "@/components/form/ProfileImageUpload";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, { message: "Full name is required" }),
@@ -51,8 +52,7 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const CompleteProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -117,12 +117,8 @@ const CompleteProfile = () => {
     checkProfile();
   }, [user, navigate, toast]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      setProfileImage(file);
-      setAvatarUrl(URL.createObjectURL(file));
-    }
+  const handleProfileImageUploaded = (url: string) => {
+    setProfileImageUrl(url);
   };
 
   const onSubmit = async (values: ProfileFormValues) => {
@@ -137,45 +133,8 @@ const CompleteProfile = () => {
 
     setIsLoading(true);
     try {
-      let profileImageUrl = null;
-
-      // Upload profile image if selected
-      if (profileImage) {
-        // Create bucket if it doesn't exist
-        const { error: bucketError } = await supabase.storage.createBucket('profile-images', {
-          public: true,
-          fileSizeLimit: 1024 * 1024 * 2, // 2MB
-        });
-        
-        if (bucketError && bucketError.message !== 'Bucket already exists') {
-          console.error('Error creating bucket:', bucketError);
-          toast({
-            title: "Error",
-            description: "Failed to upload profile image.",
-            variant: "destructive",
-          });
-        }
-        
-        // Upload the image
-        const filePath = `${user.id}/${Date.now()}-${profileImage.name}`;
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('profile-images')
-          .upload(filePath, profileImage);
-          
-        if (uploadError) {
-          throw uploadError;
-        }
-        
-        // Get public URL
-        const { data: publicUrlData } = supabase.storage
-          .from('profile-images')
-          .getPublicUrl(filePath);
-          
-        profileImageUrl = publicUrlData.publicUrl;
-      }
-
-      // Create patient record with emergency contact
-      const { error: patientError } = await supabase
+      // Create patient record
+      const { data: patientData, error: patientError } = await supabase
         .from("patients")
         .insert({
           user_id: user.id,
@@ -183,22 +142,19 @@ const CompleteProfile = () => {
           email: values.email,
           phone: values.phone,
           dob: values.dob,
+          gender: values.gender,
           address: values.address,
           medical_history: values.medical_history || null,
           profile_image: profileImageUrl,
-        });
+        })
+        .select('id')
+        .single();
 
       if (patientError) throw patientError;
 
-      // Create emergency contact record
-      const { data: patientData } = await supabase
-        .from("patients")
-        .select("id")
-        .eq("user_id", user.id)
-        .single();
-
       if (patientData) {
-        await supabase
+        // Create emergency contact record
+        const { error: emergencyContactError } = await supabase
           .from("patient_emergency_contacts")
           .insert({
             patient_id: patientData.id,
@@ -206,18 +162,22 @@ const CompleteProfile = () => {
             phone: values.emergency_contact_phone,
             relationship: values.emergency_contact_relation,
           });
-      }
 
-      // Create patient medical data record
-      if (patientData && (values.current_medications || values.allergies || values.family_medical_history)) {
-        await supabase
-          .from("patient_medical_data")
-          .insert({
-            patient_id: patientData.id,
-            current_medications: values.current_medications || null,
-            allergies: values.allergies || null,
-            family_medical_history: values.family_medical_history || null,
-          });
+        if (emergencyContactError) throw emergencyContactError;
+
+        // Create patient medical data record
+        if (values.current_medications || values.allergies || values.family_medical_history) {
+          const { error: medicalDataError } = await supabase
+            .from("patient_medical_data")
+            .insert({
+              patient_id: patientData.id,
+              current_medications: values.current_medications || null,
+              allergies: values.allergies || null,
+              family_medical_history: values.family_medical_history || null,
+            });
+
+          if (medicalDataError) throw medicalDataError;
+        }
       }
 
       toast({
@@ -259,24 +219,10 @@ const CompleteProfile = () => {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   {/* Profile Image Upload */}
                   <div className="flex flex-col items-center mb-6">
-                    <Avatar className="h-24 w-24 mb-4">
-                      <AvatarImage src={avatarUrl || undefined} />
-                      <AvatarFallback className="bg-vitality-100 text-vitality-700">
-                        {user?.email ? user.email.charAt(0).toUpperCase() : "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <label htmlFor="profile-image" className="cursor-pointer">
-                      <div className="bg-vitality-50 text-vitality-700 px-3 py-2 rounded-md text-sm hover:bg-vitality-100 transition-colors">
-                        Upload Profile Picture
-                      </div>
-                      <input
-                        id="profile-image"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="hidden"
-                      />
-                    </label>
+                    <ProfileImageUpload 
+                      initialImageUrl={null}
+                      onImageUploaded={handleProfileImageUploaded}
+                    />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

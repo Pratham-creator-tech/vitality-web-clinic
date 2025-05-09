@@ -421,6 +421,123 @@ export type Database = {
           },
         ]
       }
+      patient_diagnoses_history: {
+        Row: {
+          created_at: string
+          diagnosis_date: string | null
+          diagnosis_name: string
+          document_url: string | null
+          id: string
+          notes: string | null
+          patient_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          diagnosis_date?: string | null
+          diagnosis_name: string
+          document_url?: string | null
+          id?: string
+          notes?: string | null
+          patient_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          diagnosis_date?: string | null
+          diagnosis_name?: string
+          document_url?: string | null
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_diagnoses_history_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_emergency_contacts: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          patient_id: string
+          phone: string
+          relationship: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          patient_id: string
+          phone: string
+          relationship: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          patient_id?: string
+          phone?: string
+          relationship?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_emergency_contacts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_medical_data: {
+        Row: {
+          allergies: string | null
+          created_at: string
+          current_medications: string | null
+          family_medical_history: string | null
+          id: string
+          patient_id: string
+          updated_at: string
+        }
+        Insert: {
+          allergies?: string | null
+          created_at?: string
+          current_medications?: string | null
+          family_medical_history?: string | null
+          id?: string
+          patient_id: string
+          updated_at?: string
+        }
+        Update: {
+          allergies?: string | null
+          created_at?: string
+          current_medications?: string | null
+          family_medical_history?: string | null
+          id?: string
+          patient_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_medical_data_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       patients: {
         Row: {
           address: string | null
@@ -428,6 +545,7 @@ export type Database = {
           dob: string | null
           email: string
           full_name: string
+          gender: string | null
           id: string
           medical_history: string | null
           phone: string | null
@@ -441,6 +559,7 @@ export type Database = {
           dob?: string | null
           email: string
           full_name: string
+          gender?: string | null
           id?: string
           medical_history?: string | null
           phone?: string | null
@@ -454,10 +573,59 @@ export type Database = {
           dob?: string | null
           email?: string
           full_name?: string
+          gender?: string | null
           id?: string
           medical_history?: string | null
           phone?: string | null
           profile_image?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          payment_date: string
+          payment_method: string | null
+          payment_status: string
+          stripe_payment_id: string | null
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_date?: string
+          payment_method?: string | null
+          payment_status: string
+          stripe_payment_id?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_date?: string
+          payment_method?: string | null
+          payment_status?: string
+          stripe_payment_id?: string | null
+          stripe_session_id?: string | null
           updated_at?: string
           user_id?: string
         }
