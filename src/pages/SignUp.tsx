@@ -105,7 +105,7 @@ const SignUp = () => {
 
       const userId = authData.user.id;
 
-      // Create the patient profile
+      // Create the patient profile (minimal details - they will complete the rest in CompleteProfile)
       const { error: profileError } = await supabase
         .from('patients')
         .insert({
@@ -126,11 +126,25 @@ const SignUp = () => {
 
       toast({
         title: "Account created successfully",
-        description: "Welcome to Vitality Physio! Please check your email to confirm your account.",
+        description: "Welcome to Vitality Physio! Please complete your profile.",
       });
       
-      // Navigate to signin page after successful registration
-      setTimeout(() => navigate("/signin"), 1500);
+      // Automatically sign in the user after registration
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+      
+      if (signInError) {
+        console.error("Auto sign-in error:", signInError);
+        // Navigate to signin page if auto-signin fails
+        navigate("/signin");
+        return;
+      }
+      
+      // Redirect to complete profile page for patients
+      navigate("/complete-profile");
+      
     } catch (error) {
       console.error("Unexpected error during registration:", error);
       toast({

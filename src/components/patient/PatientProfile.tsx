@@ -1,84 +1,107 @@
 
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { User, Phone, Mail, MapPin, Calendar } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { 
+  User, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Calendar, 
+  AlertCircle 
+} from "lucide-react";
+import { format } from "date-fns";
 
 interface PatientProfileProps {
-  patient: {
-    id: string;
-    full_name: string;
-    email: string;
-    phone: string | null;
-    address: string | null;
-    dob: string | null;
-    medical_history: string | null;
-    profile_image: string | null;
-  };
-  calculateAge: (dob: string | null) => string;
-  formatDate: (date: string) => string;
-  getInitials: (name: string) => string;
+  patient: any;
 }
 
-const PatientProfile = ({ patient, calculateAge, formatDate, getInitials }: PatientProfileProps) => {
+const PatientProfile = ({ patient }: PatientProfileProps) => {
+  // Format date of birth if available
+  const formattedDob = patient.dob 
+    ? format(new Date(patient.dob), "PPP")
+    : "Not provided";
+  
   return (
-    <Card className="mb-6">
-      <CardHeader className="text-center pb-0">
-        <div className="flex justify-center mb-4">
-          <Avatar className="h-24 w-24 border-4 border-vitality-100">
-            <AvatarImage src={patient.profile_image || undefined} />
-            <AvatarFallback className="bg-vitality-600 text-white text-2xl">
-              {getInitials(patient.full_name)}
-            </AvatarFallback>
-          </Avatar>
-        </div>
-        <CardTitle className="text-xl">{patient.full_name}</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-4">
-        <div className="space-y-3">
-          <div className="flex items-center">
-            <User className="h-4 w-4 mr-2 text-gray-500" />
-            <span className="text-gray-700 dark:text-gray-300">
-              Age: {calculateAge(patient.dob)}
-            </span>
-          </div>
-          {patient.dob && (
-            <div className="flex items-center">
-              <Calendar className="h-4 w-4 mr-2 text-gray-500" />
-              <span className="text-gray-700 dark:text-gray-300">
-                DOB: {formatDate(patient.dob)}
-              </span>
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Patient Avatar and Basic Info */}
+        <Card className="w-full md:w-1/3">
+          <CardContent className="pt-6">
+            <div className="flex flex-col items-center">
+              <Avatar className="h-24 w-24">
+                <AvatarImage 
+                  src={patient.profile_image || undefined}
+                  alt={patient.full_name}
+                />
+                <AvatarFallback className="text-xl bg-vitality-100 text-vitality-700">
+                  {patient.full_name?.charAt(0)?.toUpperCase() || "P"}
+                </AvatarFallback>
+              </Avatar>
+              
+              <h3 className="mt-4 text-xl font-semibold">{patient.full_name}</h3>
+              
+              <div className="mt-2 flex gap-2">
+                <Badge variant="outline">Patient</Badge>
+                <Badge variant="default">Active</Badge>
+              </div>
             </div>
-          )}
-          {patient.phone && (
-            <div className="flex items-center">
-              <Phone className="h-4 w-4 mr-2 text-gray-500" />
-              <span className="text-gray-700 dark:text-gray-300">{patient.phone}</span>
+          </CardContent>
+        </Card>
+        
+        {/* Patient Contact Information */}
+        <Card className="w-full md:w-2/3">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-medium mb-4">Contact Information</h3>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="flex items-start">
+                <Mail className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
+                <div>
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="font-medium">{patient.email || "Not provided"}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <Phone className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
+                <div>
+                  <p className="text-sm text-gray-500">Phone</p>
+                  <p className="font-medium">{patient.phone || "Not provided"}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <MapPin className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
+                <div>
+                  <p className="text-sm text-gray-500">Address</p>
+                  <p className="font-medium">{patient.address || "Not provided"}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <Calendar className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
+                <div>
+                  <p className="text-sm text-gray-500">Date of Birth</p>
+                  <p className="font-medium">{formattedDob}</p>
+                </div>
+              </div>
             </div>
-          )}
-          <div className="flex items-center">
-            <Mail className="h-4 w-4 mr-2 text-gray-500" />
-            <span className="text-gray-700 dark:text-gray-300">{patient.email}</span>
-          </div>
-          {patient.address && (
-            <div className="flex items-start">
-              <MapPin className="h-4 w-4 mr-2 text-gray-500 mt-1 flex-shrink-0" />
-              <span className="text-gray-700 dark:text-gray-300">{patient.address}</span>
-            </div>
-          )}
-        </div>
-
-        <Separator className="my-6" />
-
-        <div>
-          <h3 className="font-medium mb-2">Medical History</h3>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            {patient.medical_history || "No medical history recorded."}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      </div>
+      
+      {/* Medical History */}
+      {patient.medical_history && (
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-medium mb-4">Medical History</h3>
+            <p className="text-gray-700">{patient.medical_history}</p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
   );
 };
 

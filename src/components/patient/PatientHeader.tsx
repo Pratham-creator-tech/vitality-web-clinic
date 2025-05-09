@@ -6,6 +6,8 @@ import PatientDetailActions from "@/components/patient/PatientDetailActions";
 interface PatientHeaderProps {
   patientId: string;
   userRole: string;
+  patientName?: string;
+  patientPhone?: string;
   onNewDiagnosis: () => void;
   onNewPrescription: () => void;
 }
@@ -13,6 +15,8 @@ interface PatientHeaderProps {
 const PatientHeader = ({ 
   patientId,
   userRole,
+  patientName,
+  patientPhone,
   onNewDiagnosis,
   onNewPrescription
 }: PatientHeaderProps) => {
@@ -27,6 +31,8 @@ const PatientHeader = ({
         <PatientDetailActions
           patientId={patientId}
           userRole={userRole}
+          patientName={patientName}
+          patientPhone={patientPhone}
           onNewDiagnosis={onNewDiagnosis}
           onNewPrescription={onNewPrescription}
         />

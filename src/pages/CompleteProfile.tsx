@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -20,7 +19,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
+  FormDescription
 } from "@/components/ui/form";
 import { 
   Select,
@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ProfileImageUpload from "@/components/form/ProfileImageUpload";
+import { Checkbox } from "@/components/ui/checkbox";
+import { generateWelcomeMessage, sendWhatsAppMessage } from "@/utils/whatsappService";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, { message: "Full name is required" }),
@@ -46,6 +48,7 @@ const profileSchema = z.object({
   current_medications: z.string().optional(),
   allergies: z.string().optional(),
   family_medical_history: z.string().optional(),
+  whatsapp_opt_in: z.boolean().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -73,6 +76,7 @@ const CompleteProfile = () => {
       current_medications: "",
       allergies: "",
       family_medical_history: "",
+      whatsapp_opt_in: true,
     },
   });
 
@@ -177,6 +181,19 @@ const CompleteProfile = () => {
             });
 
           if (medicalDataError) throw medicalDataError;
+        }
+      }
+
+      // Send WhatsApp welcome message if opted in
+      if (values.whatsapp_opt_in && values.phone) {
+        try {
+          await sendWhatsAppMessage(
+            values.phone,
+            generateWelcomeMessage(values.full_name)
+          );
+        } catch (whatsappError) {
+          console.error("Failed to send WhatsApp message:", whatsappError);
+          // Non-blocking error, we continue with the flow
         }
       }
 
@@ -445,6 +462,30 @@ const CompleteProfile = () => {
                       )}
                     />
                   </div>
+                  
+                  {/* WhatsApp Opt-in */}
+                  <FormField
+                    control={form.control}
+                    name="whatsapp_opt_in"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="font-normal">
+                            Receive WhatsApp notifications for appointments and important updates
+                          </FormLabel>
+                          <FormDescription>
+                            We'll send you appointment reminders, payment confirmations, and important updates.
+                          </FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="flex justify-end">
                     <Button type="submit" disabled={isLoading}>
