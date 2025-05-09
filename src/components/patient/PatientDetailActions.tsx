@@ -7,7 +7,7 @@ import {
   Pill, 
   Phone,
   Plus, 
-  WhatsApp 
+  MessageCircle 
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useSendWhatsAppNotification } from "@/utils/whatsappService";
@@ -83,7 +83,7 @@ const PatientDetailActions = ({
               className="flex items-center"
               onClick={handleContactViaWhatsApp}
             >
-              <WhatsApp className="h-4 w-4 mr-2" />
+              <MessageCircle className="h-4 w-4 mr-2" />
               WhatsApp
             </Button>
           )}
@@ -107,7 +107,7 @@ const PatientDetailActions = ({
               className="flex items-center"
               onClick={handleContactViaWhatsApp}
             >
-              <WhatsApp className="h-4 w-4 mr-2" />
+              <MessageCircle className="h-4 w-4 mr-2" />
               WhatsApp {formatPhoneNumber ? formatPhoneNumber(patientPhone) : patientPhone}
             </Button>
           )}
