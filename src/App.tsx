@@ -54,6 +54,8 @@ import VirtualTour from "./pages/VirtualTour";
 import PatientDetail from "./pages/PatientDetail";
 import InsuranceList from "./pages/InsuranceList";
 import InvoiceDetail from "./pages/InvoiceDetail";
+import CompleteProfile from "./pages/CompleteProfile";
+import InsuranceProviderManagement from "./pages/InsuranceProviderManagement";
 
 const queryClient = new QueryClient();
 
@@ -88,8 +90,9 @@ const App = () => (
                 <Route path="/patient/:id" element={<PatientDetail />} />
                 <Route path="/doctors" element={<DoctorsPage />} />
                 <Route path="/doctor/:id" element={<DoctorProfile />} />
-                <Route path="/insurance" element={<InsuranceList />} />
+                <Route path="/insurance" element={<InsuranceProviderManagement />} />
                 <Route path="/invoices/:id" element={<InvoiceDetail />} />
+                <Route path="/complete-profile" element={<CompleteProfile />} />
                 
                 {/* Service specific pages */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

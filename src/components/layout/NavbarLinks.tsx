@@ -134,6 +134,22 @@ export const NavbarLinks = () => {
           )}
         </Link>
 
+        {/* Insurance Link */}
+        <Link
+          to="/insurance"
+          className={`${linkStyle} ${isActive("/insurance") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+        >
+          Insurance
+          {isActive("/insurance") && (
+            <motion.span
+              layoutId="navigation-underline"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+            />
+          )}
+        </Link>
+
         {/* Conditionally show Doctors/Patients links based on user role */}
         {user && userRole === "doctor" ? (
           <Link
