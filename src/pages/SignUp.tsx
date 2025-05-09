@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -13,10 +14,17 @@ import { supabase } from "@/integrations/supabase/client";
 import PageLayout from "@/components/layout/PageLayout";
 import { useToast } from "@/hooks/use-toast";
 
+// Password regex for validation
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" })
+    .refine(
+      (password) => passwordRegex.test(password),
+      { message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" }
+    ),
   confirmPassword: z.string(),
   userType: z.enum(["patient", "doctor"]),
   termsAccepted: z.boolean().refine(val => val === true, {
@@ -142,7 +150,7 @@ const SignUp = () => {
         return;
       }
       
-      // Redirect to complete profile page for patients
+      // Redirect directly to the complete profile page for patients
       navigate("/complete-profile");
       
     } catch (error) {
@@ -247,6 +255,9 @@ const SignUp = () => {
                         </div>
                       </FormControl>
                       <FormMessage />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Password must be at least 8 characters and include uppercase, lowercase, number and special character.
+                      </p>
                     </FormItem>
                   )}
                 />

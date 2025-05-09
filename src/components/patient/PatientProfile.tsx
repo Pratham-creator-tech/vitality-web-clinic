@@ -1,125 +1,94 @@
 
 import React from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
-  AlertCircle 
-} from "lucide-react";
-import { format } from "date-fns";
 
-interface PatientProfileProps {
+export interface PatientProfileProps {
   patient: any;
-  calculateAge?: (dobString: string | null) => string;
-  formatDate?: (dateString: string) => string;
-  getInitials?: (name?: string) => string;
+  getInitials: (name?: string) => string;
+  formatDate: (dateString: string) => string;
+  calculateAge: (dobString: string) => string;
 }
 
-const PatientProfile = ({ 
-  patient, 
-  calculateAge, 
-  formatDate, 
-  getInitials 
-}: PatientProfileProps) => {
-  // Format date of birth if available
-  const formattedDob = patient.dob 
-    ? (formatDate ? formatDate(patient.dob) : format(new Date(patient.dob), "PPP"))
-    : "Not provided";
-  
-  // Use calculateAge if provided, otherwise just display DOB
-  const ageDisplay = patient.dob && calculateAge 
-    ? `${calculateAge(patient.dob)} (${formattedDob})`
-    : formattedDob;
-  
-  // Get initials for avatar
-  const initials = getInitials 
-    ? getInitials(patient.full_name)
-    : (patient.full_name?.charAt(0)?.toUpperCase() || "P");
+const PatientProfile: React.FC<PatientProfileProps> = ({ 
+  patient,
+  getInitials,
+  formatDate,
+  calculateAge
+}) => {
+  if (!patient) return null;
   
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* Patient Avatar and Basic Info */}
-        <Card className="w-full md:w-1/3">
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center">
-              <Avatar className="h-24 w-24">
-                <AvatarImage 
-                  src={patient.profile_image || undefined}
-                  alt={patient.full_name}
-                />
-                <AvatarFallback className="text-xl bg-vitality-100 text-vitality-700">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-              
-              <h3 className="mt-4 text-xl font-semibold">{patient.full_name}</h3>
-              
-              <div className="mt-2 flex gap-2">
-                <Badge variant="outline">Patient</Badge>
-                <Badge variant="default">Active</Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+    <Card className="mb-6">
+      <CardContent className="py-6">
+        <div className="flex flex-col items-center text-center">
+          <Avatar className="h-24 w-24">
+            {patient.profile_image ? (
+              <AvatarImage src={patient.profile_image} alt={patient.full_name || "Patient"} />
+            ) : (
+              <AvatarFallback className="text-lg bg-vitality-100 text-vitality-800">
+                {getInitials(patient.full_name)}
+              </AvatarFallback>
+            )}
+          </Avatar>
+          <h2 className="mt-4 text-xl font-bold">{patient.full_name}</h2>
+          
+          <Badge variant="outline" className="mt-2">
+            {patient.gender || "Not specified"}
+          </Badge>
+        </div>
         
-        {/* Patient Contact Information */}
-        <Card className="w-full md:w-2/3">
-          <CardContent className="pt-6">
-            <h3 className="text-lg font-medium mb-4">Contact Information</h3>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="flex items-start">
-                <Mail className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium">{patient.email || "Not provided"}</p>
-                </div>
-              </div>
+        <div className="mt-6">
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">ID</TableCell>
+                <TableCell className="text-right truncate max-w-[150px]" title={patient.id}>
+                  {patient.id ? patient.id.substring(0, 8) + "..." : "N/A"}
+                </TableCell>
+              </TableRow>
               
-              <div className="flex items-start">
-                <Phone className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                <div>
-                  <p className="text-sm text-gray-500">Phone</p>
-                  <p className="font-medium">{patient.phone || "Not provided"}</p>
-                </div>
-              </div>
+              <TableRow>
+                <TableCell className="font-medium">Age</TableCell>
+                <TableCell className="text-right">
+                  {patient.dob ? calculateAge(patient.dob) : "Not specified"}
+                </TableCell>
+              </TableRow>
               
-              <div className="flex items-start">
-                <MapPin className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                <div>
-                  <p className="text-sm text-gray-500">Address</p>
-                  <p className="font-medium">{patient.address || "Not provided"}</p>
-                </div>
-              </div>
+              <TableRow>
+                <TableCell className="font-medium">Date of Birth</TableCell>
+                <TableCell className="text-right">
+                  {patient.dob ? formatDate(patient.dob) : "Not specified"}
+                </TableCell>
+              </TableRow>
               
-              <div className="flex items-start">
-                <Calendar className="h-5 w-5 text-gray-500 mr-3 mt-0.5" />
-                <div>
-                  <p className="text-sm text-gray-500">Date of Birth</p>
-                  <p className="font-medium">{ageDisplay}</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* Medical History */}
-      {patient.medical_history && (
-        <Card>
-          <CardContent className="pt-6">
-            <h3 className="text-lg font-medium mb-4">Medical History</h3>
-            <p className="text-gray-700">{patient.medical_history}</p>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+              <TableRow>
+                <TableCell className="font-medium">Email</TableCell>
+                <TableCell className="text-right truncate max-w-[150px]" title={patient.email}>
+                  {patient.email || "Not specified"}
+                </TableCell>
+              </TableRow>
+              
+              <TableRow>
+                <TableCell className="font-medium">Phone</TableCell>
+                <TableCell className="text-right">
+                  {patient.phone || "Not specified"}
+                </TableCell>
+              </TableRow>
+              
+              <TableRow>
+                <TableCell className="font-medium">Address</TableCell>
+                <TableCell className="text-right">
+                  {patient.address || "Not specified"}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

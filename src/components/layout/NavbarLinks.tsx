@@ -2,8 +2,19 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
+import { useAuth } from "@/context/AuthContext";
 
 export const NavbarLinks = () => {
+  const { userRole } = useAuth();
+  
   const links = [
     { name: "About", href: "/about" },
     { 
