@@ -25,7 +25,6 @@ import {
   User,
   X, 
 } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface MobileNavProps {
   open: boolean;
@@ -38,33 +37,42 @@ export const MobileNav = ({ open, onClose }: MobileNavProps) => {
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent className="w-[300px] sm:w-[350px] pt-10 pb-20 overflow-y-auto">
-        <SheetHeader className="mb-6">
-          <div className="flex justify-between items-center">
-            <SheetTitle className="font-display text-2xl font-bold">
-              <div className="flex items-center">
-                <div className="w-8 h-8 mr-2 overflow-hidden">
-                  <motion.img 
-                    src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
-                    alt="YASHA's Physiocare Logo"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
-                  YASHA's Physiocare
-                </span>
-              </div>
+      <SheetContent className="w-[300px] sm:w-[350px] pt-6 pb-20 overflow-y-auto">
+        <SheetHeader className="mb-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <div className="w-8 h-8 mr-2 overflow-hidden">
+              <img 
+                src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
+                alt="YASHA's Physiocare Logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <SheetTitle className="text-xl font-bold">
+              <span className="text-vitality-600">
+                Physiocare
+              </span>
             </SheetTitle>
+          </div>
+          <SheetClose asChild>
+            <Button variant="ghost" size="icon" className="h-6 w-6">
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </Button>
+          </SheetClose>
+        </SheetHeader>
+
+        {/* Sign In / Sign Up button visible at top for mobile */}
+        {!user && (
+          <div className="mb-4">
             <SheetClose asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6">
-                <X className="h-4 w-4" />
-                <span className="sr-only">Close</span>
+              <Button asChild variant="outline" size="sm" className="w-full justify-center">
+                <Link to="/signin">Sign In / Sign Up</Link>
               </Button>
             </SheetClose>
           </div>
-        </SheetHeader>
+        )}
 
-        <nav className="flex flex-col space-y-2">
+        <nav className="flex flex-col space-y-1">
           <SheetClose asChild>
             <Link to="/" className="flex items-center py-2 px-3 rounded-md hover:bg-vitality-50">
               <Home className="mr-2 h-5 w-5 text-vitality-600" />
@@ -126,16 +134,6 @@ export const MobileNav = ({ open, onClose }: MobileNavProps) => {
                       Chronic Pain Management
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link to="/services/neurological" className="py-2 hover:text-vitality-600">
-                      Neurological Rehab
-                    </Link>
-                  </SheetClose>
-                  <SheetClose asChild>
-                    <Link to="/services/strength-conditioning" className="py-2 hover:text-vitality-600">
-                      Strength & Conditioning
-                    </Link>
-                  </SheetClose>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -173,11 +171,6 @@ export const MobileNav = ({ open, onClose }: MobileNavProps) => {
                       {t("app.header.blog")}
                     </Link>
                   </SheetClose>
-                  <SheetClose asChild>
-                    <Link to="/faq" className="py-2 hover:text-vitality-600">
-                      {t("app.header.faq")}
-                    </Link>
-                  </SheetClose>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -196,49 +189,35 @@ export const MobileNav = ({ open, onClose }: MobileNavProps) => {
             </Link>
           </SheetClose>
 
-          <div className="pt-4 mt-4 border-t border-gray-100">
-            {user ? (
-              <>
-                <SheetClose asChild>
-                  <Link to="/profile" className="flex items-center py-2 px-3 rounded-md hover:bg-vitality-50">
-                    <User className="mr-2 h-5 w-5 text-vitality-600" />
-                    <span>My Profile</span>
-                  </Link>
-                </SheetClose>
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start px-3 py-2 h-auto hover:bg-vitality-50 hover:text-vitality-600"
-                  onClick={() => {
-                    signOut();
-                    onClose();
-                  }}
-                >
-                  Log Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <SheetClose asChild>
-                  <Link to="/signin" className="flex items-center py-2 px-3 rounded-md hover:bg-vitality-50">
-                    <User className="mr-2 h-5 w-5 text-vitality-600" />
-                    <span>Sign In</span>
-                  </Link>
-                </SheetClose>
-                <SheetClose asChild>
-                  <Link to="/signup" className="flex items-center py-2 px-3 rounded-md hover:bg-vitality-50">
-                    <span>Create Account</span>
-                    <ChevronRight className="ml-2 h-5 w-5 text-vitality-600" />
-                  </Link>
-                </SheetClose>
-              </>
-            )}
-            <SheetClose asChild>
-              <Link to="/booking" className="flex items-center justify-center py-2 px-3 mt-4 rounded-md bg-vitality-600 text-white hover:bg-vitality-700">
-                <CalendarCheck className="mr-2 h-5 w-5" />
-                <span>Book Appointment</span>
-              </Link>
-            </SheetClose>
-          </div>
+          {/* User account links */}
+          {user && (
+            <div className="pt-4 mt-4 border-t border-gray-100">
+              <SheetClose asChild>
+                <Link to="/profile" className="flex items-center py-2 px-3 rounded-md hover:bg-vitality-50">
+                  <User className="mr-2 h-5 w-5 text-vitality-600" />
+                  <span>My Profile</span>
+                </Link>
+              </SheetClose>
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start px-3 py-2 h-auto hover:bg-vitality-50 hover:text-vitality-600"
+                onClick={() => {
+                  signOut();
+                  onClose();
+                }}
+              >
+                Log Out
+              </Button>
+            </div>
+          )}
+          
+          {/* Book Appointment Button */}
+          <SheetClose asChild>
+            <Link to="/booking" className="flex items-center justify-center py-3 px-4 mt-4 rounded-full bg-vitality-600 text-white hover:bg-vitality-700">
+              <CalendarCheck className="mr-2 h-5 w-5" />
+              <span>Book Appointment</span>
+            </Link>
+          </SheetClose>
         </nav>
       </SheetContent>
     </Sheet>

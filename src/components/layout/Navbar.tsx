@@ -51,7 +51,7 @@ const Navbar = () => {
               <motion.img 
                 src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
                 alt="YASHA's Physiocare Logo"
-                className="h-12 w-12 object-contain"
+                className="h-10 w-10 object-contain"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
@@ -91,88 +91,91 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <NavbarLinks />
 
-          {/* Right Side: Theme, Language, Avatar, Book Appointment */}
+          {/* Right Side: Book Appointment, Avatar/Sign In */}
           <div className="flex items-center gap-2">
             {/* Book Appointment Button - Visible on both desktop and mobile */}
-            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white">
+            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white text-sm rounded-full px-4 py-2">
               <Link to="/booking">Book Appointment</Link>
             </Button>
 
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg" />
-                      <AvatarFallback className="bg-vitality-100 text-vitality-700">
-                        {user.email ? user.email.charAt(0).toUpperCase() : "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile">Profile</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/account-settings">Account Settings</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/billing">Billing</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/booking">My Appointments</Link>
-                    </DropdownMenuItem>
-                    {userRole === "doctor" && (
+            {/* User Avatar or Sign In - Desktop */}
+            <div className="hidden md:block">
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="relative rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src="/placeholder.svg" />
+                        <AvatarFallback className="bg-vitality-100 text-vitality-700">
+                          {user.email ? user.email.charAt(0).toUpperCase() : "U"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
                       <DropdownMenuItem asChild>
-                        <Link to="/patients">My Patients</Link>
+                        <Link to="/profile">Profile</Link>
                       </DropdownMenuItem>
-                    )}
-                    {userRole === "patient" && (
                       <DropdownMenuItem asChild>
-                        <Link to="/doctors">Find Doctors</Link>
+                        <Link to="/account-settings">Account Settings</Link>
                       </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem asChild>
-                      <Link to="/pain-tracker">Pain Tracker</Link>
+                      <DropdownMenuItem asChild>
+                        <Link to="/billing">Billing</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to="/booking">My Appointments</Link>
+                      </DropdownMenuItem>
+                      {userRole === "doctor" && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/patients">My Patients</Link>
+                        </DropdownMenuItem>
+                      )}
+                      {userRole === "patient" && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/doctors">Find Doctors</Link>
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem asChild>
+                        <Link to="/pain-tracker">Pain Tracker</Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    {/* Theme Toggle */}
+                    <DropdownMenuItem>
+                      <div className="flex w-full items-center justify-between">
+                        <span>Theme</span>
+                        <ThemeToggle />
+                      </div>
                     </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  {/* Theme Toggle */}
-                  <DropdownMenuItem>
-                    <div className="flex w-full items-center justify-between">
-                      <span>Theme</span>
-                      <ThemeToggle />
-                    </div>
-                  </DropdownMenuItem>
-                  {/* Language Selector */}
-                  <DropdownMenuItem>
-                    <div className="flex w-full items-center justify-between">
-                      <span>Language</span>
-                      <LanguageSelector />
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut()}>
-                    Log Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
-                <Link to="/signin">Sign In / Sign Up</Link>
-              </Button>
-            )}
+                    {/* Language Selector */}
+                    <DropdownMenuItem>
+                      <div className="flex w-full items-center justify-between">
+                        <span>Language</span>
+                        <LanguageSelector />
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => signOut()}>
+                      Log Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
+                  <Link to="/signin">Sign In / Sign Up</Link>
+                </Button>
+              )}
+            </div>
 
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden"
+              className="md:hidden"
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open menu</span>
