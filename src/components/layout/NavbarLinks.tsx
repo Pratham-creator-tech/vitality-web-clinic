@@ -1,121 +1,239 @@
 
-import { NavLink } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from "@/components/ui/navigation-menu";
-import { useAuth } from "@/context/AuthContext";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const NavbarLinks = () => {
-  const { userRole } = useAuth();
-  
-  const links = [
-    { 
-      name: "About", 
-      href: "/about",
-      dropdown: [
-        { name: "Our Story", href: "/about#story" },
-        { name: "Our Team", href: "/about#team" },
-        { name: "Our Mission", href: "/about#mission" },
-        { name: "Our Values", href: "/about#values" }
-      ]
-    },
-    { 
-      name: "Services", 
-      href: "/services",
-      dropdown: [
-        { name: "Sports Rehabilitation", href: "/services/sports-rehabilitation" },
-        { name: "Manual Therapy", href: "/services/manual-therapy" },
-        { name: "Post-Surgical Rehabilitation", href: "/services/post-surgical" },
-        { name: "Chronic Pain Management", href: "/services/chronic-pain" },
-        { name: "Neurological Rehabilitation", href: "/services/neurological" },
-        { name: "Women's Health", href: "/services/womens-health" },
-        { name: "View All Services", href: "/services" }
-      ]
-    },
-    { name: "Pricing", href: "/pricing" },
-    { name: "Insurance", href: "/insurance" },
-    { 
-      name: "Resources", 
-      href: "/faq",
-      dropdown: [
-        { name: "FAQ", href: "/faq" },
-        { name: "Blog", href: "/blog" },
-        { name: "Video Library", href: "/video-library" },
-        { name: "Pain Tracker", href: "/pain-tracker" },
-        { name: "Interactive Body Map", href: "/interactive-body-map" }
-      ]
-    },
-    { name: "Contact", href: "/contact" },
-  ];
+  const { pathname } = useLocation();
+  const { t } = useLanguage();
+  const { user, userRole } = useAuth();
+
+  const isActive = (path: string) => {
+    if (path === "/services" && pathname.includes("/services/")) {
+      return true;
+    }
+    return pathname === path;
+  };
+
+  const linkStyle = "relative flex items-center gap-1.5 text-sm font-medium py-2 px-3 hover:text-vitality-500 transition-colors";
+  const activeLinkStyle = "text-vitality-500 font-semibold";
 
   return (
-    <NavigationMenu className="hidden lg:flex">
-      <NavigationMenuList className="flex items-center space-x-1 ml-6">
-        {links.map((link) => (
-          link.dropdown ? (
-            <NavigationMenuItem key={link.name}>
-              <NavigationMenuTrigger className="px-3 py-2 text-sm font-medium bg-transparent hover:bg-transparent focus:bg-transparent data-[state=open]:bg-transparent">
-                {link.name}
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[200px] gap-1 p-2">
-                  {link.dropdown.map((item) => (
-                    <li key={item.name}>
-                      <NavigationMenuLink asChild>
-                        <NavLink
-                          to={item.href}
-                          className={({ isActive }) =>
-                            cn(
-                              "block select-none rounded-md p-2 text-sm font-medium leading-none no-underline outline-none transition-colors",
-                              isActive
-                                ? "bg-vitality-50 text-vitality-600 dark:bg-gray-800 dark:text-vitality-400"
-                                : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                            )
-                          }
-                        >
-                          {item.name}
-                        </NavLink>
-                      </NavigationMenuLink>
-                    </li>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          ) : (
-            <NavLink
-              key={link.name}
-              to={link.href}
-              className={({ isActive }) =>
-                cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors relative group",
-                  isActive
-                    ? "text-vitality-600 dark:text-vitality-400"
-                    : "text-gray-700 hover:text-vitality-600 dark:text-gray-300 dark:hover:text-vitality-400"
-                )
-              }
+    <div className="hidden lg:flex items-center space-x-1">
+      {/* Main Navigation */}
+      <div className="flex items-center space-x-1">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button 
+              className={`${linkStyle} ${
+                pathname.includes("/about") || pathname.includes("/doctor-benefits")
+                  ? activeLinkStyle
+                  : "text-gray-700 dark:text-gray-200"
+              }`}
             >
-              {({ isActive }) => (
-                <>
-                  {link.name}
-                  {isActive && (
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-vitality-500 rounded-full mx-1"
-                      layoutId="navbar-indicator"
-                    />
-                  )}
-                </>
-              )}
-            </NavLink>
-          )
-        ))}
-      </NavigationMenuList>
-    </NavigationMenu>
+              <span className="flex items-center">
+                {t("app.header.about")}
+                <ChevronDown className="h-4 w-4 ml-1" />
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem asChild>
+              <Link to="/about" className="flex items-center">
+                About Us
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/doctor-benefits" className="flex items-center">
+                For Doctors
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/virtual-tour" className="flex items-center">
+                Virtual Tour
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button 
+              className={`${linkStyle} ${
+                pathname.includes("/services")
+                  ? activeLinkStyle
+                  : "text-gray-700 dark:text-gray-200"
+              }`}
+            >
+              <span className="flex items-center">
+                {t("app.header.services")}
+                <ChevronDown className="h-4 w-4 ml-1" />
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem asChild>
+              <Link to="/services" className="flex items-center">
+                All Services
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/services/sports-rehabilitation" className="flex items-center">
+                Sports Rehabilitation
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/services/manual-therapy" className="flex items-center">
+                Manual Therapy
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/services/post-surgical" className="flex items-center">
+                Post-Surgical Rehab
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/services/chronic-pain" className="flex items-center">
+                Chronic Pain Management
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/services/neurological" className="flex items-center">
+                Neurological Rehab
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/services/strength-conditioning" className="flex items-center">
+                Strength & Conditioning
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Link
+          to="/pricing"
+          className={`${linkStyle} ${isActive("/pricing") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+        >
+          {t("app.header.pricing")}
+          {isActive("/pricing") && (
+            <motion.span
+              layoutId="navigation-underline"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+            />
+          )}
+        </Link>
+
+        {/* Conditionally show Doctors/Patients links based on user role */}
+        {user && userRole === "doctor" ? (
+          <Link
+            to="/patients"
+            className={`${linkStyle} ${isActive("/patients") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+          >
+            Patients
+            {isActive("/patients") && (
+              <motion.span
+                layoutId="navigation-underline"
+                className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+              />
+            )}
+          </Link>
+        ) : user && userRole === "patient" ? (
+          <Link
+            to="/doctors"
+            className={`${linkStyle} ${isActive("/doctors") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+          >
+            Our Doctors
+            {isActive("/doctors") && (
+              <motion.span
+                layoutId="navigation-underline"
+                className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+              />
+            )}
+          </Link>
+        ) : null}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button 
+              className={`${linkStyle} ${
+                pathname.includes("/interactive-body-map") || 
+                pathname.includes("/video-library") || 
+                pathname.includes("/pain-tracker") || 
+                pathname.includes("/ai-assistant")
+                  ? activeLinkStyle
+                  : "text-gray-700 dark:text-gray-200"
+              }`}
+            >
+              <span className="flex items-center">
+                {t("app.menu.resources")}
+                <ChevronDown className="h-4 w-4 ml-1" />
+              </span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem asChild>
+              <Link to="/interactive-body-map" className="flex items-center">
+                {t("app.feature.bodymap")}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/pain-tracker" className="flex items-center">
+                {t("app.feature.paintracker")}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/video-library" className="flex items-center">
+                {t("app.feature.videolibrary")}
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/ai-assistant" className="flex items-center">
+                AI Assistant
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/blog" className="flex items-center">
+                Blog
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/faq" className="flex items-center">
+                FAQ
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Link
+          to="/contact"
+          className={`${linkStyle} ${isActive("/contact") ? activeLinkStyle : "text-gray-700 dark:text-gray-200"}`}
+        >
+          {t("app.header.contact")}
+          {isActive("/contact") && (
+            <motion.span
+              layoutId="navigation-underline"
+              className="absolute left-3 right-3 bottom-0 h-0.5 bg-vitality-400"
+              animate={{ opacity: 1 }}
+              initial={{ opacity: 0 }}
+            />
+          )}
+        </Link>
+      </div>
+    </div>
   );
 };
