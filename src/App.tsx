@@ -51,6 +51,7 @@ import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import PainTracker from "./pages/PainTracker";
 import VideoLibrary from "./pages/VideoLibrary";
 import VirtualTour from "./pages/VirtualTour";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +85,7 @@ const App = () => (
                 <Route path="/patients" element={<PatientsList />} />
                 <Route path="/doctors" element={<DoctorsPage />} />
                 <Route path="/doctor/:id" element={<DoctorProfile />} />
+                <Route path="/admin" element={<AdminDashboard />} />
                 
                 {/* Service specific pages */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

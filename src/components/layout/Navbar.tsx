@@ -45,48 +45,50 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo - with animation and linked to home */}
-          <Link to="/" className="flex items-center group">
-            <div className="flex items-center">
-              {/* Logo Image - No background box, matches navbar background */}
-              <motion.img 
-                src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
-                alt="YASHA's Physiocare Logo"
-                className="h-10 w-10 object-contain"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                whileHover={{ 
-                  scale: 1.05,
-                  rotate: [0, -2, 2, -2, 0],
-                  transition: { duration: 0.5 }
-                }}
-              />
-              
-              {/* Text Logo - Right of the image */}
-              <motion.div 
-                className="ml-2 font-display text-xl font-bold"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
-                  Physiocare
-                </span>
-                <motion.span 
-                  className="text-accent inline-block"
-                  animate={{ 
-                    rotate: [0, 8, -5, 0],
-                    scale: [1, 1.2, 0.9, 1] 
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center group">
+              <div className="flex items-center">
+                {/* Logo Image - No background box, matches navbar background */}
+                <motion.img 
+                  src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
+                  alt="YASHA's Physiocare Logo"
+                  className="h-10 w-10 object-contain"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    rotate: [0, -2, 2, -2, 0],
+                    transition: { duration: 0.5 }
                   }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatDelay: 5
-                  }}
-                >.</motion.span>
-              </motion.div>
-            </div>
-          </Link>
+                />
+                
+                {/* Text Logo - Right of the image */}
+                <motion.div 
+                  className="ml-2 font-display text-xl font-bold"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
+                    Physiocare
+                  </span>
+                  <motion.span 
+                    className="text-accent inline-block"
+                    animate={{ 
+                      rotate: [0, 8, -5, 0],
+                      scale: [1, 1.2, 0.9, 1] 
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      repeatDelay: 5
+                    }}
+                  >.</motion.span>
+                </motion.div>
+              </div>
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <NavbarLinks />
@@ -136,6 +138,11 @@ const Navbar = () => {
                       {userRole === "patient" && (
                         <DropdownMenuItem asChild>
                           <Link to="/doctors">Find Doctors</Link>
+                        </DropdownMenuItem>
+                      )}
+                      {userRole === "admin" && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin">Admin Dashboard</Link>
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem asChild>

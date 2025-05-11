@@ -1,11 +1,13 @@
 
-import { Home, Info, Phone } from "lucide-react";
+import { Home, Info, Phone, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import { MobileNavLink } from "./MobileNavLink";
 import { MobileNavItemWithIcon } from "./MobileNavItemWithIcon";
 
 export const MobileNavMainItems = () => {
   const { t } = useLanguage();
+  const { userRole } = useAuth();
   
   return (
     <>
@@ -20,6 +22,12 @@ export const MobileNavMainItems = () => {
       <MobileNavItemWithIcon to="/contact" icon={Phone}>
         {t("app.header.contact")}
       </MobileNavItemWithIcon>
+
+      {userRole === "admin" && (
+        <MobileNavItemWithIcon to="/admin" icon={ShieldCheck}>
+          Admin Dashboard
+        </MobileNavItemWithIcon>
+      )}
     </>
   );
 };
