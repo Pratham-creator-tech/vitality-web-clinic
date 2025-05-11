@@ -95,10 +95,12 @@ const Navbar = () => {
 
           {/* Right Side: Book Appointment, Avatar/Sign In */}
           <div className="flex items-center gap-2">
-            {/* Book Appointment Button - Visible on both desktop and mobile */}
-            <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white text-sm rounded-full px-4 py-2">
-              <Link to="/booking">Book Appointment</Link>
-            </Button>
+            {/* Book Appointment Button - Visible on both desktop and mobile for patients and guests */}
+            {(!user || userRole === "patient") && (
+              <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white text-sm rounded-full px-4 py-2">
+                <Link to="/booking">Book Appointment</Link>
+              </Button>
+            )}
 
             {/* User Avatar or Sign In - Desktop */}
             <div className="hidden md:block">

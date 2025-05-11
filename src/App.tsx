@@ -52,6 +52,10 @@ import PainTracker from "./pages/PainTracker";
 import VideoLibrary from "./pages/VideoLibrary";
 import VirtualTour from "./pages/VirtualTour";
 import AdminDashboard from "./pages/AdminDashboard";
+// Import new pages
+import PatientOnboarding from "./pages/PatientOnboarding";
+import PatientDetail from "./pages/PatientDetail";
+import SignUp from "./pages/SignUp";
 
 const queryClient = new QueryClient();
 
@@ -80,6 +84,9 @@ const App = () => (
                 <Route path="/doctor-onboarding" element={<DoctorOnboarding />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/patient-onboarding" element={<PatientOnboarding />} />
+                <Route path="/patient/:id" element={<PatientDetail />} />
                 <Route path="/account-settings" element={<AccountSettings />} />
                 <Route path="/billing" element={<Billing />} />
                 <Route path="/patients" element={<PatientsList />} />

@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { useAuth } from "@/context/AuthContext";
@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { Search, UserPlus, FileText, Calendar, Activity, Bone, Heart, Brain, Dumbbell, Shield } from "lucide-react";
+import { Search, Calendar, Activity, Bone, Heart, Brain, Dumbbell, Shield } from "lucide-react";
 import AIFloatingButton from "@/components/ai/AIFloatingButton";
 
 type Patient = {
@@ -49,7 +49,7 @@ const PatientsList = () => {
   // Sample specialties for filtering
   const specialties = [
     { id: "sports", name: "Sports Rehabilitation", icon: <Activity className="h-5 w-5 mr-2" /> },
-    { id: "manual", name: "Manual Therapy", icon: <UserPlus className="h-5 w-5 mr-2" /> },
+    { id: "manual", name: "Manual Therapy", icon: <Activity className="h-5 w-5 mr-2" /> },
     { id: "surgical", name: "Post-Surgical", icon: <Bone className="h-5 w-5 mr-2" /> },
     { id: "pain", name: "Chronic Pain", icon: <Heart className="h-5 w-5 mr-2" /> },
     { id: "neuro", name: "Neurological", icon: <Brain className="h-5 w-5 mr-2" /> },
@@ -168,10 +168,7 @@ const PatientsList = () => {
                   <FileText className="h-4 w-4 mr-2" />
                   Export
                 </Button>
-                <Button>
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  Add Patient
-                </Button>
+                {/* Removed "Add Patient" button since doctors shouldn't add patients */}
               </div>
             </div>
           </CardHeader>
@@ -275,8 +272,8 @@ const renderPatientsTable = (patients: Patient[], loading: boolean) => {
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="sm">
-                    View
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to={`/patient/${patient.id}`}>View</Link>
                   </Button>
                   <Button variant="ghost" size="sm">
                     Schedule

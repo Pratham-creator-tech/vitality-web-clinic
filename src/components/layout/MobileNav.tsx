@@ -13,7 +13,7 @@ interface MobileNavProps {
 export const MobileNav = ({ open, onClose }: MobileNavProps) => {
   return (
     <Sheet open={open} onOpenChange={onClose}>
-      <SheetContent className="w-[300px] sm:w-[350px] pt-6 pb-20 overflow-y-auto">
+      <SheetContent className="w-[300px] sm:w-[350px] pt-6 pb-20 overflow-y-auto fixed inset-y-0 right-0 z-50">
         <MobileNavHeader onClose={onClose} />
         <MobileNavAuth onClose={onClose} />
         <MobileNavContent />

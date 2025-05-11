@@ -105,7 +105,7 @@ const SignUp = () => {
 
       const userId = authData.user.id;
 
-      // Create the patient profile
+      // Create the patient profile with basic info
       const { error: profileError } = await supabase
         .from('patients')
         .insert({
@@ -129,8 +129,8 @@ const SignUp = () => {
         description: "Welcome to Vitality Physio! Please check your email to confirm your account.",
       });
       
-      // Navigate to signin page after successful registration
-      setTimeout(() => navigate("/signin"), 1500);
+      // Redirect to patient onboarding page instead of signin
+      setTimeout(() => navigate("/patient-onboarding"), 1500);
     } catch (error) {
       console.error("Unexpected error during registration:", error);
       toast({
