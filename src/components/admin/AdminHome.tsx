@@ -1,6 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalendarDays, Users, Clock, CreditCard } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const AdminHome = () => {
   return (
