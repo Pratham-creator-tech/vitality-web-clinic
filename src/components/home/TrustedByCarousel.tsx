@@ -1,117 +1,165 @@
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-
-const partners = [
-  { 
-    name: "Mayo Clinic", 
-    logo: "https://logos-world.net/wp-content/uploads/2021/02/Mayo-Clinic-Logo-700x394.png" 
-  },
-  { 
-    name: "Johns Hopkins", 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/5/50/Johns_Hopkins_Medicine_logo.svg" 
-  },
-  { 
-    name: "Cleveland Clinic", 
-    logo: "https://upload.wikimedia.org/wikipedia/commons/5/5d/Cleveland_Clinic_logo.svg" 
-  },
-  { 
-    name: "NYU Langone", 
-    logo: "https://logos-download.com/wp-content/uploads/2021/01/NYU_Langone_Health_Logo.png" 
-  },
-  { 
-    name: "Mass General", 
-    logo: "https://upload.wikimedia.org/wikipedia/en/7/7d/Massachusetts_General_Hospital_logo.svg" 
-  },
-  { 
-    name: "UCLA Medical", 
-    logo: "https://brand.ucla.edu/images/logos-and-marks/campus-logos/horizontal/campus-logo-blue-horizontal.svg" 
-  },
-  { 
-    name: "Stanford Health", 
-    logo: "https://med.stanford.edu/etc/designs/sm/images/stanford-health-care-logo.svg" 
-  },
-  { 
-    name: "UCSF Medical", 
-    logo: "https://www.ucsf.edu/sites/default/files/2019-04/ucsf_logo_heritage_blue_rgb.svg" 
-  },
-];
-
 const TrustedByCarousel = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    const scrollAnimation = () => {
-      if (scrollRef.current) {
-        if (scrollRef.current.scrollLeft >= 
-            scrollRef.current.scrollWidth / 2) {
-          scrollRef.current.scrollLeft = 0;
-        } else {
-          scrollRef.current.scrollLeft += 1;
-        }
-      }
-    };
-
-    const animationId = setInterval(scrollAnimation, 30);
-    
-    return () => clearInterval(animationId);
-  }, []);
-
   return (
-    <section className="py-12 bg-gray-50 dark:bg-gray-900/50 overflow-hidden">
+    <section className="py-12 bg-white dark:bg-gray-900 overflow-hidden">
       <div className="container mx-auto px-4">
-        <h3 className="text-center font-display text-lg text-gray-600 dark:text-gray-400 mb-8">
+        <h2 className="text-center text-2xl font-medium text-gray-700 mb-12 dark:text-gray-300">
           Trusted by world-class healthcare institutions
-        </h3>
-        
-        <div className="relative w-full overflow-hidden">
-          <div 
-            ref={scrollRef}
-            className="flex gap-12 overflow-x-scroll scrollbar-none"
-            style={{ scrollBehavior: "smooth", width: "200%" }}
-          >
+        </h2>
+        <div className="relative overflow-hidden">
+          <div className="flex animate-marquee gap-8 items-center whitespace-nowrap">
             {/* First set of logos */}
-            {partners.map((partner, index) => (
-              <motion.div
-                key={`partner-1-${index}`}
-                className="flex flex-col items-center justify-center min-w-[150px] px-4"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img 
-                  src={partner.logo} 
-                  alt={`${partner.name} logo`} 
-                  className="h-14 w-36 object-contain opacity-70 dark:opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                />
-                <span className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                  {partner.name}
-                </span>
-              </motion.div>
-            ))}
-            
+            {/* Cleveland Clinic */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 220 35" className="w-full h-full" fill="currentColor">
+                  <g fill="#0067B1">
+                    <path d="M75.5 14.7h-3.2v9.8h-2.4v-9.8h-3.2v-2h8.8v2zm9.6 9.8h-2.4v-5h-5v5h-2.4V12.7h2.4v4.8h5v-4.8h2.4v11.8zm12.3 0h-7.8V12.7h7.8v2h-5.4v2.8h5v2h-5v3h5.4v2zm14.9 0h-2.3l-5.2-8.1v8.1h-2.4V12.7h2.3l5.2 8.1v-8.1h2.4v11.8z"/>
+                  </g>
+                  <path fill="#00B5E2" d="M17.5 0h17.5v17.5H17.5z"/>
+                  <path fill="#8DC63F" d="M0 17.5h17.5V35H0z"/>
+                  <path fill="#0067B1" d="M17.5 17.5H35V35H17.5z"/>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Cleveland Clinic</span>
+            </div>
+            {/* NYU Langone */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#522D6D"/>
+                  <text x="25" y="26" fill="white" fontSize="16" fontFamily="Arial Black">NYU LANGONE</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">NYU Langone</span>
+            </div>
+            {/* Mass General */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#003087"/>
+                  <text x="20" y="26" fill="white" fontSize="14" fontFamily="Arial">MASS GENERAL</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Mass General</span>
+            </div>
+            {/* UCLA Health */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#347BAD"/>
+                  <text x="30" y="26" fill="white" fontSize="16" fontFamily="Arial">UCLA Health</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">UCLA Health</span>
+            </div>
+            {/* Stanford Health */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#8C1515"/>
+                  <text x="20" y="26" fill="white" fontSize="14" fontFamily="Arial">Stanford Health</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Stanford Health</span>
+            </div>
+            {/* UCSF Medical */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#052049"/>
+                  <text x="30" y="26" fill="white" fontSize="16" fontFamily="Arial">UCSF Medical</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">UCSF Medical</span>
+            </div>
+            {/* Mayo Clinic */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#001F5B"/>
+                  <text x="35" y="26" fill="white" fontSize="16" fontFamily="Arial">Mayo Clinic</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Mayo Clinic</span>
+            </div>
+
             {/* Duplicate set for continuous scrolling */}
-            {partners.map((partner, index) => (
-              <motion.div
-                key={`partner-2-${index}`}
-                className="flex flex-col items-center justify-center min-w-[150px] px-4"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img 
-                  src={partner.logo} 
-                  alt={`${partner.name} logo`} 
-                  className="h-14 w-36 object-contain opacity-70 dark:opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                />
-                <span className="mt-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
-                  {partner.name}
-                </span>
-              </motion.div>
-            ))}
+            {/* Cleveland Clinic */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 220 35" className="w-full h-full" fill="currentColor">
+                  <g fill="#0067B1">
+                    <path d="M75.5 14.7h-3.2v9.8h-2.4v-9.8h-3.2v-2h8.8v2zm9.6 9.8h-2.4v-5h-5v5h-2.4V12.7h2.4v4.8h5v-4.8h2.4v11.8zm12.3 0h-7.8V12.7h7.8v2h-5.4v2.8h5v2h-5v3h5.4v2zm14.9 0h-2.3l-5.2-8.1v8.1h-2.4V12.7h2.3l5.2 8.1v-8.1h2.4v11.8z"/>
+                  </g>
+                  <path fill="#00B5E2" d="M17.5 0h17.5v17.5H17.5z"/>
+                  <path fill="#8DC63F" d="M0 17.5h17.5V35H0z"/>
+                  <path fill="#0067B1" d="M17.5 17.5H35V35H17.5z"/>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Cleveland Clinic</span>
+            </div>
+            {/* NYU Langone */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#522D6D"/>
+                  <text x="25" y="26" fill="white" fontSize="16" fontFamily="Arial Black">NYU LANGONE</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">NYU Langone</span>
+            </div>
+            {/* Mass General */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#003087"/>
+                  <text x="20" y="26" fill="white" fontSize="14" fontFamily="Arial">MASS GENERAL</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Mass General</span>
+            </div>
+            {/* UCLA Health */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#347BAD"/>
+                  <text x="30" y="26" fill="white" fontSize="16" fontFamily="Arial">UCLA Health</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">UCLA Health</span>
+            </div>
+            {/* Stanford Health */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#8C1515"/>
+                  <text x="20" y="26" fill="white" fontSize="14" fontFamily="Arial">Stanford Health</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Stanford Health</span>
+            </div>
+            {/* UCSF Medical */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#052049"/>
+                  <text x="30" y="26" fill="white" fontSize="16" fontFamily="Arial">UCSF Medical</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">UCSF Medical</span>
+            </div>
+            {/* Mayo Clinic */}
+            <div className="flex flex-col items-center">
+              <div className="w-36 h-16 relative grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110">
+                <svg viewBox="0 0 200 40" className="w-full h-full">
+                  <path d="M10 8h180v24H10z" fill="#001F5B"/>
+                  <text x="35" y="26" fill="white" fontSize="16" fontFamily="Arial">Mayo Clinic</text>
+                </svg>
+              </div>
+              <span className="mt-2 text-sm text-gray-600 dark:text-gray-400">Mayo Clinic</span>
+            </div>
           </div>
-          
-          {/* Gradient overlays for smooth fade in/out effect */}
-          <div className="absolute left-0 top-0 w-16 h-full bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-900/50 dark:to-transparent"></div>
-          <div className="absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-900/50 dark:to-transparent"></div>
         </div>
       </div>
     </section>

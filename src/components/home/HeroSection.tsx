@@ -57,19 +57,19 @@ const HeroSection = () => {
             </div>
             
             <div className="flex items-center space-x-4">
-              <div className="flex -space-x-4">
+              <div className="flex -space-x-0">
                 <div className="w-10 h-10 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold">
                   4.9
                 </div>
-                <div className="flex space-x-1 items-center bg-white py-1 px-3 rounded-full shadow-sm border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    star <= 4 ? 
-                      <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" /> : 
-                      <StarHalf key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  ))}
-                  <span className="text-sm font-medium text-gray-600 ml-2 dark:text-gray-300">
-                    (400+ reviews)
-                  </span>
+                <div className="flex items-center bg-white py-2.5 px-5 rounded-full shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                  <div className="flex items-center gap-1 mr-3">
+                    {[1, 2, 3, 4].map((star) => (
+                      <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    ))}
+                    <StarHalf className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                  </div>
+                  {/* <span className="text-lg font-semibold text-gray-900 mr-2 dark:text-white">4.5</span> */}
+                  <span className="text-sm text-gray-600 dark:text-gray-300">(400+ reviews)</span>
                 </div>
               </div>
             </div>
