@@ -50,7 +50,12 @@ const TestimonialsSection = () => {
   };
 
   return (
-    <section className="py-20 bg-vitality-50">
+    <section className="py-20 bg-vitality-50 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 pointer-events-none opacity-50">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-vitality-200 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-orange rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2 opacity-30"></div>
+      </div>
       <div className="container mx-auto px-4">
         <SectionTitle 
           title="Patient Success Stories" 
@@ -59,8 +64,9 @@ const TestimonialsSection = () => {
         />
         
         <div className="mt-12 relative max-w-4xl mx-auto">
-          <div className="relative bg-white rounded-xl shadow-lg p-8 md:p-12">
-            <Quote className="absolute top-8 left-8 h-16 w-16 text-vitality-200 opacity-30" />
+          <div className="relative bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-8 md:p-12 transform transition-all duration-500 hover:shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-transparent rounded-xl"></div>
+            <Quote className="absolute top-8 left-8 h-16 w-16 text-vitality-200 opacity-30 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
             
             <div className="relative z-10">
               <p className="text-lg md:text-xl text-gray-700 italic mb-8 relative z-10">
@@ -96,7 +102,7 @@ const TestimonialsSection = () => {
           
           <button
             onClick={goToPrev}
-            className="absolute top-1/2 -left-4 md:-left-8 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors"
+            className="absolute top-1/2 -left-4 md:-left-8 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-x-1 hover:bg-white"
             aria-label="Previous testimonial"
           >
             <ChevronLeft className="h-6 w-6 text-vitality-500" />
@@ -104,7 +110,7 @@ const TestimonialsSection = () => {
           
           <button
             onClick={goToNext}
-            className="absolute top-1/2 -right-4 md:-right-8 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-50 transition-colors"
+            className="absolute top-1/2 -right-4 md:-right-8 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 hover:translate-x-1 hover:bg-white"
             aria-label="Next testimonial"
           >
             <ChevronRight className="h-6 w-6 text-vitality-500" />
