@@ -8,8 +8,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Settings, Calendar, Users, FileText, Activity } from "lucide-react";
-import NavbarLinks from "./NavbarLinks";
-import MobileNav from "./MobileNav";
+import { NavbarLinks } from "./NavbarLinks";
+import { MobileNav } from "./MobileNav";
 
 const Navbar = () => {
   const { user, userRole, signOut } = useAuth();
@@ -31,7 +31,6 @@ const Navbar = () => {
     if (userRole === 'doctor') {
       return [
         { icon: Users, label: "View Patients", href: "/patients" },
-        { icon: Calendar, label: "Appointments", href: "/booking" },
         { icon: FileText, label: "Reports", href: "/reports" },
       ];
     } else if (userRole === 'patient') {

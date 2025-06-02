@@ -126,16 +126,18 @@ const PatientOnboarding = () => {
         
         // Store file references in database
         if (uploadedFiles.length > 0) {
+          const fileRecords = uploadedFiles.map((fileName, index) => ({
+            patient_id: patientData.id,
+            file_path: fileName,
+            file_type: 'prescription',
+            file_name: selectedFiles[index]?.name || 'Unknown',
+            file_size: selectedFiles[index]?.size,
+            mime_type: selectedFiles[index]?.type
+          }));
+
           const { error: filesError } = await supabase
             .from('patient_files')
-            .insert(
-              uploadedFiles.map(fileName => ({
-                patient_id: patientData.id,
-                file_path: fileName,
-                file_type: 'prescription',
-                file_name: selectedFiles[uploadedFiles.indexOf(fileName)]?.name || 'Unknown'
-              }))
-            );
+            .insert(fileRecords);
           
           if (filesError) {
             console.error('Error saving file references:', filesError);
