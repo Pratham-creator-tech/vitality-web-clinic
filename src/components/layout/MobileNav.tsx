@@ -6,15 +6,13 @@ import { MobileNavContent } from "./mobile-nav/MobileNavContent";
 import { MobileNavFooter } from "./mobile-nav/MobileNavFooter";
 
 interface MobileNavProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  open: boolean;
+  onClose: () => void;
 }
 
-export const MobileNav = ({ isOpen, setIsOpen }: MobileNavProps) => {
-  const onClose = () => setIsOpen(false);
-
+export const MobileNav = ({ open, onClose }: MobileNavProps) => {
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-[300px] sm:w-[350px] pt-6 pb-20 overflow-y-auto fixed inset-y-0 right-0 z-50">
         <MobileNavHeader onClose={onClose} />
         <MobileNavAuth onClose={onClose} />

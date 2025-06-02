@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,34 +8,48 @@ import { supabase } from "@/integrations/supabase/client";
 import PageLayout from "@/components/layout/PageLayout";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { SectionTitle } from "@/components/ui/section-title";
-import { CheckCircle, AlertCircle, Upload, X } from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
+
+const genderOptions = [
+  { value: "male", label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "other", label: "Other" },
+  { value: "prefer_not_to_say", label: "Prefer not to say" }
+];
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
-  phone: z.string().min(6, { message: "Phone number must be at least 6 characters." }),
-  address: z.string().min(5, { message: "Address must be at least 5 characters." }),
+  dob: z.string().min(1, { message: "Date of birth is required" }),
+  gender: z.string().optional(),
+  phone: z.string().min(6, { message: "Phone number must be at least 6 characters." }).optional(),
+  address: z.string().min(5, { message: "Address must be at least 5 characters." }).optional(),
+  medicalHistory: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const PatientOnboarding = () => {
-  const { user, userRole, isLoading } = useAuth();
+  const { user, userRole, isLoading } = useAuth(); // Added isLoading from useAuth
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: user?.email?.split('@')[0] || "",
+      dob: "",
+      gender: "prefer_not_to_say",
       phone: "",
       address: "",
+      medicalHistory: "",
     },
   });
 
@@ -61,44 +74,6 @@ const PatientOnboarding = () => {
     }
   }, [user, userRole, isLoading, navigate, toast]);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    if (files.length + selectedFiles.length > 5) {
-      toast({
-        title: "Too many files",
-        description: "You can upload a maximum of 5 files",
-        variant: "destructive",
-      });
-      return;
-    }
-    setSelectedFiles(prev => [...prev, ...files]);
-  };
-
-  const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const uploadFiles = async (patientId: string) => {
-    const uploadPromises = selectedFiles.map(async (file, index) => {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${patientId}/prescription_${Date.now()}_${index}.${fileExt}`;
-      
-      const { error } = await supabase.storage
-        .from('patient-files')
-        .upload(fileName, file);
-      
-      if (error) {
-        console.error('Error uploading file:', error);
-        return null;
-      }
-      
-      return fileName;
-    });
-
-    const uploadedFiles = await Promise.all(uploadPromises);
-    return uploadedFiles.filter(file => file !== null);
-  };
-
   const onSubmit = async (data: FormValues) => {
     if (!user) return;
     
@@ -106,44 +81,20 @@ const PatientOnboarding = () => {
       setIsSubmitting(true);
       
       // Update or create the patient profile
-      const { data: patientData, error } = await supabase
+      const { error } = await supabase
         .from('patients')
         .upsert({
           user_id: user.id,
           full_name: data.fullName,
           email: user.email,
+          dob: data.dob,
+          gender: data.gender,
           phone: data.phone,
-          address: data.address
-        })
-        .select()
-        .single();
+          address: data.address,
+          medical_history: data.medicalHistory
+        });
       
       if (error) throw error;
-      
-      // Upload prescription files if any
-      if (selectedFiles.length > 0) {
-        const uploadedFiles = await uploadFiles(patientData.id);
-        
-        // Store file references in database
-        if (uploadedFiles.length > 0) {
-          const fileRecords = uploadedFiles.map((fileName, index) => ({
-            patient_id: patientData.id,
-            file_path: fileName,
-            file_type: 'prescription',
-            file_name: selectedFiles[index]?.name || 'Unknown',
-            file_size: selectedFiles[index]?.size,
-            mime_type: selectedFiles[index]?.type
-          }));
-
-          const { error: filesError } = await supabase
-            .from('patient_files')
-            .insert(fileRecords);
-          
-          if (filesError) {
-            console.error('Error saving file references:', filesError);
-          }
-        }
-      }
       
       setSubmitSuccess(true);
       toast({
@@ -172,7 +123,7 @@ const PatientOnboarding = () => {
       <div className="container mx-auto px-4 py-12">
         <SectionTitle
           title="Complete Your Patient Profile"
-          subtitle="Please provide your contact information to help us serve you better."
+          subtitle="Please provide your medical information to help us serve you better."
         />
         
         <div className="max-w-2xl mx-auto mt-8">
@@ -193,7 +144,7 @@ const PatientOnboarding = () => {
               <CardHeader>
                 <CardTitle>Patient Information Form</CardTitle>
                 <CardDescription>
-                  Fill out your contact details to complete your profile setup
+                  Fill out your details to complete your profile setup
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -216,12 +167,51 @@ const PatientOnboarding = () => {
                       
                       <FormField
                         control={form.control}
+                        name="dob"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Date of Birth *</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="gender"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Gender</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select gender" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {genderOptions.map((option) => (
+                                  <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone Number *</FormLabel>
+                            <FormLabel>Phone Number</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="+1 (555) 123-4567" />
+                              <Input {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -233,63 +223,32 @@ const PatientOnboarding = () => {
                         name="address"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Address *</FormLabel>
+                            <FormLabel>Address</FormLabel>
                             <FormControl>
-                              <Input {...field} placeholder="Your full address" />
+                              <Textarea {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-
-                      {/* File Upload Section */}
-                      <div className="space-y-4">
-                        <FormLabel>Previous Prescriptions (Optional)</FormLabel>
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-                          <div className="text-center">
-                            <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                            <div className="mt-4">
-                              <label htmlFor="file-upload" className="cursor-pointer">
-                                <span className="mt-2 block text-sm font-medium text-gray-900">
-                                  Upload previous prescriptions or medical reports
-                                </span>
-                                <span className="mt-1 block text-xs text-gray-500">
-                                  PDF, JPG, PNG up to 10MB each (max 5 files)
-                                </span>
-                              </label>
-                              <input
-                                id="file-upload"
-                                name="file-upload"
-                                type="file"
-                                className="sr-only"
-                                multiple
-                                accept=".pdf,.jpg,.jpeg,.png"
-                                onChange={handleFileSelect}
+                      
+                      <FormField
+                        control={form.control}
+                        name="medicalHistory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Medical History</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                {...field}
+                                placeholder="Please list any pre-existing conditions, allergies, or previous surgeries"
+                                className="h-32"
                               />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Selected Files */}
-                        {selectedFiles.length > 0 && (
-                          <div className="space-y-2">
-                            <p className="text-sm font-medium">Selected Files:</p>
-                            {selectedFiles.map((file, index) => (
-                              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                                <span className="text-sm text-gray-700 truncate">{file.name}</span>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeFile(index)}
-                                >
-                                  <X className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
                         )}
-                      </div>
+                      />
                     </div>
                     
                     <div className="pt-4">

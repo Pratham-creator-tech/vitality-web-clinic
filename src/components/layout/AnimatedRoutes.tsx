@@ -1,4 +1,3 @@
-
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -11,7 +10,6 @@ import Booking from '@/pages/Booking';
 import Contact from '@/pages/Contact';
 import FAQ from '@/pages/FAQ';
 import Blog from '@/pages/Blog';
-import BlogDetail from '@/pages/BlogDetail';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import NotFound from '@/pages/NotFound';
@@ -37,7 +35,6 @@ import DryNeedling from '@/pages/services/DryNeedling';
 import NeuroDynamic from '@/pages/services/NeuroDynamic';
 import CuppingTherapy from '@/pages/services/CuppingTherapy';
 import VirtualPhysiotherapy from '@/pages/services/VirtualPhysiotherapy';
-import ServiceDetailPage from '@/pages/services/ServiceDetailPage';
 import AIAssistant from '@/pages/AIAssistant';
 import DoctorUSP from '@/pages/DoctorUSP';
 import PatientsList from '@/pages/PatientsList';
@@ -105,7 +102,6 @@ const AnimatedRoutes = () => {
         <Route path="/contact" element={<AnimatedPage><Contact /></AnimatedPage>} />
         <Route path="/faq" element={<AnimatedPage><FAQ /></AnimatedPage>} />
         <Route path="/blog" element={<AnimatedPage><Blog /></AnimatedPage>} />
-        <Route path="/blog/:slug" element={<AnimatedPage><BlogDetail /></AnimatedPage>} />
         <Route path="/privacy-policy" element={<AnimatedPage><PrivacyPolicy /></AnimatedPage>} />
         <Route path="/terms-of-service" element={<AnimatedPage><TermsOfService /></AnimatedPage>} />
 
@@ -146,9 +142,6 @@ const AnimatedRoutes = () => {
         <Route path="/services/neuro-dynamic" element={<AnimatedPage><NeuroDynamic /></AnimatedPage>} />
         <Route path="/services/cupping-therapy" element={<AnimatedPage><CuppingTherapy /></AnimatedPage>} />
         <Route path="/services/virtual-physiotherapy" element={<AnimatedPage><VirtualPhysiotherapy /></AnimatedPage>} />
-        
-        {/* Dynamic service detail route */}
-        <Route path="/service/:slug" element={<AnimatedPage><ServiceDetailPage /></AnimatedPage>} />
 
         {/* Features & Resources */}
         <Route path="/interactive-body-map" element={<AnimatedPage><InteractiveBodyMap /></AnimatedPage>} />
