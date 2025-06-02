@@ -1,200 +1,164 @@
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { NavbarLinks } from "./NavbarLinks";
-import { MobileNav } from "./MobileNav";
-import { Menu } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { motion } from "framer-motion";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageSelector } from "@/components/ui/language-selector";
+import { useAuth } from "@/context/AuthContext";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { User, LogOut, Settings, Calendar, Users, FileText, Activity } from "lucide-react";
+import NavbarLinks from "./NavbarLinks";
+import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   const { user, userRole, signOut } = useAuth();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const getInitials = (email: string) => {
+    return email.split('@')[0].substring(0, 2).toUpperCase();
+  };
+
+  const getQuickActions = () => {
+    if (userRole === 'doctor') {
+      return [
+        { icon: Users, label: "View Patients", href: "/patients" },
+        { icon: Calendar, label: "Appointments", href: "/booking" },
+        { icon: FileText, label: "Reports", href: "/reports" },
+      ];
+    } else if (userRole === 'patient') {
+      return [
+        { icon: Calendar, label: "Book Appointment", href: "/booking" },
+        { icon: Activity, label: "Health Tracker", href: "/pain-tracker" },
+        { icon: FileText, label: "Medical Records", href: "/profile" },
+      ];
+    } else if (userRole === 'admin') {
+      return [
+        { icon: Users, label: "Admin Dashboard", href: "/admin" },
+        { icon: Settings, label: "Manage Users", href: "/admin" },
+        { icon: FileText, label: "Reports", href: "/admin" },
+      ];
+    }
+    return [];
+  };
 
   return (
-    <header 
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-white/95 backdrop-blur-md shadow-md dark:bg-gray-900/95" 
-          : "bg-transparent"
-      }`}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo - with animation and linked to home */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center group">
-              <div className="flex items-center">
-                {/* Logo Image - No background box, matches navbar background */}
-                <motion.img 
-                  src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
-                  alt="YASHA's Physiocare Logo"
-                  className="h-10 w-10 object-contain"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    rotate: [0, -2, 2, -2, 0],
-                    transition: { duration: 0.5 }
-                  }}
-                />
-                
-                {/* Text Logo - Right of the image */}
-                <motion.div 
-                  className="ml-2 font-display text-xl font-bold"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-vitality-700 to-vitality-500 dark:from-vitality-300 dark:to-vitality-500 transition-all duration-300">
-                    Physiocare
-                  </span>
-                  <motion.span 
-                    className="text-accent inline-block"
-                    animate={{ 
-                      rotate: [0, 8, -5, 0],
-                      scale: [1, 1.2, 0.9, 1] 
-                    }}
-                    transition={{ 
-                      duration: 2,
-                      repeat: Infinity,
-                      repeatDelay: 5
-                    }}
-                  >.</motion.span>
-                </motion.div>
-              </div>
-            </Link>
-          </div>
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-vitality-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">V</span>
+            </div>
+            <span className="text-xl font-bold text-vitality-700 dark:text-vitality-300">
+              Vitality Physio
+            </span>
+          </Link>
 
           {/* Desktop Navigation */}
-          <NavbarLinks />
+          <div className="hidden lg:flex items-center space-x-8">
+            <NavbarLinks />
+          </div>
 
-          {/* Right Side: Book Appointment, Avatar/Sign In */}
-          <div className="flex items-center gap-2">
-            {/* Book Appointment Button - Visible on both desktop and mobile for patients and guests */}
-            {(!user || userRole === "patient") && (
-              <Button asChild size="sm" className="bg-vitality-600 hover:bg-vitality-700 text-white text-sm rounded-full px-4 py-2">
-                <Link to="/booking">Book Appointment</Link>
-              </Button>
-            )}
-
-            {/* User Avatar or Sign In - Desktop */}
-            <div className="hidden md:block">
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="relative rounded-full">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src="/placeholder.svg" />
-                        <AvatarFallback className="bg-vitality-100 text-vitality-700">
-                          {user.email ? user.email.charAt(0).toUpperCase() : "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                      <DropdownMenuItem asChild>
-                        <Link to="/profile">Profile</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/account-settings">Account Settings</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/billing">Billing</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to="/booking">My Appointments</Link>
-                      </DropdownMenuItem>
-                      {userRole === "doctor" && (
-                        <DropdownMenuItem asChild>
-                          <Link to="/patients">My Patients</Link>
-                        </DropdownMenuItem>
-                      )}
-                      {userRole === "patient" && (
-                        <DropdownMenuItem asChild>
-                          <Link to="/doctors">Find Doctors</Link>
-                        </DropdownMenuItem>
-                      )}
-                      {userRole === "admin" && (
-                        <DropdownMenuItem asChild>
-                          <Link to="/admin">Admin Dashboard</Link>
-                        </DropdownMenuItem>
-                      )}
-                      <DropdownMenuItem asChild>
-                        <Link to="/pain-tracker">Pain Tracker</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    {/* Theme Toggle */}
-                    <DropdownMenuItem>
-                      <div className="flex w-full items-center justify-between">
-                        <span>Theme</span>
-                        <ThemeToggle />
-                      </div>
-                    </DropdownMenuItem>
-                    {/* Language Selector */}
-                    <DropdownMenuItem>
-                      <div className="flex w-full items-center justify-between">
-                        <span>Language</span>
-                        <LanguageSelector />
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => signOut()}>
-                      Log Out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Button asChild variant="ghost" size="sm" className="text-gray-700 dark:text-gray-200">
-                  <Link to="/signin">Sign In / Sign Up</Link>
-                </Button>
-              )}
+          {/* Right Side Actions */}
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle and Language Selector */}
+            <div className="hidden md:flex items-center space-x-2">
+              <ThemeToggle />
+              <LanguageSelector />
             </div>
 
+            {/* Authentication */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-vitality-600 text-white">
+                        {getInitials(user.email || "")}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-80" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-4">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{user.email}</p>
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {userRole || 'User'}
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  
+                  {/* Quick Actions */}
+                  <div className="p-2">
+                    <p className="text-xs font-medium text-muted-foreground mb-2 px-2">Quick Actions</p>
+                    <div className="grid grid-cols-1 gap-1">
+                      {getQuickActions().map((action, index) => {
+                        const Icon = action.icon;
+                        return (
+                          <DropdownMenuItem key={index} asChild>
+                            <Link to={action.href} className="flex items-center gap-2 p-2">
+                              <Icon className="h-4 w-4" />
+                              <span>{action.label}</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      <span>Profile</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/account-settings" className="flex items-center gap-2">
+                      <Settings className="h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-600 focus:text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden md:flex items-center space-x-3">
+                <Button asChild variant="ghost">
+                  <Link to="/signin">Sign In</Link>
+                </Button>
+                <Button asChild>
+                  <Link to="/signup">Get Started</Link>
+                </Button>
+              </div>
+            )}
+
             {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden"
-            >
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Open menu</span>
-            </Button>
+            <div className="lg:hidden">
+              <MobileNav 
+                isOpen={isMobileMenuOpen} 
+                setIsOpen={setIsMobileMenuOpen}
+              />
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Mobile Navigation Drawer */}
-      <MobileNav open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
     </header>
   );
 };
