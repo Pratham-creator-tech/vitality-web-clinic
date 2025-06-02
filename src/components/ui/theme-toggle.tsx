@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 
 export function ThemeToggle() {
