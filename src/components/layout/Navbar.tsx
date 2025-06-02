@@ -55,11 +55,15 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-vitality-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">V</span>
+            <div className="w-8 h-8 mr-2 overflow-hidden">
+              <img 
+                src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
+                alt="YASHA's Physiocare Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <span className="text-xl font-bold text-vitality-700 dark:text-vitality-300">
-              Vitality Physio
+              Physiocare
             </span>
           </Link>
 
