@@ -57,6 +57,96 @@ export type Database = {
           },
         ]
       }
+      articles: {
+        Row: {
+          author_id: string | null
+          content: string
+          created_at: string
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          published: boolean
+          published_at: string | null
+          reading_time: number | null
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          content: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published?: boolean
+          published_at?: string | null
+          reading_time?: number | null
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published?: boolean
+          published_at?: string | null
+          reading_time?: number | null
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          responded_at: string | null
+          status: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          responded_at?: string | null
+          status?: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          responded_at?: string | null
+          status?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
       diagnoses: {
         Row: {
           condition: string
@@ -303,6 +393,39 @@ export type Database = {
         }
         Relationships: []
       }
+      faqs: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          order_index: number | null
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          order_index?: number | null
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          order_index?: number | null
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       insurance_providers: {
         Row: {
           contact_email: string | null
@@ -493,6 +616,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "patient_emergency_contacts_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patient_files: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          file_type: string
+          id: string
+          mime_type: string | null
+          patient_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          file_type?: string
+          id?: string
+          mime_type?: string | null
+          patient_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          file_type?: string
+          id?: string
+          mime_type?: string | null
+          patient_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patient_files_patient_id_fkey"
             columns: ["patient_id"]
             isOneToOne: false
             referencedRelation: "patients"
@@ -694,6 +861,105 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      service_details: {
+        Row: {
+          benefits: string[] | null
+          created_at: string
+          description: string
+          detailed_content: string
+          duration: string | null
+          featured_image: string | null
+          gallery_images: string[] | null
+          id: string
+          is_active: boolean
+          meta_description: string | null
+          meta_title: string | null
+          price_range: string | null
+          process_steps: string[] | null
+          service_slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          benefits?: string[] | null
+          created_at?: string
+          description: string
+          detailed_content: string
+          duration?: string | null
+          featured_image?: string | null
+          gallery_images?: string[] | null
+          id?: string
+          is_active?: boolean
+          meta_description?: string | null
+          meta_title?: string | null
+          price_range?: string | null
+          process_steps?: string[] | null
+          service_slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          benefits?: string[] | null
+          created_at?: string
+          description?: string
+          detailed_content?: string
+          duration?: string | null
+          featured_image?: string | null
+          gallery_images?: string[] | null
+          id?: string
+          is_active?: boolean
+          meta_description?: string | null
+          meta_title?: string | null
+          price_range?: string | null
+          process_steps?: string[] | null
+          service_slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          created_at: string
+          featured: boolean
+          id: string
+          location: string | null
+          patient_image: string | null
+          patient_name: string
+          rating: number
+          service_related: string | null
+          testimonial_text: string
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          created_at?: string
+          featured?: boolean
+          id?: string
+          location?: string | null
+          patient_image?: string | null
+          patient_name: string
+          rating: number
+          service_related?: string | null
+          testimonial_text: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          created_at?: string
+          featured?: boolean
+          id?: string
+          location?: string | null
+          patient_image?: string | null
+          patient_name?: string
+          rating?: number
+          service_related?: string | null
+          testimonial_text?: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {

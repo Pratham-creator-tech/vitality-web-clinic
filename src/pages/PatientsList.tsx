@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/use-toast";
-import { Search, Calendar, Activity, Bone, Heart, Brain, Dumbbell, Shield } from "lucide-react";
+import { Search, Calendar, Activity, Bone, Heart, Brain, Dumbbell, Shield, FileText } from "lucide-react";
 import AIFloatingButton from "@/components/ai/AIFloatingButton";
 
 type Patient = {
