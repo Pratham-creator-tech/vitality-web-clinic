@@ -10,16 +10,10 @@ const HeroSection = () => {
   
   return (
     <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-vitality-300 rounded-full opacity-20 animate-float"></div>
-        <div className="absolute top-60 -left-20 w-60 h-60 bg-brand-orange rounded-full opacity-10 animate-float-delayed"></div>
-        <div className="absolute -bottom-40 right-20 w-72 h-72 bg-vitality-200 rounded-full opacity-15 animate-float-slow"></div>
-      </div>
-      <div className="container mx-auto px-4 py-20 md:py-28" data-aos="fade-up" data-aos-duration="1000">
+      <div className="container mx-auto px-4 py-20 md:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl">
-            <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800 transform hover:scale-105 transition-transform cursor-pointer animate-pulse">
+            <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800">
               <Star className="h-5 w-5 text-yellow-500 mr-2" />
               <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">Trusted by 10,000+ patients</span>
             </div>
@@ -82,7 +76,7 @@ const HeroSection = () => {
           </div>
           
           <div className="relative">
-            <div className="rounded-lg overflow-hidden shadow-xl relative z-10 transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
+            <div className="rounded-lg overflow-hidden shadow-xl relative z-10">
               <img 
                 src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" 
                 alt="Physiotherapist treating patient" 
