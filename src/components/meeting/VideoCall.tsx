@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +20,8 @@ import {
   Volume2,
   Maximize,
   MoreVertical,
-  VolumeX
+  VolumeX,
+  User
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import MeetingTranscription from './MeetingTranscription';
@@ -36,7 +38,18 @@ interface Participant {
   isVideoEnabled: boolean;
   isAudioEnabled: boolean;
   joinedAt: Date;
+  isHost?: boolean;
 }
+
+interface MeetingRoom {
+  id: string;
+  participants: Participant[];
+  host: string;
+  createdAt: Date;
+}
+
+// Simulate a global meeting room store (in a real app, this would be a backend service)
+const meetingRooms = new Map<string, MeetingRoom>();
 
 const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -50,6 +63,8 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [currentUser, setCurrentUser] = useState<Participant | null>(null);
+  const [isHost, setIsHost] = useState(false);
   
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -59,37 +74,87 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
 
   useEffect(() => {
     initializeMedia();
-    // Simulate connection and participant joining
-    setTimeout(() => {
-      setConnectionStatus('connected');
-      // Simulate a participant joining after 3 seconds
-      setTimeout(() => {
-        const newParticipant: Participant = {
-          id: 'participant-1',
-          name: 'Dr. Sarah Wilson',
-          isVideoEnabled: true,
-          isAudioEnabled: true,
-          joinedAt: new Date()
-        };
-        setParticipants([newParticipant]);
-        toast({
-          title: "Participant joined",
-          description: `${newParticipant.name} has joined the meeting`,
-        });
-      }, 3000);
-    }, 1500);
+    joinMeetingRoom();
+    
+    // Simulate periodic participant updates
+    const interval = setInterval(() => {
+      updateParticipants();
+    }, 3000);
     
     return () => {
       cleanup();
+      clearInterval(interval);
+      leaveMeetingRoom();
     };
   }, []);
 
-  // Keep video stream active when switching tabs
   useEffect(() => {
     if (localStreamRef.current && localVideoRef.current && activeTab === 'meeting') {
       localVideoRef.current.srcObject = localStreamRef.current;
     }
   }, [activeTab]);
+
+  const joinMeetingRoom = () => {
+    setConnectionStatus('connecting');
+    
+    // Get or create meeting room
+    let room = meetingRooms.get(meetingId);
+    
+    if (!room) {
+      // Create new room if it doesn't exist
+      room = {
+        id: meetingId,
+        participants: [],
+        host: userName,
+        createdAt: new Date()
+      };
+      meetingRooms.set(meetingId, room);
+      setIsHost(true);
+      toast({
+        title: "Meeting created",
+        description: "You are the host of this meeting",
+      });
+    }
+    
+    // Add current user to room
+    const newParticipant: Participant = {
+      id: `${userName}-${Date.now()}`,
+      name: userName,
+      isVideoEnabled: true,
+      isAudioEnabled: true,
+      joinedAt: new Date(),
+      isHost: room.host === userName
+    };
+    
+    room.participants.push(newParticipant);
+    setCurrentUser(newParticipant);
+    setParticipants([...room.participants]);
+    
+    setTimeout(() => {
+      setConnectionStatus('connected');
+      toast({
+        title: "Connected to meeting",
+        description: `${room.participants.length} participant(s) in the room`,
+      });
+    }, 1500);
+  };
+
+  const leaveMeetingRoom = () => {
+    const room = meetingRooms.get(meetingId);
+    if (room && currentUser) {
+      room.participants = room.participants.filter(p => p.id !== currentUser.id);
+      if (room.participants.length === 0) {
+        meetingRooms.delete(meetingId);
+      }
+    }
+  };
+
+  const updateParticipants = () => {
+    const room = meetingRooms.get(meetingId);
+    if (room) {
+      setParticipants([...room.participants]);
+    }
+  };
 
   const initializeMedia = async () => {
     try {
@@ -129,6 +194,15 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       if (videoTrack) {
         videoTrack.enabled = !videoTrack.enabled;
         setIsVideoEnabled(videoTrack.enabled);
+        
+        // Update participant status in room
+        const room = meetingRooms.get(meetingId);
+        if (room && currentUser) {
+          const participant = room.participants.find(p => p.id === currentUser.id);
+          if (participant) {
+            participant.isVideoEnabled = videoTrack.enabled;
+          }
+        }
       }
     }
   };
@@ -139,6 +213,15 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       if (audioTrack) {
         audioTrack.enabled = !audioTrack.enabled;
         setIsAudioEnabled(audioTrack.enabled);
+        
+        // Update participant status in room
+        const room = meetingRooms.get(meetingId);
+        if (room && currentUser) {
+          const participant = room.participants.find(p => p.id === currentUser.id);
+          if (participant) {
+            participant.isAudioEnabled = audioTrack.enabled;
+          }
+        }
       }
     }
   };
@@ -247,6 +330,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
 
   const endCall = () => {
     cleanup();
+    leaveMeetingRoom();
     setIsCallStarted(false);
     onEndCall();
     toast({
@@ -256,12 +340,13 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   };
 
   const isDoctor = userName.toLowerCase().includes('dr.') || userName.toLowerCase().includes('doctor');
+  const otherParticipants = participants.filter(p => p.id !== currentUser?.id);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-green-25">
       <div className="container mx-auto p-4 h-screen flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-gray-100">
+        <div className="flex justify-between items-center mb-6 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-sm border border-gray-100">
           <div className="flex items-center gap-4">
             <div>
               <h1 className="text-2xl font-bold text-gray-800">Vitality Meeting</h1>
@@ -276,13 +361,14 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                   {connectionStatus}
                 </Badge>
                 <span className="text-gray-500 text-sm">ID: {meetingId}</span>
+                {isHost && <Badge className="bg-blue-100 text-blue-800 border-blue-200">Host</Badge>}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-gray-700">
               <Users className="h-5 w-5" />
-              <span>{participants.length + 1} participant(s)</span>
+              <span>{participants.length} participant(s)</span>
             </div>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="bg-gray-100/80">
@@ -306,12 +392,13 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               {/* Video Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full mb-6">
                 {/* Local Video */}
-                <Card className="bg-white/80 backdrop-blur-sm border-gray-200 h-full shadow-sm">
+                <Card className="bg-white/90 backdrop-blur-sm border-gray-200 h-full shadow-sm">
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-gray-800 flex items-center gap-2">
                         {isDoctor && <Badge className="bg-blue-100 text-blue-800 border-blue-200">Doctor</Badge>}
                         {userName} (You)
+                        {isHost && <Badge className="bg-purple-100 text-purple-800 border-purple-200">Host</Badge>}
                       </CardTitle>
                       <div className="flex gap-1">
                         {!isAudioEnabled && (
@@ -330,7 +417,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                     </div>
                   </CardHeader>
                   <CardContent className="p-0 flex-1">
-                    <div className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden h-full">
+                    <div className="relative aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden h-full">
                       <video
                         ref={localVideoRef}
                         autoPlay
@@ -339,7 +426,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                         className="w-full h-full object-cover"
                       />
                       {!isVideoEnabled && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                           <div className="text-center">
                             <VideoOff className="h-16 w-16 text-gray-400 mx-auto mb-2" />
                             <p className="text-gray-600">Camera off</p>
@@ -351,7 +438,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                           size="sm"
                           variant="secondary"
                           onClick={toggleVolume}
-                          className="h-8 w-8 p-0 bg-white/80 backdrop-blur-sm hover:bg-white/90 border border-gray-200"
+                          className="h-8 w-8 p-0 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200"
                         >
                           {isVolumeEnabled ? (
                             <Volume2 className="h-4 w-4 text-gray-700" />
@@ -363,7 +450,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                           size="sm"
                           variant="secondary"
                           onClick={toggleFullscreen}
-                          className="h-8 w-8 p-0 bg-white/80 backdrop-blur-sm hover:bg-white/90 border border-gray-200"
+                          className="h-8 w-8 p-0 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200"
                         >
                           <Maximize className="h-4 w-4 text-gray-700" />
                         </Button>
@@ -372,27 +459,23 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                   </CardContent>
                 </Card>
 
-                {/* Remote Video */}
-                <Card className="bg-white/80 backdrop-blur-sm border-gray-200 h-full shadow-sm">
+                {/* Remote Video/Participants */}
+                <Card className="bg-white/90 backdrop-blur-sm border-gray-200 h-full shadow-sm">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-gray-800">
-                      {participants.length > 0 ? participants[0].name : 'Waiting for participants...'}
+                      {otherParticipants.length > 0 ? 
+                        `Participants (${otherParticipants.length})` : 
+                        'Waiting for participants...'
+                      }
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="p-0 flex-1">
                     <div 
                       ref={remoteVideoContainerRef}
-                      className="relative aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden h-full"
+                      className="relative aspect-video bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden h-full"
                     >
-                      <video
-                        ref={remoteVideoRef}
-                        autoPlay
-                        playsInline
-                        muted={!isVolumeEnabled}
-                        className="w-full h-full object-cover"
-                      />
-                      {participants.length === 0 ? (
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      {otherParticipants.length === 0 ? (
+                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
                           <div className="text-center">
                             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600 mb-2">Waiting for others to join</p>
@@ -400,13 +483,30 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                           </div>
                         </div>
                       ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-green-100 flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <User className="h-10 w-10 text-blue-600" />
-                            </div>
-                            <p className="text-gray-700 font-medium">{participants[0].name}</p>
-                            <p className="text-gray-500 text-sm">Connected</p>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-green-50 p-4">
+                          <div className="grid gap-2 h-full">
+                            {otherParticipants.map((participant) => (
+                              <div key={participant.id} className="bg-white/80 rounded-lg p-3 flex items-center gap-3">
+                                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                  <User className="h-6 w-6 text-blue-600" />
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-gray-800 font-medium">{participant.name}</p>
+                                  <div className="flex gap-2 mt-1">
+                                    {!participant.isAudioEnabled && (
+                                      <MicOff className="h-3 w-3 text-red-500" />
+                                    )}
+                                    {!participant.isVideoEnabled && (
+                                      <VideoOff className="h-3 w-3 text-red-500" />
+                                    )}
+                                    {participant.isHost && (
+                                      <Badge className="bg-purple-100 text-purple-800 border-purple-200 text-xs">Host</Badge>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       )}
@@ -415,7 +515,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                           size="sm"
                           variant="secondary"
                           onClick={toggleVolume}
-                          className="h-8 w-8 p-0 bg-white/80 backdrop-blur-sm hover:bg-white/90 border border-gray-200"
+                          className="h-8 w-8 p-0 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200"
                         >
                           {isVolumeEnabled ? (
                             <Volume2 className="h-4 w-4 text-gray-700" />
@@ -427,7 +527,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                           size="sm"
                           variant="secondary"
                           onClick={toggleFullscreen}
-                          className="h-8 w-8 p-0 bg-white/80 backdrop-blur-sm hover:bg-white/90 border border-gray-200"
+                          className="h-8 w-8 p-0 bg-white/90 backdrop-blur-sm hover:bg-white border border-gray-200"
                         >
                           <Maximize className="h-4 w-4 text-gray-700" />
                         </Button>
@@ -439,7 +539,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
             </TabsContent>
 
             <TabsContent value="transcription" className="h-full">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 h-full overflow-auto border border-gray-200 shadow-sm">
+              <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 h-full overflow-auto border border-gray-200 shadow-sm">
                 <MeetingTranscription 
                   meetingId={meetingId} 
                   userName={userName}
@@ -451,13 +551,13 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
         </div>
 
         {/* Controls - Fixed at bottom */}
-        <div className="mt-6 bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200 shadow-sm">
+        <div className="mt-6 bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-gray-200 shadow-sm">
           <div className="flex justify-center items-center gap-4">
             <Button
               variant={isAudioEnabled ? "secondary" : "destructive"}
               size="lg"
               onClick={toggleAudio}
-              className="rounded-full h-12 w-12 p-0 bg-white/80 hover:bg-white/90 border border-gray-200"
+              className="rounded-full h-12 w-12 p-0 bg-white/90 hover:bg-white border border-gray-200"
             >
               {isAudioEnabled ? <Mic className="h-5 w-5 text-gray-700" /> : <MicOff className="h-5 w-5" />}
             </Button>
@@ -466,7 +566,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               variant={isVideoEnabled ? "secondary" : "destructive"}
               size="lg"
               onClick={toggleVideo}
-              className="rounded-full h-12 w-12 p-0 bg-white/80 hover:bg-white/90 border border-gray-200"
+              className="rounded-full h-12 w-12 p-0 bg-white/90 hover:bg-white border border-gray-200"
             >
               {isVideoEnabled ? <Video className="h-5 w-5 text-gray-700" /> : <VideoOff className="h-5 w-5" />}
             </Button>
@@ -475,7 +575,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               variant={isScreenSharing ? "default" : "secondary"}
               size="lg"
               onClick={isScreenSharing ? stopScreenShare : startScreenShare}
-              className="rounded-full h-12 w-12 p-0 bg-white/80 hover:bg-white/90 border border-gray-200"
+              className="rounded-full h-12 w-12 p-0 bg-white/90 hover:bg-white border border-gray-200"
             >
               <Monitor className="h-5 w-5 text-gray-700" />
             </Button>
@@ -485,7 +585,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               size="lg"
               onClick={toggleChat}
               className={`rounded-full h-12 w-12 p-0 border border-gray-200 ${
-                showChat ? 'bg-blue-100 hover:bg-blue-200' : 'bg-white/80 hover:bg-white/90'
+                showChat ? 'bg-blue-100 hover:bg-blue-200' : 'bg-white/90 hover:bg-white'
               }`}
             >
               <MessageSquare className="h-5 w-5 text-gray-700" />
@@ -496,7 +596,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               size="lg"
               onClick={toggleSettings}
               className={`rounded-full h-12 w-12 p-0 border border-gray-200 ${
-                showSettings ? 'bg-blue-100 hover:bg-blue-200' : 'bg-white/80 hover:bg-white/90'
+                showSettings ? 'bg-blue-100 hover:bg-blue-200' : 'bg-white/90 hover:bg-white'
               }`}
             >
               <Settings className="h-5 w-5 text-gray-700" />
@@ -506,7 +606,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               variant="secondary"
               size="lg"
               onClick={showMoreOptions}
-              className="rounded-full h-12 w-12 p-0 bg-white/80 hover:bg-white/90 border border-gray-200"
+              className="rounded-full h-12 w-12 p-0 bg-white/90 hover:bg-white border border-gray-200"
             >
               <MoreVertical className="h-5 w-5 text-gray-700" />
             </Button>
@@ -535,6 +635,9 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
           <div className="mt-4 text-center">
             <p className="text-gray-600 text-sm">
               Meeting in progress • Share ID: <span className="text-gray-800 font-mono font-medium">{meetingId}</span>
+              {participants.length > 1 && (
+                <span className="ml-2">• {participants.length} participants connected</span>
+              )}
             </p>
           </div>
         </div>
