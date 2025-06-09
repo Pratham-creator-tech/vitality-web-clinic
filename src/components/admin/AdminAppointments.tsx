@@ -8,14 +8,17 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Search, CalendarPlus } from "lucide-react";
+import { MoreHorizontal, Search, CalendarPlus, Video, Copy, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
+import { generateMeetingId, generateMeetingLink, copyToClipboard } from "@/utils/meetingUtils";
 
 export const AdminAppointments = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { toast } = useToast();
   
-  // Mock appointment data
+  // Mock appointment data with meeting links
   const appointments = [
     { 
       id: 1, 
@@ -23,7 +26,9 @@ export const AdminAppointments = () => {
       doctor: "Dr. Emily Wilson", 
       service: "Sports Rehabilitation",
       date: "2023-06-15T10:30:00", 
-      status: "completed" 
+      status: "completed",
+      meetingId: "abc123def4",
+      meetingLink: "https://your-domain.com/meeting/abc123def4"
     },
     { 
       id: 2, 
@@ -31,7 +36,9 @@ export const AdminAppointments = () => {
       doctor: "Dr. Michael Brown", 
       service: "Manual Therapy",
       date: "2023-06-18T14:00:00", 
-      status: "cancelled" 
+      status: "cancelled",
+      meetingId: null,
+      meetingLink: null
     },
     { 
       id: 3, 
@@ -39,7 +46,9 @@ export const AdminAppointments = () => {
       doctor: "Dr. Emily Wilson", 
       service: "Chronic Pain Management",
       date: "2025-06-20T11:15:00", 
-      status: "scheduled" 
+      status: "scheduled",
+      meetingId: "xyz789ghi2",
+      meetingLink: "https://your-domain.com/meeting/xyz789ghi2"
     },
     { 
       id: 4, 
@@ -47,7 +56,9 @@ export const AdminAppointments = () => {
       doctor: "Dr. Michael Brown", 
       service: "Post-surgical Rehabilitation",
       date: "2025-06-22T09:00:00", 
-      status: "confirmed" 
+      status: "confirmed",
+      meetingId: "def456jkl8",
+      meetingLink: "https://your-domain.com/meeting/def456jkl8"
     },
     { 
       id: 5, 
@@ -55,7 +66,9 @@ export const AdminAppointments = () => {
       doctor: "Dr. Emily Wilson", 
       service: "Neurological Rehabilitation",
       date: "2025-06-25T15:30:00", 
-      status: "scheduled" 
+      status: "scheduled",
+      meetingId: "mno123pqr5",
+      meetingLink: "https://your-domain.com/meeting/mno123pqr5"
     },
   ];
   
@@ -84,14 +97,43 @@ export const AdminAppointments = () => {
   
   const formatAppointmentDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "PPP p"); // Example: "Apr 29, 2023, 3:00 PM"
+    return format(date, "PPP p");
+  };
+
+  const handleCopyMeetingLink = async (meetingLink: string) => {
+    const success = await copyToClipboard(meetingLink);
+    if (success) {
+      toast({
+        title: "Meeting link copied!",
+        description: "The meeting link has been copied to your clipboard.",
+      });
+    } else {
+      toast({
+        title: "Copy failed",
+        description: "Please copy the meeting link manually.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const generateMeetingForAppointment = (appointmentId: number) => {
+    const meetingId = generateMeetingId();
+    const meetingLink = generateMeetingLink(meetingId);
+    
+    // In a real app, you would update this in your database
+    console.log(`Generated meeting for appointment ${appointmentId}:`, { meetingId, meetingLink });
+    
+    toast({
+      title: "Meeting link generated!",
+      description: `Meeting ID: ${meetingId}`,
+    });
   };
 
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle>Appointments Management</CardTitle>
-        <CardDescription>View and manage all patient appointments</CardDescription>
+        <CardDescription>View and manage all patient appointments with video meeting links</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
@@ -119,6 +161,7 @@ export const AdminAppointments = () => {
                 <TableHead>Service</TableHead>
                 <TableHead>Date & Time</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Meeting</TableHead>
                 <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -136,6 +179,41 @@ export const AdminAppointments = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>
+                      {appointment.meetingLink ? (
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleCopyMeetingLink(appointment.meetingLink!)}
+                            className="h-8 w-8 p-0"
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => window.open(appointment.meetingLink!, '_blank')}
+                            className="h-8 w-8 p-0"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </Button>
+                          <span className="text-xs text-green-600 font-mono">
+                            {appointment.meetingId}
+                          </span>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => generateMeetingForAppointment(appointment.id)}
+                          className="h-8 text-xs"
+                        >
+                          <Video className="h-3 w-3 mr-1" />
+                          Generate
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" size="icon">
@@ -147,6 +225,11 @@ export const AdminAppointments = () => {
                           <DropdownMenuItem>View details</DropdownMenuItem>
                           <DropdownMenuItem>Reschedule</DropdownMenuItem>
                           <DropdownMenuItem>Send reminder</DropdownMenuItem>
+                          {appointment.meetingLink && (
+                            <DropdownMenuItem onClick={() => window.open(appointment.meetingLink!, '_blank')}>
+                              Join meeting
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem className="text-red-600">Cancel</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -155,7 +238,7 @@ export const AdminAppointments = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-4 text-muted-foreground">
+                  <TableCell colSpan={7} className="text-center py-4 text-muted-foreground">
                     No appointments found
                   </TableCell>
                 </TableRow>
