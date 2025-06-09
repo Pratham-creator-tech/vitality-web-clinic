@@ -72,8 +72,28 @@ const Booking = () => {
     setFormData(prev => ({ ...prev, isNewPatient: checked }));
   };
 
+  const isFormValid = () => {
+    return formData.name.trim() !== "" && 
+           formData.email.trim() !== "" && 
+           formData.phone.trim() !== "" && 
+           formData.service !== "" && 
+           formData.therapist !== "" && 
+           formData.timeSlot !== "" && 
+           date !== undefined;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isFormValid()) {
+      toast({
+        title: "Please fill all required fields",
+        description: "All fields except additional information are required.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setFormStatus("submitting");
     
     // Generate meeting details
@@ -92,6 +112,11 @@ const Booking = () => {
       setMeetingId(newMeetingId);
       setMeetingLink(newMeetingLink);
       setFormStatus("success");
+      
+      toast({
+        title: "Booking Confirmed!",
+        description: "Your appointment has been successfully booked.",
+      });
       
       // Reset form after successful submission
       setFormData({
@@ -150,7 +175,7 @@ const Booking = () => {
                   <div className="mb-4 mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Booking Successful!</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Booking Confirmed!</h2>
                   <p className="text-gray-600 mb-6 text-center">
                     Thank you for scheduling your appointment with Vitality Physiotherapy. We've sent a confirmation email with all the details.
                   </p>
@@ -208,7 +233,7 @@ const Booking = () => {
                   <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="name">Full Name</Label>
+                        <Label htmlFor="name">Full Name *</Label>
                         <Input 
                           id="name"
                           name="name"
@@ -220,7 +245,7 @@ const Booking = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email Address</Label>
+                        <Label htmlFor="email">Email Address *</Label>
                         <Input 
                           id="email"
                           name="email"
@@ -233,7 +258,7 @@ const Booking = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone">Phone Number *</Label>
                         <Input 
                           id="phone"
                           name="phone"
@@ -245,10 +270,11 @@ const Booking = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="service">Service Required</Label>
+                        <Label htmlFor="service">Service Required *</Label>
                         <Select 
                           onValueChange={(value) => handleSelectChange("service", value)}
                           value={formData.service}
+                          required
                         >
                           <SelectTrigger id="service">
                             <SelectValue placeholder="Select a service" />
@@ -264,10 +290,11 @@ const Booking = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="therapist">Preferred Therapist</Label>
+                        <Label htmlFor="therapist">Preferred Therapist *</Label>
                         <Select 
                           onValueChange={(value) => handleSelectChange("therapist", value)}
                           value={formData.therapist}
+                          required
                         >
                           <SelectTrigger id="therapist">
                             <SelectValue placeholder="Select a therapist" />
@@ -283,7 +310,7 @@ const Booking = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label>Preferred Date</Label>
+                        <Label>Preferred Date *</Label>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
@@ -309,10 +336,11 @@ const Booking = () => {
                       </div>
                       
                       <div className="space-y-2">
-                        <Label htmlFor="timeSlot">Preferred Time</Label>
+                        <Label htmlFor="timeSlot">Preferred Time *</Label>
                         <Select 
                           onValueChange={(value) => handleSelectChange("timeSlot", value)}
                           value={formData.timeSlot}
+                          required
                         >
                           <SelectTrigger id="timeSlot">
                             <SelectValue placeholder="Select a time" />
@@ -361,14 +389,29 @@ const Booking = () => {
                       </div>
                     </div>
                     
-                    <Button 
-                      type="submit" 
-                      className="w-full md:w-auto bg-accent hover:bg-accent/90"
-                      disabled={formStatus === "submitting"}
-                    >
-                      {formStatus === "submitting" ? "Submitting..." : "Book Appointment"}
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
+                    {/* Confirm Booking Button */}
+                    <div className="pt-6 border-t border-gray-200">
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-vitality-600 hover:bg-vitality-700 text-white py-3 text-lg font-semibold"
+                        disabled={formStatus === "submitting" || !isFormValid()}
+                      >
+                        {formStatus === "submitting" ? (
+                          <>
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                            Confirming Booking...
+                          </>
+                        ) : (
+                          <>
+                            Confirm Booking
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-sm text-gray-500 mt-2 text-center">
+                        * Required fields. Click to confirm your appointment booking.
+                      </p>
+                    </div>
                   </form>
                 </>
               )}
