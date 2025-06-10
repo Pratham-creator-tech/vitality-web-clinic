@@ -14,6 +14,7 @@ import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Copy
 import { format } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 import { generateMeetingId, generateMeetingLink, copyToClipboard } from "@/utils/meetingUtils";
+import { setMeetingHost } from "@/components/meeting/VideoCall";
 
 const services = [
   "Sports Rehabilitation",
@@ -100,13 +101,17 @@ const Booking = () => {
     const newMeetingId = generateMeetingId();
     const newMeetingLink = generateMeetingLink(newMeetingId);
     
+    // Set the person who books as the host
+    setMeetingHost(newMeetingId, formData.name);
+    
     // Simulate API call
     setTimeout(() => {
       console.log("Booking form submitted:", { 
         ...formData, 
         date,
         meetingId: newMeetingId,
-        meetingLink: newMeetingLink
+        meetingLink: newMeetingLink,
+        isHost: true
       });
       
       setMeetingId(newMeetingId);
@@ -115,7 +120,7 @@ const Booking = () => {
       
       toast({
         title: "Booking Confirmed!",
-        description: "Your appointment has been successfully booked.",
+        description: "Your appointment has been successfully booked. You are the meeting host.",
       });
       
       // Reset form after successful submission
@@ -184,10 +189,10 @@ const Booking = () => {
                   <div className="bg-vitality-50 border border-vitality-200 rounded-lg p-6 mb-6">
                     <div className="flex items-center gap-2 mb-3">
                       <Video className="h-5 w-5 text-vitality-600" />
-                      <h3 className="text-lg font-semibold text-vitality-700">Your Virtual Meeting</h3>
+                      <h3 className="text-lg font-semibold text-vitality-700">Your Virtual Meeting (You are the Host)</h3>
                     </div>
                     <p className="text-sm text-gray-600 mb-4">
-                      Join your appointment using this secure meeting link:
+                      Join your appointment using this secure meeting link. As the meeting host, you can admit participants who request to join:
                     </p>
                     <div className="flex gap-2 mb-3">
                       <Input
@@ -209,7 +214,7 @@ const Booking = () => {
                         className="bg-vitality-500 hover:bg-vitality-600"
                       >
                         <Video className="h-4 w-4 mr-2" />
-                        Test Meeting Room
+                        Start Meeting
                       </Button>
                       <Button
                         variant="outline"
@@ -219,7 +224,7 @@ const Booking = () => {
                       </Button>
                     </div>
                     <p className="text-xs text-gray-500 mt-3">
-                      Meeting ID: <span className="font-mono">{meetingId}</span>
+                      Meeting ID: <span className="font-mono">{meetingId}</span> | Share this link with participants
                     </p>
                   </div>
                 </div>
@@ -227,7 +232,7 @@ const Booking = () => {
                 <>
                   <SectionTitle 
                     title="Schedule Your Visit" 
-                    subtitle="Fill out the form below to request an appointment. You'll receive a secure meeting link for your virtual consultation."
+                    subtitle="Fill out the form below to request an appointment. You'll receive a secure meeting link and become the meeting host."
                   />
                   
                   <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -381,9 +386,9 @@ const Booking = () => {
                       <div className="flex items-start gap-3">
                         <Video className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div>
-                          <h4 className="font-medium text-blue-900">Virtual Consultation</h4>
+                          <h4 className="font-medium text-blue-900">Virtual Consultation - You'll be the Host</h4>
                           <p className="text-sm text-blue-700 mt-1">
-                            This appointment will be conducted via our secure video platform. You'll receive a meeting link after booking.
+                            This appointment will be conducted via our secure video platform. You'll receive a meeting link and become the meeting host, allowing you to admit participants.
                           </p>
                         </div>
                       </div>
@@ -409,7 +414,7 @@ const Booking = () => {
                         )}
                       </Button>
                       <p className="text-sm text-gray-500 mt-2 text-center">
-                        * Required fields. Click to confirm your appointment booking.
+                        * Required fields. Click to confirm your appointment booking and become the meeting host.
                       </p>
                     </div>
                   </form>

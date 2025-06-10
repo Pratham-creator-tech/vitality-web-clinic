@@ -53,13 +53,16 @@ interface JoinRequest {
 interface MeetingRoom {
   id: string;
   participants: Participant[];
-  host: string;
+  hostName: string; // Changed from host to hostName for clarity
   createdAt: Date;
 }
 
 // Simulate a global meeting room store (in a real app, this would be a backend service)
 const meetingRooms = new Map<string, MeetingRoom>();
 const joinRequestsStore = new Map<string, JoinRequest[]>();
+
+// Store meeting hosts (in real app, this would be in the backend)
+const meetingHosts = new Map<string, string>();
 
 const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -135,7 +138,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       r.id === requestId ? { ...r, status: 'approved' as const } : r
     );
     joinRequestsStore.set(meetingId, updatedRequests);
-    
+
     const approvedRequest = requests.find(r => r.id === requestId);
     if (approvedRequest) {
       // Add to participants
@@ -168,7 +171,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       r.id === requestId ? { ...r, status: 'denied' as const } : r
     );
     joinRequestsStore.set(meetingId, updatedRequests);
-    
+
     const deniedRequest = requests.find(r => r.id === requestId);
     if (deniedRequest) {
       toast({
@@ -183,6 +186,10 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const joinMeetingRoom = () => {
     setConnectionStatus('connecting');
     
+    // Check if this meeting has a designated host from booking
+    const designatedHost = meetingHosts.get(meetingId);
+    const shouldBeHost = designatedHost === userName;
+    
     // Get or create meeting room
     let room = meetingRooms.get(meetingId);
     
@@ -191,15 +198,27 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       room = {
         id: meetingId,
         participants: [],
-        host: userName,
+        hostName: designatedHost || userName, // Use designated host or current user
         createdAt: new Date()
       };
       meetingRooms.set(meetingId, room);
-      setIsHost(true);
-      toast({
-        title: "Meeting created",
-        description: "You are the host of this meeting",
-      });
+      
+      if (shouldBeHost || !designatedHost) {
+        setIsHost(true);
+        toast({
+          title: "Meeting created",
+          description: "You are the host of this meeting",
+        });
+      }
+    } else {
+      // Room exists, check if user should be host
+      if (shouldBeHost || room.hostName === userName) {
+        setIsHost(true);
+        toast({
+          title: "Joined as host",
+          description: "You are the host of this meeting",
+        });
+      }
     }
     
     // Add current user to room
@@ -209,7 +228,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       isVideoEnabled: true,
       isAudioEnabled: true,
       joinedAt: new Date(),
-      isHost: room.host === userName
+      isHost: shouldBeHost || room.hostName === userName
     };
     
     room.participants.push(newParticipant);
@@ -794,6 +813,11 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       </div>
     </div>
   );
+};
+
+// Export function to set meeting host (would be called when booking is created)
+export const setMeetingHost = (meetingId: string, hostName: string) => {
+  meetingHosts.set(meetingId, hostName);
 };
 
 export default VideoCall;
