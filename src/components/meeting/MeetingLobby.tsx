@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,6 +39,9 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const { toast } = useToast();
+  
+  // Poll interval for checking join request status - 1.5 seconds for better responsiveness
+  const POLL_INTERVAL = 1500;
 
   useEffect(() => {
     initializePreview();
@@ -50,13 +52,13 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
       if (currentRequestId) {
         checkJoinRequestStatus();
       }
-    }, 1000);
+    }, POLL_INTERVAL);
     
     return () => {
       cleanup();
       clearInterval(interval);
     };
-  }, [currentRequestId]);
+  }, [currentRequestId, meetingId]);
 
   const checkIfHost = () => {
     // Check if this user is the designated host for this meeting
@@ -413,3 +415,5 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
 export { meetingHosts };
 
 export default MeetingLobby;
+
+</edits_to_apply>

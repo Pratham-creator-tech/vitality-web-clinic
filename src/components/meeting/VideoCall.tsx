@@ -89,12 +89,12 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
     initializeMedia();
     joinMeetingRoom();
     
-    // Check for new join requests if host
+    // Check for new join requests if host - check every 2 seconds for better responsiveness
     const requestInterval = setInterval(() => {
       if (isHost) {
         checkForNewJoinRequests();
       }
-    }, 1000);
+    }, 2000);
     
     // Simulate periodic participant updates
     const participantInterval = setInterval(() => {
@@ -107,7 +107,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       clearInterval(participantInterval);
       leaveMeetingRoom();
     };
-  }, [isHost]);
+  }, [isHost, meetingId]);
 
   useEffect(() => {
     if (localStreamRef.current && localVideoRef.current && activeTab === 'meeting') {
@@ -118,15 +118,20 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const checkForNewJoinRequests = () => {
     const requests = joinRequestsStore.get(meetingId) || [];
     const pending = requests.filter(r => r.status === 'pending');
-    setPendingRequests(pending);
     
-    // Show notification for new requests
-    if (pending.length > pendingRequests.length) {
-      toast({
-        title: "New join request",
-        description: `${pending[pending.length - 1]?.userName} wants to join the meeting`,
-      });
-      setShowJoinRequests(true);
+    // Only update if there are actually new requests
+    if (pending.length !== pendingRequests.length) {
+      setPendingRequests(pending);
+      
+      // Show notification for new requests
+      if (pending.length > pendingRequests.length) {
+        const latestRequest = pending[pending.length - 1];
+        toast({
+          title: "New join request",
+          description: `${latestRequest?.userName} wants to join the meeting`,
+        });
+        setShowJoinRequests(true);
+      }
     }
   };
 
@@ -557,6 +562,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                       <CardTitle className="text-gray-800 flex items-center gap-2">
                         {isDoctor && <Badge className="bg-blue-100 text-blue-800 border-blue-200">Doctor</Badge>}
                         {userName} (You)
+                        {/* Only show Host badge here if user is the host */}
                         {isHost && <Badge className="bg-purple-100 text-purple-800 border-purple-200">Host</Badge>}
                       </CardTitle>
                       <div className="flex gap-1">
@@ -655,16 +661,16 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                                   <User className="h-6 w-6 text-blue-600" />
                                 </div>
                                 <div className="flex-1">
-                                  <p className="text-gray-800 font-medium">{participant.name}</p>
+                                  <div className="flex items-center gap-1">
+                                    <p className="text-gray-800 font-medium">{participant.name}</p>
+                                    {participant.isHost && <Badge className="bg-purple-100 text-purple-800 border-purple-200 text-xs">Host</Badge>}
+                                  </div>
                                   <div className="flex gap-2 mt-1">
                                     {!participant.isAudioEnabled && (
                                       <MicOff className="h-3 w-3 text-red-500" />
                                     )}
                                     {!participant.isVideoEnabled && (
                                       <VideoOff className="h-3 w-3 text-red-500" />
-                                    )}
-                                    {participant.isHost && (
-                                      <Badge className="bg-purple-100 text-purple-800 border-purple-200 text-xs">Host</Badge>
                                     )}
                                   </div>
                                 </div>
