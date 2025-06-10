@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import MeetingTranscription from './MeetingTranscription';
+import { meetingHosts } from './MeetingLobby';
 
 interface VideoCallProps {
   meetingId: string;
@@ -53,16 +54,13 @@ interface JoinRequest {
 interface MeetingRoom {
   id: string;
   participants: Participant[];
-  hostName: string; // Changed from host to hostName for clarity
+  hostName: string;
   createdAt: Date;
 }
 
 // Simulate a global meeting room store (in a real app, this would be a backend service)
 const meetingRooms = new Map<string, MeetingRoom>();
 const joinRequestsStore = new Map<string, JoinRequest[]>();
-
-// Store meeting hosts (in real app, this would be in the backend)
-const meetingHosts = new Map<string, string>();
 
 const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -186,7 +184,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const joinMeetingRoom = () => {
     setConnectionStatus('connecting');
     
-    // Check if this meeting has a designated host from booking
+    // Check if this meeting has a designated host from booking or lobby
     const designatedHost = meetingHosts.get(meetingId);
     const shouldBeHost = designatedHost === userName;
     
@@ -198,7 +196,7 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
       room = {
         id: meetingId,
         participants: [],
-        hostName: designatedHost || userName, // Use designated host or current user
+        hostName: designatedHost || userName,
         createdAt: new Date()
       };
       meetingRooms.set(meetingId, room);

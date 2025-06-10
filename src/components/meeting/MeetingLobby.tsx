@@ -24,6 +24,9 @@ interface JoinRequest {
 // Global store for join requests
 const joinRequestsStore = new Map<string, JoinRequest[]>();
 
+// Store meeting hosts (in real app, this would be in the backend)
+const meetingHosts = new Map<string, string>();
+
 const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: MeetingLobbyProps) => {
   const [userName, setUserName] = useState(defaultUserName);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -32,6 +35,7 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
   const [joinRequestSent, setJoinRequestSent] = useState(false);
   const [joinRequestStatus, setJoinRequestStatus] = useState<'pending' | 'approved' | 'denied'>('pending');
   const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
+  const [isCheckingHost, setIsCheckingHost] = useState(true);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -39,6 +43,7 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
 
   useEffect(() => {
     initializePreview();
+    checkIfHost();
     
     // Check for join request status updates
     const interval = setInterval(() => {
@@ -52,6 +57,24 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
       clearInterval(interval);
     };
   }, [currentRequestId]);
+
+  const checkIfHost = () => {
+    // Check if this user is the designated host for this meeting
+    const designatedHost = meetingHosts.get(meetingId);
+    
+    if (designatedHost && userName && designatedHost === userName) {
+      // User is the designated host, join directly
+      toast({
+        title: "Welcome, Host!",
+        description: "You are joining as the meeting host",
+      });
+      cleanup();
+      onJoinMeeting(userName);
+      return;
+    }
+    
+    setIsCheckingHost(false);
+  };
 
   const checkJoinRequestStatus = () => {
     const requests = joinRequestsStore.get(meetingId) || [];
@@ -98,6 +121,7 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
         description: "Please allow camera and microphone access to join the meeting",
         variant: "destructive",
       });
+      setMediaReady(true); // Allow joining even without media
     }
   };
 
@@ -137,6 +161,18 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
       return;
     }
 
+    // Check if user is actually the designated host but with different name
+    const designatedHost = meetingHosts.get(meetingId);
+    if (designatedHost && designatedHost === userName.trim()) {
+      toast({
+        title: "Welcome, Host!",
+        description: "You are joining as the meeting host",
+      });
+      cleanup();
+      onJoinMeeting(userName.trim());
+      return;
+    }
+
     const requestId = `${userName}-${Date.now()}`;
     const newRequest: JoinRequest = {
       id: requestId,
@@ -157,6 +193,41 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
       description: "Waiting for host approval...",
     });
   };
+
+  const joinAsHost = () => {
+    if (!userName.trim()) {
+      toast({
+        title: "Name required",
+        description: "Please enter your name to start the meeting",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Set this user as the host for this meeting
+    meetingHosts.set(meetingId, userName.trim());
+    
+    toast({
+      title: "Starting meeting",
+      description: "You are the meeting host",
+    });
+    cleanup();
+    onJoinMeeting(userName.trim());
+  };
+
+  if (isCheckingHost) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-green-25 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md text-center">
+          <CardContent className="p-6">
+            <div className="animate-pulse">
+              <p className="text-gray-600">Checking meeting status...</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (joinRequestSent) {
     return (
@@ -307,23 +378,38 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
             </div>
           </div>
 
-          {/* Request to Join Button */}
-          <Button
-            onClick={sendJoinRequest}
-            disabled={!mediaReady || !userName.trim()}
-            className="w-full bg-blue-500 hover:bg-blue-600"
-            size="lg"
-          >
-            Ask to Join
-          </Button>
+          {/* Join Options */}
+          <div className="space-y-3">
+            <Button
+              onClick={joinAsHost}
+              disabled={!mediaReady || !userName.trim()}
+              className="w-full bg-green-500 hover:bg-green-600"
+              size="lg"
+            >
+              Start Meeting (as Host)
+            </Button>
+            
+            <Button
+              onClick={sendJoinRequest}
+              disabled={!mediaReady || !userName.trim()}
+              variant="outline"
+              className="w-full"
+              size="lg"
+            >
+              Ask to Join Meeting
+            </Button>
+          </div>
           
           <p className="text-center text-sm text-gray-500">
-            The meeting host will review your request before admitting you to the meeting.
+            If you created this meeting, click "Start Meeting". Otherwise, click "Ask to Join" to request access from the host.
           </p>
         </CardContent>
       </Card>
     </div>
   );
 };
+
+// Export the meetingHosts map so it can be accessed from other components
+export { meetingHosts };
 
 export default MeetingLobby;
