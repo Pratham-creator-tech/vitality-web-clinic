@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,7 +20,10 @@ import {
   Maximize,
   MoreVertical,
   VolumeX,
-  User
+  User,
+  UserCheck,
+  UserX,
+  Bell
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import MeetingTranscription from './MeetingTranscription';
@@ -41,6 +43,13 @@ interface Participant {
   isHost?: boolean;
 }
 
+interface JoinRequest {
+  id: string;
+  userName: string;
+  timestamp: Date;
+  status: 'pending' | 'approved' | 'denied';
+}
+
 interface MeetingRoom {
   id: string;
   participants: Participant[];
@@ -50,6 +59,7 @@ interface MeetingRoom {
 
 // Simulate a global meeting room store (in a real app, this would be a backend service)
 const meetingRooms = new Map<string, MeetingRoom>();
+const joinRequestsStore = new Map<string, JoinRequest[]>();
 
 const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -65,6 +75,8 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
   const [showSettings, setShowSettings] = useState(false);
   const [currentUser, setCurrentUser] = useState<Participant | null>(null);
   const [isHost, setIsHost] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState<JoinRequest[]>([]);
+  const [showJoinRequests, setShowJoinRequests] = useState(false);
   
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
@@ -76,23 +88,97 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
     initializeMedia();
     joinMeetingRoom();
     
+    // Check for new join requests if host
+    const requestInterval = setInterval(() => {
+      if (isHost) {
+        checkForNewJoinRequests();
+      }
+    }, 1000);
+    
     // Simulate periodic participant updates
-    const interval = setInterval(() => {
+    const participantInterval = setInterval(() => {
       updateParticipants();
     }, 3000);
     
     return () => {
       cleanup();
-      clearInterval(interval);
+      clearInterval(requestInterval);
+      clearInterval(participantInterval);
       leaveMeetingRoom();
     };
-  }, []);
+  }, [isHost]);
 
   useEffect(() => {
     if (localStreamRef.current && localVideoRef.current && activeTab === 'meeting') {
       localVideoRef.current.srcObject = localStreamRef.current;
     }
   }, [activeTab]);
+
+  const checkForNewJoinRequests = () => {
+    const requests = joinRequestsStore.get(meetingId) || [];
+    const pending = requests.filter(r => r.status === 'pending');
+    setPendingRequests(pending);
+    
+    // Show notification for new requests
+    if (pending.length > pendingRequests.length) {
+      toast({
+        title: "New join request",
+        description: `${pending[pending.length - 1]?.userName} wants to join the meeting`,
+      });
+      setShowJoinRequests(true);
+    }
+  };
+
+  const approveJoinRequest = (requestId: string) => {
+    const requests = joinRequestsStore.get(meetingId) || [];
+    const updatedRequests = requests.map(r => 
+      r.id === requestId ? { ...r, status: 'approved' as const } : r
+    );
+    joinRequestsStore.set(meetingId, updatedRequests);
+    
+    const approvedRequest = requests.find(r => r.id === requestId);
+    if (approvedRequest) {
+      // Add to participants
+      const room = meetingRooms.get(meetingId);
+      if (room) {
+        const newParticipant: Participant = {
+          id: requestId,
+          name: approvedRequest.userName,
+          isVideoEnabled: true,
+          isAudioEnabled: true,
+          joinedAt: new Date(),
+          isHost: false
+        };
+        room.participants.push(newParticipant);
+        setParticipants([...room.participants]);
+      }
+      
+      toast({
+        title: "Request approved",
+        description: `${approvedRequest.userName} has joined the meeting`,
+      });
+    }
+    
+    checkForNewJoinRequests();
+  };
+
+  const denyJoinRequest = (requestId: string) => {
+    const requests = joinRequestsStore.get(meetingId) || [];
+    const updatedRequests = requests.map(r => 
+      r.id === requestId ? { ...r, status: 'denied' as const } : r
+    );
+    joinRequestsStore.set(meetingId, updatedRequests);
+    
+    const deniedRequest = requests.find(r => r.id === requestId);
+    if (deniedRequest) {
+      toast({
+        title: "Request denied",
+        description: `${deniedRequest.userName}'s request was denied`,
+      });
+    }
+    
+    checkForNewJoinRequests();
+  };
 
   const joinMeetingRoom = () => {
     setConnectionStatus('connecting');
@@ -362,6 +448,16 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                 </Badge>
                 <span className="text-gray-500 text-sm">ID: {meetingId}</span>
                 {isHost && <Badge className="bg-blue-100 text-blue-800 border-blue-200">Host</Badge>}
+                {isHost && pendingRequests.length > 0 && (
+                  <Button
+                    size="sm"
+                    onClick={() => setShowJoinRequests(!showJoinRequests)}
+                    className="bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200 h-6 px-2"
+                  >
+                    <Bell className="h-3 w-3 mr-1" />
+                    {pendingRequests.length} waiting
+                  </Button>
+                )}
               </div>
             </div>
           </div>
@@ -384,6 +480,52 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
             </Tabs>
           </div>
         </div>
+
+        {/* Join Requests Panel */}
+        {isHost && showJoinRequests && pendingRequests.length > 0 && (
+          <div className="mb-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 border border-orange-200 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <Bell className="h-5 w-5" />
+              Join Requests ({pendingRequests.length})
+            </h3>
+            <div className="space-y-2">
+              {pendingRequests.map((request) => (
+                <div key={request.id} className="flex items-center justify-between bg-orange-50 rounded-lg p-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-orange-200 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-orange-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-800">{request.userName}</p>
+                      <p className="text-sm text-gray-500">
+                        Requested {request.timestamp.toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => approveJoinRequest(request.id)}
+                      className="bg-green-500 hover:bg-green-600 h-8"
+                    >
+                      <UserCheck className="h-4 w-4 mr-1" />
+                      Admit
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => denyJoinRequest(request.id)}
+                      className="h-8"
+                    >
+                      <UserX className="h-4 w-4 mr-1" />
+                      Deny
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Content */}
         <div className="flex-1 overflow-hidden">
@@ -480,6 +622,11 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                             <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600 mb-2">Waiting for others to join</p>
                             <p className="text-gray-500 text-sm">Share meeting ID: {meetingId}</p>
+                            {isHost && pendingRequests.length > 0 && (
+                              <p className="text-orange-600 text-sm mt-2 font-medium">
+                                {pendingRequests.length} person(s) waiting for approval
+                              </p>
+                            )}
                           </div>
                         </div>
                       ) : (
@@ -637,6 +784,9 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
               Meeting in progress • Share ID: <span className="text-gray-800 font-mono font-medium">{meetingId}</span>
               {participants.length > 1 && (
                 <span className="ml-2">• {participants.length} participants connected</span>
+              )}
+              {isHost && pendingRequests.length > 0 && (
+                <span className="ml-2 text-orange-600 font-medium">• {pendingRequests.length} waiting for approval</span>
               )}
             </p>
           </div>

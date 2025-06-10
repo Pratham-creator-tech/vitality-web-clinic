@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Video, VideoOff, Mic, MicOff, Settings, Monitor } from 'lucide-react';
+import { Video, VideoOff, Mic, MicOff, Settings, Clock, Users } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 interface MeetingLobbyProps {
   meetingId: string;
@@ -13,11 +14,24 @@ interface MeetingLobbyProps {
   defaultUserName?: string;
 }
 
+interface JoinRequest {
+  id: string;
+  userName: string;
+  timestamp: Date;
+  status: 'pending' | 'approved' | 'denied';
+}
+
+// Global store for join requests
+const joinRequestsStore = new Map<string, JoinRequest[]>();
+
 const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: MeetingLobbyProps) => {
   const [userName, setUserName] = useState(defaultUserName);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [mediaReady, setMediaReady] = useState(false);
+  const [joinRequestSent, setJoinRequestSent] = useState(false);
+  const [joinRequestStatus, setJoinRequestStatus] = useState<'pending' | 'approved' | 'denied'>('pending');
+  const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -25,10 +39,45 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
 
   useEffect(() => {
     initializePreview();
+    
+    // Check for join request status updates
+    const interval = setInterval(() => {
+      if (currentRequestId) {
+        checkJoinRequestStatus();
+      }
+    }, 1000);
+    
     return () => {
       cleanup();
+      clearInterval(interval);
     };
-  }, []);
+  }, [currentRequestId]);
+
+  const checkJoinRequestStatus = () => {
+    const requests = joinRequestsStore.get(meetingId) || [];
+    const request = requests.find(r => r.id === currentRequestId);
+    
+    if (request && request.status !== joinRequestStatus) {
+      setJoinRequestStatus(request.status);
+      
+      if (request.status === 'approved') {
+        toast({
+          title: "Approved!",
+          description: "You have been admitted to the meeting",
+        });
+        cleanup();
+        onJoinMeeting(userName.trim());
+      } else if (request.status === 'denied') {
+        toast({
+          title: "Request denied",
+          description: "The host has denied your request to join",
+          variant: "destructive",
+        });
+        setJoinRequestSent(false);
+        setCurrentRequestId(null);
+      }
+    }
+  };
 
   const initializePreview = async () => {
     try {
@@ -78,25 +127,87 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
     }
   };
 
-  const handleJoinMeeting = () => {
+  const sendJoinRequest = () => {
     if (!userName.trim()) {
       toast({
         title: "Name required",
-        description: "Please enter your name to join the meeting",
+        description: "Please enter your name to request to join",
         variant: "destructive",
       });
       return;
     }
+
+    const requestId = `${userName}-${Date.now()}`;
+    const newRequest: JoinRequest = {
+      id: requestId,
+      userName: userName.trim(),
+      timestamp: new Date(),
+      status: 'pending'
+    };
+
+    // Add to global store
+    const existingRequests = joinRequestsStore.get(meetingId) || [];
+    joinRequestsStore.set(meetingId, [...existingRequests, newRequest]);
+
+    setCurrentRequestId(requestId);
+    setJoinRequestSent(true);
     
-    cleanup();
-    onJoinMeeting(userName.trim());
+    toast({
+      title: "Join request sent",
+      description: "Waiting for host approval...",
+    });
   };
 
+  if (joinRequestSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-green-25 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md text-center">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
+              <Clock className="h-5 w-5" />
+              Waiting for Approval
+            </CardTitle>
+            <CardDescription>
+              Meeting ID: <span className="font-mono">{meetingId}</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-blue-50 rounded-lg p-4">
+              <div className="animate-pulse flex items-center justify-center gap-2 text-blue-600">
+                <Users className="h-5 w-5" />
+                <span>Requesting to join as <strong>{userName}</strong></span>
+              </div>
+            </div>
+            
+            <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+              {joinRequestStatus === 'pending' ? 'Pending approval...' : joinRequestStatus}
+            </Badge>
+            
+            <p className="text-gray-600 text-sm">
+              The meeting host will review your request to join. Please wait while they approve your entry.
+            </p>
+            
+            <Button
+              variant="outline"
+              onClick={() => {
+                setJoinRequestSent(false);
+                setCurrentRequestId(null);
+              }}
+              className="w-full"
+            >
+              Cancel Request
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-vitality-50 to-vitality-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-green-25 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-vitality-700">
+          <CardTitle className="text-2xl font-bold text-gray-800">
             Join Vitality Meeting
           </CardTitle>
           <CardDescription>
@@ -122,7 +233,7 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
             {/* Controls Overlay */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
               <Button
-                variant={isAudioEnabled ? "default" : "destructive"}
+                variant={isAudioEnabled ? "secondary" : "destructive"}
                 size="sm"
                 onClick={toggleAudio}
                 className="rounded-full h-10 w-10 p-0"
@@ -131,7 +242,7 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
               </Button>
               
               <Button
-                variant={isVideoEnabled ? "default" : "destructive"}
+                variant={isVideoEnabled ? "secondary" : "destructive"}
                 size="sm"
                 onClick={toggleVideo}
                 className="rounded-full h-10 w-10 p-0"
@@ -196,15 +307,19 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
             </div>
           </div>
 
-          {/* Join Button */}
+          {/* Request to Join Button */}
           <Button
-            onClick={handleJoinMeeting}
+            onClick={sendJoinRequest}
             disabled={!mediaReady || !userName.trim()}
-            className="w-full bg-vitality-500 hover:bg-vitality-600"
+            className="w-full bg-blue-500 hover:bg-blue-600"
             size="lg"
           >
-            Join Meeting
+            Ask to Join
           </Button>
+          
+          <p className="text-center text-sm text-gray-500">
+            The meeting host will review your request before admitting you to the meeting.
+          </p>
         </CardContent>
       </Card>
     </div>
