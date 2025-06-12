@@ -10,7 +10,26 @@ const HeroSection = () => {
   
   return (
     <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <div className="container mx-auto px-4 py-20 md:py-28">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover opacity-30"
+        >
+          <source
+            src="https://videos.pexels.com/video-files/5150329/5150329-hd_1920_1080_30fps.mp4"
+            type="video/mp4"
+          />
+          {/* Fallback for browsers that don't support video */}
+        </video>
+        {/* Overlay to ensure text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/80 via-white/70 to-vitality-50/80 dark:bg-gradient-to-r dark:from-gray-900/80 dark:via-gray-800/70 dark:to-gray-900/80"></div>
+      </div>
+
+      <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl lg:pr-8">
             <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800">
@@ -37,12 +56,6 @@ const HeroSection = () => {
                 <Link to="/booking" className="flex items-center">
                   <CalendarCheck className="mr-2 h-5 w-5" />
                   Book Appointment
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-vitality-500 text-vitality-600 hover:bg-vitality-50 dark:text-vitality-300 dark:border-vitality-700 dark:hover:bg-vitality-950/30">
-                <Link to="/ai-assistant" className="flex items-center">
-                  AI Health Assistant
-                  <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
             </div>

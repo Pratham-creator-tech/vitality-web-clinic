@@ -26,7 +26,7 @@ const DryNeedling = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80"
+              src="/lovable-uploads/bc0dc033-b554-4c42-b097-ae2e85030924.png"
               alt="Dry Needling Therapy"
               className="w-full h-full object-cover"
             />

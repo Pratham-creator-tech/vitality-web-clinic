@@ -26,7 +26,7 @@ const GroupExercises = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="/lovable-uploads/24065092-317b-43fa-b198-38a431488a28.png"
+              src="/lovable-uploads/79205ab3-ab93-49a4-92bc-d9d6765c3a9a.png"
               alt="Group Exercise"
               className="w-full h-full object-cover"
             />

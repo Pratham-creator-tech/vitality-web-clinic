@@ -26,7 +26,7 @@ const PosturalAlignment = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="/lovable-uploads/dd2ac8e5-f657-457c-955c-665ea3f1f4ea.png"
+              src="/lovable-uploads/0c401620-99d7-4077-92c4-8991ed051b54.png"
               alt="Postural Alignment"
               className="w-full h-full object-cover"
             />

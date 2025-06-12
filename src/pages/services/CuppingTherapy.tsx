@@ -26,7 +26,7 @@ const CuppingTherapy = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80"
+              src="/lovable-uploads/2eff2a62-2c07-4abe-8845-55eaef425bf8.png"
               alt="Cupping Therapy"
               className="w-full h-full object-cover"
             />

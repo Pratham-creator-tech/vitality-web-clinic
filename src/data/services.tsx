@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Activity,
@@ -121,7 +122,7 @@ export const serviceData = [
     description: "Correct posture problems and improve ergonomic wellness.",
     icon: <UserPlus className="h-10 w-10 text-vitality-400" />,
     link: "/services/postural-alignment",
-    image: "https://images.unsplash.com/photo-1489659639091-8b687bc4386e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1773&q=80",
+    image: "/lovable-uploads/0c401620-99d7-4077-92c4-8991ed051b54.png",
     category: "specialized",
   },
   {
@@ -139,7 +140,7 @@ export const serviceData = [
     description: "Motivating group sessions for fitness and rehabilitation.",
     icon: <Users className="h-10 w-10 text-vitality-400" />,
     link: "/services/group-exercise",
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: "/lovable-uploads/79205ab3-ab93-49a4-92bc-d9d6765c3a9a.png",
     category: "specialized",
   },
   {
@@ -148,7 +149,7 @@ export const serviceData = [
     description: "Advanced taping techniques for pain relief and muscle support.",
     icon: <Bandage className="h-10 w-10 text-vitality-400" />,
     link: "/services/kinesiotaping",
-    image: "https://images.unsplash.com/photo-1619124649874-f21dd6450d95?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80",
+    image: "/lovable-uploads/ac03d3e2-37c6-4508-8fa1-f9919c46e85d.png",
     category: "advanced",
   },
   {
@@ -157,7 +158,7 @@ export const serviceData = [
     description: "Precision treatment for muscle pain and tension.",
     icon: <Syringe className="h-10 w-10 text-vitality-400" />,
     link: "/services/dry-needling",
-    image: "https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: "/lovable-uploads/bc0dc033-b554-4c42-b097-ae2e85030924.png",
     category: "advanced",
   },
   {
@@ -175,7 +176,7 @@ export const serviceData = [
     description: "Traditional therapy for muscle tension and circulation.",
     icon: <Grid className="h-10 w-10 text-vitality-400" />,
     link: "/services/cupping",
-    image: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80",
+    image: "/lovable-uploads/2eff2a62-2c07-4abe-8845-55eaef425bf8.png",
     category: "advanced",
   },
   {

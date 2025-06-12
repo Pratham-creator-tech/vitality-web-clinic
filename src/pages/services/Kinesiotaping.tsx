@@ -26,7 +26,7 @@ const Kinesiotaping = () => {
 
           <div className="mt-8 aspect-video w-full overflow-hidden rounded-xl">
             <img
-              src="https://images.unsplash.com/photo-1619124649874-f21dd6450d95?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80"
+              src="/lovable-uploads/ac03d3e2-37c6-4508-8fa1-f9919c46e85d.png"
               alt="Kinesiotaping"
               className="w-full h-full object-cover"
             />
