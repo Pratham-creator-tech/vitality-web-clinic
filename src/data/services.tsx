@@ -40,7 +40,7 @@ export const serviceData = [
     description: "Specialized treatment for sports-related injuries and performance enhancement.",
     icon: <Activity className="h-10 w-10 text-vitality-400" />,
     link: "/services/sports-rehabilitation",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: "/lovable-uploads/510a9189-5ee7-49c6-8e7b-8f93d604890e.png",
     category: "core",
   },
   {
@@ -49,7 +49,7 @@ export const serviceData = [
     description: "Hands-on techniques to reduce pain, decrease restriction and restore mobility.",
     icon: <HandHeart className="h-10 w-10 text-vitality-400" />,
     link: "/services/manual-therapy",
-    image: "https://images.unsplash.com/photo-1573811381942-10961e9cf296?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: "/lovable-uploads/efbaad3c-8a4b-4c84-ad49-dd7aac058243.png",
     category: "core",
   },
   {
@@ -58,7 +58,7 @@ export const serviceData = [
     description: "Specialized programs for optimal recovery after surgery.",
     icon: <Bone className="h-10 w-10 text-vitality-400" />,
     link: "/services/post-surgical",
-    image: "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1742&q=80",
+    image: "/lovable-uploads/863e4279-0e48-4920-b67b-bc998a402a0a.png",
     category: "core",
   },
   {
@@ -67,7 +67,7 @@ export const serviceData = [
     description: "Comprehensive approaches to manage and reduce persistent pain.",
     icon: <Heart className="h-10 w-10 text-vitality-400" />,
     link: "/services/chronic-pain",
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1820&q=80",
+    image: "/lovable-uploads/d81465e1-16ed-4f41-9628-3135bd368c43.png",
     category: "core",
   },
   {
@@ -94,7 +94,7 @@ export const serviceData = [
     description: "Specialized care for children's development and rehabilitation needs.",
     icon: <Baby className="h-10 w-10 text-vitality-400" />,
     link: "/services/pediatric-rehab",
-    image: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80",
+    image: "/lovable-uploads/7e0d7c53-c8c7-41ee-ba96-080fb8d69252.png",
     category: "specialized",
   },
   {
@@ -103,7 +103,7 @@ export const serviceData = [
     description: "Specialized care for elderly patients focusing on mobility and independence.",
     icon: <ThermometerSun className="h-10 w-10 text-vitality-400" />,
     link: "/services/geriatric-rehab",
-    image: "https://images.unsplash.com/photo-1574279606130-09958dc756f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1776&q=80",
+    image: "/lovable-uploads/f2423b88-6c23-434c-aaf9-05075064894d.png",
     category: "specialized",
   },
   {
