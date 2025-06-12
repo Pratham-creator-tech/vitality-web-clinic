@@ -56,8 +56,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
-import { AIFloatingButton } from "@/components/ai/AIFloatingButton";
-import ScrollToTop from "@/components/ui/scroll-to-top";
+import AIFloatingButton from "@/components/ai/AIFloatingButton";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
 function App() {
   return (
