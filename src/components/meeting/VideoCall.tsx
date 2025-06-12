@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,10 +24,12 @@ import {
   User,
   UserCheck,
   UserX,
-  Bell
+  Bell,
+  Files
 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import MeetingTranscription from './MeetingTranscription';
+import MeetingFileSharing from './MeetingFileSharing';
 import { meetingHosts } from './MeetingLobby';
 
 interface VideoCallProps {
@@ -498,6 +501,10 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
                   <FileText className="h-4 w-4 mr-2" />
                   Notes
                 </TabsTrigger>
+                <TabsTrigger value="files" className="text-gray-700 data-[state=active]:bg-white data-[state=active]:text-gray-900">
+                  <Files className="h-4 w-4 mr-2" />
+                  Files
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
@@ -711,6 +718,16 @@ const VideoCall = ({ meetingId, userName, onEndCall }: VideoCallProps) => {
             <TabsContent value="transcription" className="h-full">
               <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 h-full overflow-auto border border-gray-200 shadow-sm">
                 <MeetingTranscription 
+                  meetingId={meetingId} 
+                  userName={userName}
+                  isDoctor={isDoctor}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="files" className="h-full">
+              <div className="h-full">
+                <MeetingFileSharing 
                   meetingId={meetingId} 
                   userName={userName}
                   isDoctor={isDoctor}

@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -56,7 +55,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
-import AIFloatingButton from "@/components/ai/AIFloatingButton";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
 function App() {
@@ -120,7 +118,6 @@ function App() {
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              <AIFloatingButton />
               <ScrollToTop />
             </div>
             <Toaster />
