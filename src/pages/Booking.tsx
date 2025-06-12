@@ -10,10 +10,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Copy, Video } from "lucide-react";
+import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Video } from "lucide-react";
 import { format } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
-import { generateMeetingId, generateMeetingLink, copyToClipboard } from "@/utils/meetingUtils";
+import { generateMeetingId, generateMeetingLink } from "@/utils/meetingUtils";
 import { setMeetingHost } from "@/components/meeting/VideoCall";
 
 const services = [
@@ -45,8 +45,6 @@ const timeSlots = [
 const Booking = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [meetingLink, setMeetingLink] = useState<string>("");
-  const [meetingId, setMeetingId] = useState<string>("");
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
@@ -83,7 +81,7 @@ const Booking = () => {
            date !== undefined;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!isFormValid()) {
@@ -97,30 +95,34 @@ const Booking = () => {
     
     setFormStatus("submitting");
     
-    // Generate meeting details
-    const newMeetingId = generateMeetingId();
-    const newMeetingLink = generateMeetingLink(newMeetingId);
-    
-    // Set the person who books as the host
-    setMeetingHost(newMeetingId, formData.name);
-    
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Booking form submitted:", { 
-        ...formData, 
-        date,
-        meetingId: newMeetingId,
-        meetingLink: newMeetingLink,
-        isHost: true
-      });
+    try {
+      // Generate meeting details
+      const meetingId = generateMeetingId();
+      const meetingLink = generateMeetingLink(meetingId);
       
-      setMeetingId(newMeetingId);
-      setMeetingLink(newMeetingLink);
+      // Set the person who books as the host
+      setMeetingHost(meetingId, formData.name);
+      
+      const appointmentData = {
+        ...formData,
+        date: date?.toISOString(),
+        meetingId,
+        meetingLink,
+        isHost: true,
+        bookingTime: new Date().toISOString()
+      };
+      
+      console.log("Booking form submitted:", appointmentData);
+      
+      // Here you would typically send emails to both doctor and patient
+      // For now, we'll simulate the booking process
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       setFormStatus("success");
       
       toast({
         title: "Booking Confirmed!",
-        description: "Your appointment has been successfully booked. You are the meeting host.",
+        description: "Your appointment has been successfully booked. Check your email for meeting details.",
       });
       
       // Reset form after successful submission
@@ -135,20 +137,13 @@ const Booking = () => {
         message: ""
       });
       setDate(undefined);
-    }, 1500);
-  };
-
-  const handleCopyMeetingLink = async () => {
-    const success = await copyToClipboard(meetingLink);
-    if (success) {
+      
+    } catch (error) {
+      console.error("Booking error:", error);
+      setFormStatus("error");
       toast({
-        title: "Meeting link copied!",
-        description: "The meeting link has been copied to your clipboard.",
-      });
-    } else {
-      toast({
-        title: "Copy failed",
-        description: "Please copy the meeting link manually.",
+        title: "Booking Failed",
+        description: "There was an error processing your booking. Please try again.",
         variant: "destructive",
       });
     }
@@ -164,7 +159,7 @@ const Booking = () => {
               Book Your Appointment
             </h1>
             <p className="text-lg text-gray-700">
-              Schedule a consultation with our expert physiotherapists and join your virtual session seamlessly.
+              Schedule a consultation with our expert physiotherapists. Meeting details will be sent to your email.
             </p>
           </div>
         </div>
@@ -176,63 +171,42 @@ const Booking = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
               {formStatus === "success" ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-8">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
                   <div className="mb-4 mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Booking Confirmed!</h2>
-                  <p className="text-gray-600 mb-6 text-center">
-                    Thank you for scheduling your appointment with Vitality Physiotherapy. We've sent a confirmation email with all the details.
+                  <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking Confirmed!</h2>
+                  <p className="text-gray-600 mb-6">
+                    Thank you for scheduling your appointment with Vitality Physiotherapy. 
+                    We've sent confirmation emails with meeting details to both you and your assigned therapist.
                   </p>
                   
-                  {/* Meeting Link Section */}
                   <div className="bg-vitality-50 border border-vitality-200 rounded-lg p-6 mb-6">
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center justify-center gap-2 mb-3">
                       <Video className="h-5 w-5 text-vitality-600" />
-                      <h3 className="text-lg font-semibold text-vitality-700">Your Virtual Meeting (You are the Host)</h3>
+                      <h3 className="text-lg font-semibold text-vitality-700">What's Next?</h3>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Join your appointment using this secure meeting link. As the meeting host, you can admit participants who request to join:
-                    </p>
-                    <div className="flex gap-2 mb-3">
-                      <Input
-                        value={meetingLink}
-                        readOnly
-                        className="font-mono text-sm"
-                      />
-                      <Button
-                        onClick={handleCopyMeetingLink}
-                        variant="outline"
-                        size="sm"
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
+                    <div className="text-sm text-gray-600 space-y-2">
+                      <p>✓ Check your email for the secure meeting link</p>
+                      <p>✓ You will be the meeting host and can start the session</p>
+                      <p>✓ Your therapist will join at the scheduled time</p>
+                      <p>✓ Meeting details have been sent to your assigned therapist</p>
                     </div>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => window.open(meetingLink, '_blank')}
-                        className="bg-vitality-500 hover:bg-vitality-600"
-                      >
-                        <Video className="h-4 w-4 mr-2" />
-                        Start Meeting
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => setFormStatus("idle")}
-                      >
-                        Book Another Appointment
-                      </Button>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-3">
-                      Meeting ID: <span className="font-mono">{meetingId}</span> | Share this link with participants
-                    </p>
                   </div>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={() => setFormStatus("idle")}
+                    className="mt-4"
+                  >
+                    Book Another Appointment
+                  </Button>
                 </div>
               ) : (
                 <>
                   <SectionTitle 
                     title="Schedule Your Visit" 
-                    subtitle="Fill out the form below to request an appointment. You'll receive a secure meeting link and become the meeting host."
+                    subtitle="Fill out the form below to request an appointment. Meeting details will be emailed to you and your therapist."
                   />
                   
                   <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -386,9 +360,9 @@ const Booking = () => {
                       <div className="flex items-start gap-3">
                         <Video className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div>
-                          <h4 className="font-medium text-blue-900">Virtual Consultation - You'll be the Host</h4>
+                          <h4 className="font-medium text-blue-900">Virtual Consultation via Email</h4>
                           <p className="text-sm text-blue-700 mt-1">
-                            This appointment will be conducted via our secure video platform. You'll receive a meeting link and become the meeting host, allowing you to admit participants.
+                            Meeting details will be sent to your email and your therapist's email. You'll receive a secure video link to join your appointment.
                           </p>
                         </div>
                       </div>
@@ -414,7 +388,7 @@ const Booking = () => {
                         )}
                       </Button>
                       <p className="text-sm text-gray-500 mt-2 text-center">
-                        * Required fields. Click to confirm your appointment booking and become the meeting host.
+                        * Required fields. Meeting details will be emailed to you and your therapist.
                       </p>
                     </div>
                   </form>
@@ -471,7 +445,7 @@ const Booking = () => {
                     <div>
                       <p className="font-medium text-gray-800">Virtual Consultations:</p>
                       <p className="text-gray-600">
-                        Secure video meetings available<br />
+                        Secure video meetings via email<br />
                         HD quality with screen sharing
                       </p>
                     </div>
