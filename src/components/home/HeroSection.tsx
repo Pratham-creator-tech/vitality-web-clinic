@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck, ArrowRight, Shield, Star, UserCheck } from "lucide-react";
+import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
 import { Star as LucideStar, StarHalf } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -15,27 +15,33 @@ const HeroSection = () => {
           <div className="max-w-xl">
             <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800">
               <Star className="h-5 w-5 text-yellow-500 mr-2" />
-              <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">Trusted by 10,000+ patients</span>
+              <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">Trusted by 50,000+ patients across India</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display text-vitality-700 leading-tight dark:text-white">
-              {t("app.home.hero.title")}
+              Expert Physiotherapy Care Across India
             </h1>
             
             <p className="text-lg md:text-xl text-gray-700 mb-8 dark:text-gray-300">
-              {t("app.home.hero.subtitle")}
+              Connect with certified physiotherapists in your city. From Mumbai to Chennai, Delhi to Kolkata - quality care is just a click away.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
               <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
+                <Link to="/recommendations" className="flex items-center">
+                  <Search className="mr-2 h-5 w-5" />
+                  Find Your Doctor
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white">
                 <Link to="/booking" className="flex items-center">
                   <CalendarCheck className="mr-2 h-5 w-5" />
-                  {t("app.cta.book")}
+                  Book Appointment
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-vitality-500 text-vitality-600 hover:bg-vitality-50 dark:text-vitality-300 dark:border-vitality-700 dark:hover:bg-vitality-950/30">
                 <Link to="/ai-assistant" className="flex items-center">
-                  Chat with AI Assistant
+                  AI Health Assistant
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -44,22 +50,22 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-6 mb-6">
               <div className="flex items-center">
                 <Shield className="h-5 w-5 text-vitality-500 mr-2" />
-                <span className="text-sm font-medium dark:text-gray-300">Certified Specialists</span>
+                <span className="text-sm font-medium dark:text-gray-300">Government Certified</span>
               </div>
               <div className="flex items-center">
                 <UserCheck className="h-5 w-5 text-vitality-500 mr-2" />
-                <span className="text-sm font-medium dark:text-gray-300">Personalized Care</span>
+                <span className="text-sm font-medium dark:text-gray-300">1000+ Expert Doctors</span>
               </div>
               <div className="flex items-center">
                 <CalendarCheck className="h-5 w-5 text-vitality-500 mr-2" />
-                <span className="text-sm font-medium dark:text-gray-300">Flexible Scheduling</span>
+                <span className="text-sm font-medium dark:text-gray-300">Same Day Booking</span>
               </div>
             </div>
             
             <div className="flex items-center space-x-4">
               <div className="flex -space-x-0">
                 <div className="w-10 h-10 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold">
-                  4.9
+                  4.8
                 </div>
                 <div className="flex items-center bg-white py-2.5 px-5 rounded-full shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
                   <div className="flex items-center gap-1 mr-3">
@@ -68,8 +74,7 @@ const HeroSection = () => {
                     ))}
                     <StarHalf className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                   </div>
-                  {/* <span className="text-lg font-semibold text-gray-900 mr-2 dark:text-white">4.5</span> */}
-                  <span className="text-sm text-gray-600 dark:text-gray-300">(400+ reviews)</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">(12,000+ reviews)</span>
                 </div>
               </div>
             </div>
@@ -94,8 +99,8 @@ const HeroSection = () => {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Since 2010</p>
-                  <p className="text-lg font-bold text-vitality-700 dark:text-vitality-300">10,000+ Patients</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Successfully Treated</p>
+                  <p className="text-lg font-bold text-vitality-700 dark:text-vitality-300">50,000+ Patients</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Successfully Treated Across India</p>
                 </div>
               </div>
             </div>

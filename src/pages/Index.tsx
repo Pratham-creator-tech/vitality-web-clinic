@@ -7,12 +7,14 @@ import AboutPreview from "@/components/home/AboutPreview";
 import BlogPreview from "@/components/home/BlogPreview";
 import { CTASection } from "@/components/ui/cta-section";
 import TrustedByCarousel from "@/components/home/TrustedByCarousel";
+import PanIndiaSection from "@/components/home/PanIndiaSection";
 
 const Index = () => {
   return (
     <PageLayout>
       <HeroSection />
       <TrustedByCarousel />
+      <PanIndiaSection />
       <ServicesSection />
       <AboutPreview />
       <TestimonialsSection />

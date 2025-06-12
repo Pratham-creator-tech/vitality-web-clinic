@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,6 +39,7 @@ import VirtualTour from "./pages/VirtualTour";
 import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import PainTracker from "./pages/PainTracker";
 import AIAssistant from "./pages/AIAssistant";
+import Recommendations from "./pages/Recommendations";
 
 // Service pages
 import SportsRehabilitation from "./pages/services/SportsRehabilitation";
@@ -102,6 +102,7 @@ const App = () => (
                 <Route path="/body-map" element={<InteractiveBodyMap />} />
                 <Route path="/pain-tracker" element={<PainTracker />} />
                 <Route path="/ai-assistant" element={<AIAssistant />} />
+                <Route path="/recommendations" element={<Recommendations />} />
                 
                 {/* Service Routes */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

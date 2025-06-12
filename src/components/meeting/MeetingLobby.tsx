@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -415,5 +416,3 @@ const MeetingLobby = ({ meetingId, onJoinMeeting, defaultUserName = '' }: Meetin
 export { meetingHosts };
 
 export default MeetingLobby;
-
-</edits_to_apply>
