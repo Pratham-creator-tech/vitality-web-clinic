@@ -20,7 +20,7 @@ const HeroSection = () => {
       }}
     >
       {/* Lighter overlay for image visibility */}
-      <div className="absolute inset-0 bg-white/35 dark:bg-black/40 pointer-events-none" />
+      <div className="absolute inset-0 bg-white/60 dark:bg-black/60 pointer-events-none" />
       <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center text-center py-7 px-2 sm:py-10 sm:px-6 md:py-12 rounded-lg">
         <div className="flex items-center mb-1 bg-vitality-50 rounded-full py-1 px-4 w-fit mx-auto dark:bg-gray-800">
           <Star className="h-5 w-5 text-yellow-500 mr-2" />
