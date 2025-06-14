@@ -1,5 +1,4 @@
 
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
@@ -11,33 +10,15 @@ const HeroSection = () => {
   
   return (
     <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Background Video */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover opacity-40"
-          poster="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-        >
-          <source
-            src="https://videos.pexels.com/video-files/5150329/5150329-hd_1920_1080_30fps.mp4"
-            type="video/mp4"
-          />
-          <source
-            src="https://videos.pexels.com/video-files/6823668/6823668-hd_1920_1080_25fps.mp4"
-            type="video/mp4"
-          />
-          {/* Fallback image if video doesn't load */}
-          <img 
-            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
-            alt="Healthcare background" 
-            className="w-full h-full object-cover"
-          />
-        </video>
-        {/* Reduced overlay for better video visibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/70 via-white/60 to-vitality-50/70 dark:bg-gradient-to-r dark:from-gray-900/70 dark:via-gray-800/60 dark:to-gray-900/70"></div>
+        <img
+          src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          alt="Physiotherapy treatment background"
+          className="w-full h-full object-cover opacity-30"
+        />
+        {/* Overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/70 to-vitality-50/80 dark:bg-gradient-to-r dark:from-gray-900/80 dark:via-gray-800/70 dark:to-gray-900/80"></div>
       </div>
 
       <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
@@ -136,4 +117,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
