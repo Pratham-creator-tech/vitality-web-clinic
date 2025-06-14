@@ -1,5 +1,3 @@
-
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
@@ -18,8 +16,8 @@ const HeroSection = () => {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover opacity-40"
-          poster="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+          className="w-full h-full object-cover opacity-60"
+          poster="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
         >
           <source
             src="https://videos.pexels.com/video-files/5150329/5150329-hd_1920_1080_30fps.mp4"
@@ -31,28 +29,26 @@ const HeroSection = () => {
           />
           {/* Fallback image if video doesn't load */}
           <img 
-            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
-            alt="Healthcare background" 
+            src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+            alt="Physiotherapist treating patient" 
             className="w-full h-full object-cover"
           />
         </video>
-        {/* Reduced overlay for better video visibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/70 via-white/60 to-vitality-50/70 dark:bg-gradient-to-r dark:from-gray-900/70 dark:via-gray-800/60 dark:to-gray-900/70"></div>
       </div>
 
       <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl lg:pr-8">
-            <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800">
+            <div className="flex items-center mb-4 bg-white/90 rounded-full py-1 px-4 w-fit dark:bg-gray-800/90">
               <Star className="h-5 w-5 text-yellow-500 mr-2" />
               <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">Trusted by 50,000+ patients across India</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display text-vitality-700 leading-tight dark:text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display text-white leading-tight drop-shadow-lg">
               Expert Physiotherapy Care Across India
             </h1>
             
-            <p className="text-lg md:text-xl text-gray-700 mb-8 dark:text-gray-300">
+            <p className="text-lg md:text-xl text-white/90 mb-8 drop-shadow-md">
               Connect with certified physiotherapists in your city. From Mumbai to Chennai, Delhi to Kolkata - quality care is just a click away.
             </p>
             
@@ -73,16 +69,16 @@ const HeroSection = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 mb-6">
               <div className="flex items-center">
-                <Shield className="h-5 w-5 text-vitality-500 mr-2" />
-                <span className="text-sm font-medium dark:text-gray-300">Government Certified</span>
+                <Shield className="h-5 w-5 text-white mr-2" />
+                <span className="text-sm font-medium text-white/90">Government Certified</span>
               </div>
               <div className="flex items-center">
-                <UserCheck className="h-5 w-5 text-vitality-500 mr-2" />
-                <span className="text-sm font-medium dark:text-gray-300">1000+ Expert Doctors</span>
+                <UserCheck className="h-5 w-5 text-white mr-2" />
+                <span className="text-sm font-medium text-white/90">1000+ Expert Doctors</span>
               </div>
               <div className="flex items-center">
-                <CalendarCheck className="h-5 w-5 text-vitality-500 mr-2" />
-                <span className="text-sm font-medium dark:text-gray-300">Same Day Booking</span>
+                <CalendarCheck className="h-5 w-5 text-white mr-2" />
+                <span className="text-sm font-medium text-white/90">Same Day Booking</span>
               </div>
             </div>
             
@@ -91,7 +87,7 @@ const HeroSection = () => {
                 <div className="w-10 h-10 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold">
                   4.8
                 </div>
-                <div className="flex items-center bg-white py-2.5 px-5 rounded-full shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                <div className="flex items-center bg-white/90 py-2.5 px-5 rounded-full shadow-md border border-gray-100 dark:bg-gray-800/90 dark:border-gray-700">
                   <div className="flex items-center gap-1 mr-3">
                     {[1, 2, 3, 4].map((star) => (
                       <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
@@ -136,4 +132,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
