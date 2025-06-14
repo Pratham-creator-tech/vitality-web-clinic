@@ -1,4 +1,5 @@
 
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
@@ -17,7 +18,7 @@ const HeroSection = () => {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover opacity-40"
           poster="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
         >
           <source
@@ -35,8 +36,8 @@ const HeroSection = () => {
             className="w-full h-full object-cover"
           />
         </video>
-        {/* Enhanced overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/90 via-white/80 to-vitality-50/90 dark:bg-gradient-to-r dark:from-gray-900/90 dark:via-gray-800/80 dark:to-gray-900/90"></div>
+        {/* Reduced overlay for better video visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/70 via-white/60 to-vitality-50/70 dark:bg-gradient-to-r dark:from-gray-900/70 dark:via-gray-800/60 dark:to-gray-900/70"></div>
       </div>
 
       <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
@@ -135,3 +136,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
