@@ -1,81 +1,133 @@
 
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck, Star, Shield, UserCheck, Search, Star as LucideStar, StarHalf } from "lucide-react";
+import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
+import { Star as LucideStar, StarHalf } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-
-// Use this physiotherapy image from uploads
-const PHYSIO_IMAGE = "/lovable-uploads/photo-1581091226825-a6a2a5aee158.jpeg";
 
 const HeroSection = () => {
   const { t } = useLanguage();
-
+  
   return (
-    <section
-      className="relative w-full min-h-[58vh] flex items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: `url('${PHYSIO_IMAGE}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Lighter overlay for image visibility */}
-      <div className="absolute inset-0 bg-white/60 dark:bg-black/60 pointer-events-none" />
-      <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center text-center py-7 px-2 sm:py-10 sm:px-6 md:py-12 rounded-lg">
-        <div className="flex items-center mb-1 bg-vitality-50 rounded-full py-1 px-4 w-fit mx-auto dark:bg-gray-800">
-          <Star className="h-5 w-5 text-yellow-500 mr-2" />
-          <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">
-            Trusted by 50,000+ patients across India
-          </span>
-        </div>
-        <h1 className="text-xl xs:text-3xl md:text-4xl font-bold mb-2 font-display text-vitality-700 leading-tight dark:text-white">
-          Expert Physiotherapy Care Online & In-Clinic
-        </h1>
-        <p className="text-sm sm:text-base text-gray-700 mb-3 dark:text-gray-300">
-          Book certified physiotherapist appointments&nbsp;–&nbsp;online or in person.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-2 mb-4 w-full justify-center">
-          <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white w-full sm:w-auto">
-            <Link to="/recommendations" className="flex items-center justify-center">
-              <Search className="mr-2 h-5 w-5" />
-              Find Your Doctor
-            </Link>
-          </Button>
-          <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto">
-            <Link to="/booking" className="flex items-center justify-center">
-              <CalendarCheck className="mr-2 h-5 w-5" />
-              Book Appointment
-            </Link>
-          </Button>
-        </div>
-        {/* Quick facts */}
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-2">
-          <div className="flex items-center">
-            <Shield className="h-5 w-5 text-vitality-500 mr-2" />
-            <span className="text-xs font-medium dark:text-gray-300">Govt. Certified</span>
-          </div>
-          <div className="flex items-center">
-            <UserCheck className="h-5 w-5 text-vitality-500 mr-2" />
-            <span className="text-xs font-medium dark:text-gray-300">1000+ Experts</span>
-          </div>
-          <div className="flex items-center">
-            <CalendarCheck className="h-5 w-5 text-vitality-500 mr-2" />
-            <span className="text-xs font-medium dark:text-gray-300">Same Day Booking</span>
-          </div>
-        </div>
-        {/* Rating */}
-        <div className="flex items-center justify-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold shadow">
-            4.8
-          </div>
-          <div className="flex items-center bg-white py-1 px-3 rounded-full shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
-            <div className="flex items-center gap-0.5 mr-1">
-              {[1, 2, 3, 4].map((star) => (
-                <LucideStar key={star} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-              ))}
-              <StarHalf className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+    <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover opacity-40"
+          poster="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+        >
+          <source
+            src="https://videos.pexels.com/video-files/5150329/5150329-hd_1920_1080_30fps.mp4"
+            type="video/mp4"
+          />
+          <source
+            src="https://videos.pexels.com/video-files/6823668/6823668-hd_1920_1080_25fps.mp4"
+            type="video/mp4"
+          />
+          {/* Fallback image if video doesn't load */}
+          <img 
+            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+            alt="Healthcare background" 
+            className="w-full h-full object-cover"
+          />
+        </video>
+        {/* Reduced overlay for better video visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/70 via-white/60 to-vitality-50/70 dark:bg-gradient-to-r dark:from-gray-900/70 dark:via-gray-800/60 dark:to-gray-900/70"></div>
+      </div>
+
+      <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="max-w-xl lg:pr-8">
+            <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800">
+              <Star className="h-5 w-5 text-yellow-500 mr-2" />
+              <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">Trusted by 50,000+ patients across India</span>
             </div>
-            <span className="text-xs text-gray-600 dark:text-gray-300">(12,000+ reviews)</span>
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display text-vitality-700 leading-tight dark:text-white">
+              Expert Physiotherapy Care Across India
+            </h1>
+            
+            <p className="text-lg md:text-xl text-gray-700 mb-8 dark:text-gray-300">
+              Connect with certified physiotherapists in your city. From Mumbai to Chennai, Delhi to Kolkata - quality care is just a click away.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 mb-10">
+              <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
+                <Link to="/recommendations" className="flex items-center">
+                  <Search className="mr-2 h-5 w-5" />
+                  Find Your Doctor
+                </Link>
+              </Button>
+              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+                <Link to="/booking" className="flex items-center">
+                  <CalendarCheck className="mr-2 h-5 w-5" />
+                  Book Appointment
+                </Link>
+              </Button>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-6 mb-6">
+              <div className="flex items-center">
+                <Shield className="h-5 w-5 text-vitality-500 mr-2" />
+                <span className="text-sm font-medium dark:text-gray-300">Government Certified</span>
+              </div>
+              <div className="flex items-center">
+                <UserCheck className="h-5 w-5 text-vitality-500 mr-2" />
+                <span className="text-sm font-medium dark:text-gray-300">1000+ Expert Doctors</span>
+              </div>
+              <div className="flex items-center">
+                <CalendarCheck className="h-5 w-5 text-vitality-500 mr-2" />
+                <span className="text-sm font-medium dark:text-gray-300">Same Day Booking</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <div className="flex -space-x-0">
+                <div className="w-10 h-10 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold">
+                  4.8
+                </div>
+                <div className="flex items-center bg-white py-2.5 px-5 rounded-full shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                  <div className="flex items-center gap-1 mr-3">
+                    {[1, 2, 3, 4].map((star) => (
+                      <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    ))}
+                    <StarHalf className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                  </div>
+                  <span className="text-sm text-gray-600 dark:text-gray-300">(12,000+ reviews)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="relative lg:pl-8">
+            <div className="rounded-lg overflow-hidden shadow-xl relative z-10">
+              <img 
+                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" 
+                alt="Physiotherapist treating patient" 
+                className="w-full h-auto object-cover rounded-lg"
+              />
+            </div>
+            
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-vitality-300 rounded-full opacity-30 z-0"></div>
+            <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-brand-orange rounded-full opacity-10 z-0"></div>
+            
+            <div className="absolute -bottom-5 right-5 md:right-10 bg-white rounded-lg shadow-lg p-4 z-20 border border-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+              <div className="flex items-center space-x-4">
+                <div className="bg-vitality-50 rounded-full p-3 dark:bg-gray-700">
+                  <UserCheck className="h-6 w-6 text-vitality-600 dark:text-vitality-300" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Since 2010</p>
+                  <p className="text-lg font-bold text-vitality-700 dark:text-vitality-300">50,000+ Patients</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Successfully Treated Across India</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -84,3 +136,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
