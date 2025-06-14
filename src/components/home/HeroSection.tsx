@@ -1,15 +1,27 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
+import { CalendarCheck, Star, Shield, UserCheck, Search } from "lucide-react";
 import { Star as LucideStar, StarHalf } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
+// Replace with your preferred physiotherapy image
+const PHYSIO_IMAGE = "/lovable-uploads/24065092-317b-43fa-b198-38a431488a28.png";
+
 const HeroSection = () => {
   const { t } = useLanguage();
-  
+
   return (
-    <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <section className="relative overflow-hidden">
+      {/* Physiotherapy background image */}
+      <img
+        src={PHYSIO_IMAGE}
+        alt="Physiotherapy session"
+        className="absolute inset-0 w-full h-full object-cover opacity-40 z-0"
+        draggable={false}
+      />
+      {/* Overlay for text readability */}
+      <div className="absolute inset-0 bg-white/70 dark:bg-black/60 z-0" />
       <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl lg:pr-8">
@@ -75,17 +87,12 @@ const HeroSection = () => {
           </div>
           
           <div className="relative lg:pl-8">
+            {/* Removed background/foreground image */}
             <div className="rounded-lg overflow-hidden shadow-xl relative z-10">
-              <img 
-                src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" 
-                alt="Physiotherapist treating patient" 
-                className="w-full h-auto object-cover rounded-lg"
-              />
+              {/* Optionally, you can show a very small accent shape here if you wish */}
             </div>
-            
             <div className="absolute -top-6 -right-6 w-32 h-32 bg-vitality-300 rounded-full opacity-30 z-0"></div>
             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-brand-orange rounded-full opacity-10 z-0"></div>
-            
             <div className="absolute -bottom-5 right-5 md:right-10 bg-white rounded-lg shadow-lg p-4 z-20 border border-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
               <div className="flex items-center space-x-4">
                 <div className="bg-vitality-50 rounded-full p-3 dark:bg-gray-700">
