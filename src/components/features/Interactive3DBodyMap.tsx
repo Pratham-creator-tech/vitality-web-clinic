@@ -1,7 +1,8 @@
+
 import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import gsap from 'gsap';
@@ -57,7 +58,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.outputEncoding = THREE.sRGBEncoding;
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
