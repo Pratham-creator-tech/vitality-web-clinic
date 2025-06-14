@@ -1,22 +1,38 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CalendarCheck, ArrowRight, Shield, Star, UserCheck, Search } from "lucide-react";
-import { Star as LucideStar, StarHalf } from "lucide-react";
+import { CalendarCheck, Shield, Star, UserCheck, Search, Star as LucideStar, StarHalf } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import React from "react";
 
 const HeroSection = () => {
   const { t } = useLanguage();
-  
+
+  // Handle parallax
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (!videoRef.current) return;
+      // Parallax effect: move video slower than scroll
+      const scrolled = window.scrollY;
+      videoRef.current.style.transform = `scale(1.06) translateY(${scrolled * 0.08}px)`;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
-          className="w-full h-full object-cover opacity-60 animate-scale-up"
+          className="w-full h-full object-cover opacity-60 animate-scale-up transition-transform duration-500"
           poster="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
           style={{ willChange: "transform" }}
         >
@@ -35,57 +51,56 @@ const HeroSection = () => {
             className="w-full h-full object-cover"
           />
         </video>
-        {/* Dynamic overlay for better video visibility */}
         <div className="absolute inset-0 bg-gradient-to-r from-brand-softblue/80 via-white/60 to-vitality-50/80 dark:bg-gradient-to-r dark:from-gray-900/80 dark:via-gray-800/60 dark:to-gray-900/80 animate-overlay-pulse pointer-events-none"></div>
       </div>
 
       <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl lg:pr-8">
-            <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800">
-              <Star className="h-5 w-5 text-yellow-500 mr-2" />
+            <div className="flex items-center mb-4 bg-vitality-50 rounded-full py-1 px-4 w-fit dark:bg-gray-800 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+              <Star className="h-5 w-5 text-yellow-500 mr-2 animate-gentle-bounce" />
               <span className="text-sm font-medium text-vitality-700 dark:text-vitality-300">Trusted by 50,000+ patients across India</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display text-vitality-700 leading-tight dark:text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 font-display text-vitality-700 leading-tight dark:text-white animate-fade-in-up" style={{ animationDelay: "0.18s" }}>
               Expert Physiotherapy Care Across India
             </h1>
             
-            <p className="text-lg md:text-xl text-gray-700 mb-8 dark:text-gray-300">
+            <p className="text-lg md:text-xl text-gray-700 mb-8 dark:text-gray-300 animate-fade-in-up" style={{ animationDelay: "0.28s" }}>
               Connect with certified physiotherapists in your city. From Mumbai to Chennai, Delhi to Kolkata - quality care is just a click away.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white">
+            <div className="flex flex-col sm:flex-row gap-4 mb-10 animate-fade-in-up" style={{ animationDelay: "0.34s" }}>
+              <Button asChild size="lg" className="bg-vitality-600 hover:bg-vitality-700 text-white transition-transform underline-hover">
                 <Link to="/recommendations" className="flex items-center">
-                  <Search className="mr-2 h-5 w-5" />
+                  <Search className="mr-2 h-5 w-5 animate-gentle-bounce" />
                   Find Your Doctor
                 </Link>
               </Button>
-              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white">
+              <Button asChild size="lg" className="bg-green-600 hover:bg-green-700 text-white transition-transform underline-hover">
                 <Link to="/booking" className="flex items-center">
-                  <CalendarCheck className="mr-2 h-5 w-5" />
+                  <CalendarCheck className="mr-2 h-5 w-5 animate-gentle-bounce" />
                   Book Appointment
                 </Link>
               </Button>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-6 mb-6">
-              <div className="flex items-center">
-                <Shield className="h-5 w-5 text-vitality-500 mr-2" />
+              <div className="flex items-center animate-fade-in-up" style={{ animationDelay: "0.42s" }}>
+                <Shield className="h-5 w-5 text-vitality-500 mr-2 animate-gentle-bounce" />
                 <span className="text-sm font-medium dark:text-gray-300">Government Certified</span>
               </div>
-              <div className="flex items-center">
-                <UserCheck className="h-5 w-5 text-vitality-500 mr-2" />
+              <div className="flex items-center animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
+                <UserCheck className="h-5 w-5 text-vitality-500 mr-2 animate-gentle-bounce" />
                 <span className="text-sm font-medium dark:text-gray-300">1000+ Expert Doctors</span>
               </div>
-              <div className="flex items-center">
-                <CalendarCheck className="h-5 w-5 text-vitality-500 mr-2" />
+              <div className="flex items-center animate-fade-in-up" style={{ animationDelay: "0.58s" }}>
+                <CalendarCheck className="h-5 w-5 text-vitality-500 mr-2 animate-gentle-bounce" />
                 <span className="text-sm font-medium dark:text-gray-300">Same Day Booking</span>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 animate-fade-in-up" style={{ animationDelay: "0.66s" }}>
               <div className="flex -space-x-0">
                 <div className="w-10 h-10 rounded-full bg-vitality-500 flex items-center justify-center text-white text-xs font-bold">
                   4.8
@@ -93,9 +108,9 @@ const HeroSection = () => {
                 <div className="flex items-center bg-white py-2.5 px-5 rounded-full shadow-md border border-gray-100 dark:bg-gray-800 dark:border-gray-700">
                   <div className="flex items-center gap-1 mr-3">
                     {[1, 2, 3, 4].map((star) => (
-                      <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                      <LucideStar key={star} className="w-5 h-5 text-yellow-400 fill-yellow-400 animate-gentle-bounce" />
                     ))}
-                    <StarHalf className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                    <StarHalf className="w-5 h-5 text-yellow-400 fill-yellow-400 animate-gentle-bounce" />
                   </div>
                   <span className="text-sm text-gray-600 dark:text-gray-300">(12,000+ reviews)</span>
                 </div>
@@ -103,22 +118,20 @@ const HeroSection = () => {
             </div>
           </div>
           
-          <div className="relative lg:pl-8">
+          <div className="relative lg:pl-8 animate-slide-fade-in-right" style={{ animationDelay: "0.6s" }}>
             <div className="rounded-lg overflow-hidden shadow-xl relative z-10">
               <img 
                 src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80" 
                 alt="Physiotherapist treating patient" 
-                className="w-full h-auto object-cover rounded-lg"
+                className="w-full h-auto object-cover rounded-lg hover-scale"
               />
             </div>
-            
             <div className="absolute -top-6 -right-6 w-32 h-32 bg-vitality-300 rounded-full opacity-30 z-0"></div>
             <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-brand-orange rounded-full opacity-10 z-0"></div>
-            
-            <div className="absolute -bottom-5 right-5 md:right-10 bg-white rounded-lg shadow-lg p-4 z-20 border border-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+            <div className="absolute -bottom-5 right-5 md:right-10 bg-white rounded-lg shadow-lg p-4 z-20 border border-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-white animate-fade-in-up" style={{ animationDelay: "0.8s" }}>
               <div className="flex items-center space-x-4">
                 <div className="bg-vitality-50 rounded-full p-3 dark:bg-gray-700">
-                  <UserCheck className="h-6 w-6 text-vitality-600 dark:text-vitality-300" />
+                  <UserCheck className="h-6 w-6 text-vitality-600 dark:text-vitality-300 animate-gentle-bounce" />
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Since 2010</p>
