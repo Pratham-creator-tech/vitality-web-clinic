@@ -10,17 +10,6 @@ const HeroSection = () => {
   
   return (
     <section className="relative bg-gradient-to-r from-brand-softblue via-white to-vitality-50 overflow-hidden dark:bg-gradient-to-r dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-          alt="Physiotherapy treatment background"
-          className="w-full h-full object-cover opacity-30"
-        />
-        {/* Overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/70 to-vitality-50/80 dark:bg-gradient-to-r dark:from-gray-900/80 dark:via-gray-800/70 dark:to-gray-900/80"></div>
-      </div>
-
       <div className="container mx-auto px-4 py-20 md:py-28 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="max-w-xl lg:pr-8">
