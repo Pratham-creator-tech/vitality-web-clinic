@@ -1,6 +1,6 @@
 
 import PageLayout from "@/components/layout/PageLayout";
-import HeroSection from "@/components/home/HeroSection";
+import Hero3D from "@/components/home/Hero3D";
 import ServicesSection from "@/components/home/ServicesSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import AboutPreview from "@/components/home/AboutPreview";
@@ -12,7 +12,7 @@ import PanIndiaSection from "@/components/home/PanIndiaSection";
 const Index = () => {
   return (
     <PageLayout>
-      <HeroSection />
+      <Hero3D />
       <TrustedByCarousel />
       <PanIndiaSection />
       <ServicesSection />
