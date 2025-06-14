@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,6 +13,32 @@
 
 .animate-marquee {
   animation: marquee 30s linear infinite;
+}
+
+/* NEW: Subtle zoom-in ("scale-up") for video */
+@keyframes scale-up {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.07);
+  }
+}
+.animate-scale-up {
+  animation: scale-up 16s ease-in-out infinite alternate;
+}
+
+/* Optionally, animate overlay opacity for gentle pulse */
+@keyframes overlay-pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+.animate-overlay-pulse {
+  animation: overlay-pulse 10s ease-in-out infinite;
 }
 
 @layer base {
