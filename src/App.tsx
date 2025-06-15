@@ -17,7 +17,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AIAssistant from "./pages/AIAssistant";
 import VideoLibrary from "./pages/VideoLibrary";
 import VirtualTour from "./pages/VirtualTour";
-import InteractiveBodyMap from "./pages/InteractiveBodyMap";
+import InteractiveBodyMap from "./pages/InteractiveBodyMap"; // Make sure this matches exactly (case-sensitive)
 import Meeting from "./pages/Meeting";
 import DoctorRegistration from "./pages/DoctorRegistration";
 import DoctorOnboarding from "./pages/DoctorOnboarding";
