@@ -31,6 +31,7 @@ import PainTracker from "./pages/PainTracker";
 import Recommendations from "./pages/Recommendations";
 import DoctorsPage from "./pages/DoctorsPage";
 import DoctorProfile from "./pages/DoctorProfile";
+import DoctorBenefits from "./pages/DoctorBenefits";
 
 // Service pages
 import SportsRehabilitation from "./pages/services/SportsRehabilitation";
@@ -91,6 +92,7 @@ function App() {
                 <Route path="/patients" element={<PatientsList />} />
                 <Route path="/patient/:id" element={<PatientDetail />} />
                 <Route path="/doctor-usp" element={<DoctorUSP />} />
+                <Route path="/doctor-benefits" element={<DoctorBenefits />} />
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/account-settings" element={<AccountSettings />} />
                 <Route path="/billing" element={<Billing />} />
