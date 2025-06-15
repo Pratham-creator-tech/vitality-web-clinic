@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -34,6 +33,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
   const hoveredPartRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'front' | 'back'>('front');
+  const [showFallback, setShowFallback] = useState(false);
 
   // Setup 3D scene
   useEffect(() => {
@@ -111,7 +111,11 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
     animate();
 
     // Load 3D model
-    loadHumanModel();
+    try {
+      loadHumanModel();
+    } catch (e) {
+      setShowFallback(true);
+    }
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -474,6 +478,19 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
       }
     }
   };
+
+  if (showFallback) {
+    // Render the SVG map alternative or a descriptive fallback
+    return (
+      <div className="flex items-center justify-center w-full h-full bg-gray-50 rounded-lg border">
+        <div className="text-center p-8">
+          <h2 className="text-xl font-bold mb-4 text-vitality-700">3D Body Map Not Supported</h2>
+          <p className="text-gray-600 mb-4">Your device or browser might not support 3D visualization. Please try refreshing, use a different browser, or continue with the 2D Interactive Body Map below.</p>
+          {/* Optionally: Render SVG fallback here */}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full h-[600px]">
