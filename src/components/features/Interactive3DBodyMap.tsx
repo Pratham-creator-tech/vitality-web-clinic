@@ -1,3 +1,4 @@
+
 import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -32,8 +33,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
   const hoveredPartRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'front' | 'back'>('front'); // FIXED TYPING HERE
-  const [showFallback, setShowFallback] = useState(false);
+  const [viewMode, setViewMode] = useState<'front' | 'back'>('front');
 
   // Setup 3D scene
   useEffect(() => {
@@ -111,11 +111,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
     animate();
 
     // Load 3D model
-    try {
-      loadHumanModel();
-    } catch (e) {
-      setShowFallback(true);
-    }
+    loadHumanModel();
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -478,32 +474,6 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
       }
     }
   };
-
-  const webglAvailable = () => {
-    try {
-      const canvas = document.createElement('canvas');
-      return !!(
-        window.WebGLRenderingContext &&
-        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-      );
-    } catch {
-      return false;
-    }
-  };
-
-  if (typeof window !== "undefined" && !webglAvailable()) {
-    return (
-      <div className="flex items-center justify-center w-full h-full bg-gray-50 rounded-lg border">
-        <div className="text-center p-8">
-          <h2 className="text-xl font-bold mb-4 text-vitality-700">3D Body Map Unavailable</h2>
-          <p className="text-gray-600 mb-4">
-            Sorry, your browser or device does not support interactive 3D graphics.
-          </p>
-          <p className="text-gray-500">Please use a modern browser, or try our <a href="/contact" className="text-vitality-500 underline">contact page</a> for more info.</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative w-full h-[600px]">
