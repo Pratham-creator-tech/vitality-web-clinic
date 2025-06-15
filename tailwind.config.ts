@@ -83,7 +83,7 @@ export default {
 				}
 			},
 			fontFamily: {
-				sans: ['Poppins', 'sans-serif'],
+				sans: ['Poppins', 'sans-serif'], // Use only Poppins for sans
 				display: ['Poppins', 'sans-serif'],
 			},
 			borderRadius: {

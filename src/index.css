@@ -191,7 +191,7 @@
 
 @layer base {
   html, body {
-    font-family: 'Poppins', 'Inter', sans-serif;
+    font-family: 'Poppins', 'sans-serif' !important;
   }
   * {
     @apply border-border;
@@ -236,3 +236,4 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
