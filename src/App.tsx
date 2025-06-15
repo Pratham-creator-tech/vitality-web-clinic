@@ -86,7 +86,7 @@ function App() {
                 <Route path="/ai-assistant" element={<AIAssistant />} />
                 <Route path="/video-library" element={<VideoLibrary />} />
                 <Route path="/virtual-tour" element={<VirtualTour />} />
-                <Route path="/body-map" element={<InteractiveBodyMap />} />
+                <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
                 <Route path="/meeting/:id" element={<Meeting />} />
                 <Route path="/doctor-registration" element={<DoctorRegistration />} />
                 <Route path="/doctor-onboarding" element={<DoctorOnboarding />} />
