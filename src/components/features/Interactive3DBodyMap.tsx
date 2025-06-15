@@ -32,7 +32,7 @@ const Interactive3DBodyMap = ({ bodyPartsData, onPartSelect }: Interactive3DBody
   const mouseRef = useRef<THREE.Vector2>(new THREE.Vector2());
   const hoveredPartRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewMode, setViewMode<'front' | 'back'>('front');
+  const [viewMode, setViewMode] = useState<'front' | 'back'>('front'); // FIXED TYPING HERE
   const [showFallback, setShowFallback] = useState(false);
 
   // Setup 3D scene
