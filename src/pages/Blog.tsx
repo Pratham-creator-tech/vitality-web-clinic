@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PageLayout from "@/components/layout/PageLayout";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, Clock, Calendar, ArrowRight } from "lucide-react";
+import { blogPosts } from "@/data/blogPosts";
 
 const categories = [
   "All",
@@ -16,97 +16,6 @@ const categories = [
   "Rehabilitation",
   "Wellness",
   "Sports Performance"
-];
-
-const blogPosts = [
-  {
-    id: 1,
-    title: "5 Exercises to Relieve Lower Back Pain",
-    excerpt: "Discover effective stretches and strengthening exercises that can help alleviate lower back pain and improve mobility.",
-    image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1720&q=80",
-    date: "April 12, 2023",
-    readTime: "5 min read",
-    category: "Pain Management",
-    slug: "/blog/lower-back-pain-exercises",
-    featured: true
-  },
-  {
-    id: 2,
-    title: "The Importance of Proper Posture for Office Workers",
-    excerpt: "Learn how maintaining good posture during long hours at a desk can prevent chronic pain and improve your overall wellbeing.",
-    image: "https://images.unsplash.com/photo-1541591425126-4e6dcb9351d6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-    date: "March 28, 2023",
-    readTime: "7 min read",
-    category: "Injury Prevention",
-    slug: "/blog/office-worker-posture",
-    featured: false
-  },
-  {
-    id: 3,
-    title: "Recovering from a Sports Injury: What You Need to Know",
-    excerpt: "A comprehensive guide to the recovery process after a sports injury, including what to expect and how to enhance healing.",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-    date: "March 15, 2023",
-    readTime: "8 min read",
-    category: "Rehabilitation",
-    slug: "/blog/sports-injury-recovery",
-    featured: false
-  },
-  {
-    id: 4,
-    title: "How to Choose the Right Running Shoes to Prevent Injuries",
-    excerpt: "Find out what factors to consider when selecting running shoes that will support your unique gait and help prevent common injuries.",
-    image: "https://images.unsplash.com/photo-1562183241-b937e95585b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80",
-    date: "February 28, 2023",
-    readTime: "6 min read",
-    category: "Injury Prevention",
-    slug: "/blog/choosing-running-shoes",
-    featured: false
-  },
-  {
-    id: 5,
-    title: "The Role of Physiotherapy in Managing Chronic Conditions",
-    excerpt: "Explore how physiotherapy can help manage and improve quality of life for those living with chronic health conditions.",
-    image: "https://images.unsplash.com/photo-1487088678257-3a541e6e3922?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1774&q=80",
-    date: "February 15, 2023",
-    readTime: "9 min read",
-    category: "Wellness",
-    slug: "/blog/physio-for-chronic-conditions",
-    featured: false
-  },
-  {
-    id: 6,
-    title: "Core Strengthening Exercises for Better Stability",
-    excerpt: "Discover effective core exercises that improve stability, posture, and help prevent back injuries.",
-    image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-    date: "January 30, 2023",
-    readTime: "7 min read",
-    category: "Exercise Tips",
-    slug: "/blog/core-strengthening",
-    featured: false
-  },
-  {
-    id: 7,
-    title: "Nutrition Tips for Optimal Recovery After Injury",
-    excerpt: "Learn about the key nutrients and dietary strategies that can support healing and recovery after an injury or surgery.",
-    image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1753&q=80",
-    date: "January 15, 2023",
-    readTime: "8 min read",
-    category: "Wellness",
-    slug: "/blog/nutrition-for-recovery",
-    featured: false
-  },
-  {
-    id: 8,
-    title: "Improving Athletic Performance with Sport-Specific Training",
-    excerpt: "Discover how targeted physiotherapy and training can enhance performance in your specific sport or athletic activity.",
-    image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-    date: "January 5, 2023",
-    readTime: "10 min read",
-    category: "Sports Performance",
-    slug: "/blog/sport-specific-training",
-    featured: false
-  }
 ];
 
 const Blog = () => {
