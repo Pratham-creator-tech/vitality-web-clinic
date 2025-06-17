@@ -11,7 +11,7 @@ const HeroSection = () => {
   return (
     <section className="relative bg-gradient-to-br from-white via-vitality-50 to-blue-50 overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23f0f9ff" fill-opacity="0.4"%3E%3Cpath d="m0 40 40-40h-40z"/%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjZjBmOWZmIiBmaWxsLW9wYWNpdHk9IjAuNCI+PHBhdGggZD0ibTAgNDAgNDAtNDBoLTQweiIvPjwvZz48L3N2Zz4=')] opacity-20"></div>
       
       <div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
