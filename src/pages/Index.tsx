@@ -8,20 +8,16 @@ import BlogPreview from "@/components/home/BlogPreview";
 import { CTASection } from "@/components/ui/cta-section";
 import TrustedByCarousel from "@/components/home/TrustedByCarousel";
 import PanIndiaSection from "@/components/home/PanIndiaSection";
-import StatsSection from "@/components/home/StatsSection";
-import WhyChooseUsSection from "@/components/home/WhyChooseUsSection";
 
 const Index = () => {
   return (
     <PageLayout>
       <HeroSection />
-      <StatsSection />
-      <WhyChooseUsSection />
+      <TrustedByCarousel />
+      <PanIndiaSection />
       <ServicesSection />
       <AboutPreview />
       <TestimonialsSection />
-      <TrustedByCarousel />
-      <PanIndiaSection />
       <BlogPreview />
       <CTASection />
     </PageLayout>
