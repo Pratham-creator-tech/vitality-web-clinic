@@ -264,9 +264,9 @@ const VirtualTour = () => {
     switch (category) {
       case "equipment": return "border-blue-400 bg-blue-500/20 hover:bg-blue-500/30";
       case "area": return "border-green-400 bg-green-500/20 hover:bg-green-500/30";
-      case "service": return "border-purple-400 bg-purple-500/20 hover:bg-purple-500/30";
-      case "info": return "border-orange-400 bg-orange-500/20 hover:bg-orange-500/30";
-      default: return "border-vitality-400 bg-vitality-500/20 hover:bg-vitality-500/30";
+      case "service": return "border-blue-400 bg-blue-500/20 hover:bg-blue-500/30";
+      case "info": return "border-blue-400 bg-blue-500/20 hover:bg-blue-500/30";
+      default: return "border-blue-400 bg-blue-500/20 hover:bg-blue-500/30";
     }
   };
 
@@ -289,7 +289,7 @@ const VirtualTour = () => {
               <Users className="h-4 w-4 mr-2" />
               15+ Equipment Points
             </Badge>
-            <Badge variant="secondary" className="bg-purple-100 text-purple-700">
+            <Badge variant="secondary" className="bg-blue-100 text-blue-700">
               <Award className="h-4 w-4 mr-2" />
               Modern Facilities
             </Badge>
@@ -471,10 +471,10 @@ const VirtualTour = () => {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-2xl">{currentScene.title}</CardTitle>
+                    <CardTitle className="text-2xl text-vitality-700">{currentScene.title}</CardTitle>
                     <CardDescription className="text-base mt-2">{currentScene.description}</CardDescription>
                   </div>
-                  <Badge variant="outline" className="bg-vitality-50 text-vitality-700 border-vitality-200">
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
                     {currentScene.hotspots.length} Points
                   </Badge>
                 </div>
@@ -482,7 +482,7 @@ const VirtualTour = () => {
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-2">Key Features:</h4>
+                    <h4 className="font-medium text-vitality-700 mb-2">Key Features:</h4>
                     <div className="grid grid-cols-2 gap-2">
                       {currentScene.features.map((feature, index) => (
                         <div key={index} className="flex items-center text-sm text-gray-600">
@@ -495,13 +495,13 @@ const VirtualTour = () => {
                   
                   {currentScene.stats && (
                     <div>
-                      <h4 className="font-medium text-gray-900 mb-2">Statistics:</h4>
+                      <h4 className="font-medium text-vitality-700 mb-2">Statistics:</h4>
                       <div className="grid grid-cols-2 gap-4">
                         {currentScene.stats.map((stat, index) => (
-                          <div key={index} className="bg-vitality-50 rounded-lg p-3 text-center">
+                          <div key={index} className="bg-blue-50 rounded-lg p-3 text-center">
                             <div className="flex items-center justify-center mb-1">
                               {stat.icon}
-                              <span className="text-2xl font-bold text-vitality-700 ml-2">{stat.value}</span>
+                              <span className="text-2xl font-bold text-blue-600 ml-2">{stat.value}</span>
                             </div>
                             <p className="text-sm text-gray-600">{stat.label}</p>
                           </div>
@@ -516,7 +516,7 @@ const VirtualTour = () => {
             {/* Selected Hotspot Details */}
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl">
+                <CardTitle className="text-xl text-vitality-700">
                   {selectedHotspot ? "Point of Interest" : "Explore Interactive Points"}
                 </CardTitle>
               </CardHeader>
@@ -543,15 +543,15 @@ const VirtualTour = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => setSelectedHotspot(null)}
-                      className="w-full"
+                      className="w-full border-blue-200 text-blue-600 hover:bg-blue-50"
                     >
                       Close Details
                     </Button>
                   </motion.div>
                 ) : (
                   <div className="text-center py-8">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Info className="h-8 w-8 text-gray-400" />
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Info className="h-8 w-8 text-blue-600" />
                     </div>
                     <p className="text-gray-600 mb-4">
                       Click on any interactive point in the tour to learn more about our facilities and equipment.
@@ -565,12 +565,12 @@ const VirtualTour = () => {
                         <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
                         Areas
                       </div>
-                      <div className="flex items-center justify-center p-2 bg-purple-50 rounded-lg">
-                        <div className="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                      <div className="flex items-center justify-center p-2 bg-blue-50 rounded-lg">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
                         Services
                       </div>
-                      <div className="flex items-center justify-center p-2 bg-orange-50 rounded-lg">
-                        <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                      <div className="flex items-center justify-center p-2 bg-blue-50 rounded-lg">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
                         Information
                       </div>
                     </div>
@@ -591,7 +591,7 @@ const VirtualTour = () => {
                 <Card
                   className={`cursor-pointer transition-all duration-300 hover:shadow-xl ${
                     currentScene.id === scene.id
-                      ? "ring-2 ring-vitality-400 bg-vitality-50"
+                      ? "ring-2 ring-blue-400 bg-blue-50"
                       : "hover:shadow-lg"
                   }`}
                   onClick={() => navigateToScene(scene.id)}
@@ -605,9 +605,9 @@ const VirtualTour = () => {
                   </div>
                   <CardHeader className="p-4">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{scene.title}</CardTitle>
+                      <CardTitle className="text-lg text-vitality-700">{scene.title}</CardTitle>
                       {currentScene.id === scene.id && (
-                        <Badge variant="default" className="bg-vitality-500">
+                        <Badge variant="default" className="bg-blue-600">
                           Current
                         </Badge>
                       )}
@@ -620,20 +620,20 @@ const VirtualTour = () => {
           </div>
 
           {/* Call to Action */}
-          <Card className="bg-gradient-to-r from-vitality-500 to-blue-600 text-white shadow-xl">
+          <Card className="bg-gradient-to-r from-blue-600 to-vitality-600 text-white shadow-xl">
             <CardContent className="p-8 text-center">
               <h3 className="text-2xl font-bold mb-4">Ready to Experience Our Clinic in Person?</h3>
               <p className="text-lg mb-6 opacity-90">
                 Book your appointment today and see how our modern facilities can help you achieve optimal health.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild size="lg" className="bg-white text-vitality-600 hover:bg-gray-100">
+                <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
                   <Link to="/booking" className="flex items-center">
                     <Calendar className="mr-2 h-5 w-5" />
                     Book Appointment
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-vitality-600">
+                <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
                   <Link to="/contact" className="flex items-center">
                     <MapPin className="mr-2 h-5 w-5" />
                     Visit Our Clinic
