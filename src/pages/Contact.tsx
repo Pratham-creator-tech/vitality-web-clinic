@@ -58,13 +58,25 @@ const Contact = () => {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="bg-vitality-50 py-16 md:py-24">
-        <div className="container mx-auto px-4">
+      <section className="relative bg-gradient-to-br from-vitality-50 via-white to-blue-50 py-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-100/20 to-green-100/20"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1)_0%,transparent_50%)]"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 font-display text-vitality-700">
-              Contact Us
+            <div className="flex items-center justify-center mb-6 bg-white rounded-full py-2 px-6 w-fit mx-auto shadow-sm border border-blue-100">
+              <Mail className="h-5 w-5 text-blue-600 mr-3" />
+              <span className="text-sm font-medium text-gray-700">We're Here to Help</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 font-display text-vitality-700 leading-tight">
+              Contact 
+              <span className="text-blue-600 block">Our Team</span>
             </h1>
-            <p className="text-lg text-gray-700">
+            
+            <p className="text-lg text-gray-600 leading-relaxed">
               Have questions or need assistance? We're here to help. Reach out to our friendly team through any of the methods below.
             </p>
           </div>
@@ -72,7 +84,7 @@ const Contact = () => {
       </section>
 
       {/* Contact Details & Form Section */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Contact Information */}
@@ -84,12 +96,12 @@ const Contact = () => {
               
               <div className="mt-8 space-y-8">
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-full mr-4">
+                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
                     <MapPin className="h-6 w-6 text-vitality-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">Visit Us</h3>
-                    <address className="not-italic text-gray-600">
+                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Visit Us</h3>
+                    <address className="not-italic text-gray-600 leading-relaxed">
                       123 Healing Street<br />
                       Wellness City, WC 10001<br />
                       United States
@@ -98,38 +110,38 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-full mr-4">
+                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
                     <Phone className="h-6 w-6 text-vitality-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">Call Us</h3>
-                    <p className="text-gray-600">
-                      Main: <a href="tel:+1234567890" className="hover:text-vitality-500">(123) 456-7890</a><br />
-                      Urgent Care: <a href="tel:+1234567899" className="hover:text-vitality-500">(123) 456-7899</a>
+                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Call Us</h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      Main: <a href="tel:+1234567890" className="hover:text-blue-600 transition-colors">(123) 456-7890</a><br />
+                      Urgent Care: <a href="tel:+1234567899" className="hover:text-blue-600 transition-colors">(123) 456-7899</a>
                     </p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-full mr-4">
+                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
                     <Mail className="h-6 w-6 text-vitality-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">Email Us</h3>
-                    <p className="text-gray-600">
-                      General Inquiries: <a href="mailto:info@vitalityphysio.com" className="hover:text-vitality-500">info@vitalityphysio.com</a><br />
-                      Appointments: <a href="mailto:appointments@vitalityphysio.com" className="hover:text-vitality-500">appointments@vitalityphysio.com</a>
+                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Email Us</h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      General Inquiries: <a href="mailto:info@vitalityphysio.com" className="hover:text-blue-600 transition-colors">info@vitalityphysio.com</a><br />
+                      Appointments: <a href="mailto:appointments@vitalityphysio.com" className="hover:text-blue-600 transition-colors">appointments@vitalityphysio.com</a>
                     </p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-full mr-4">
+                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
                     <Clock className="h-6 w-6 text-vitality-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">Hours of Operation</h3>
-                    <p className="text-gray-600">
+                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Hours of Operation</h3>
+                    <p className="text-gray-600 leading-relaxed">
                       Monday - Friday: 8:00 AM - 6:00 PM<br />
                       Saturday: 9:00 AM - 2:00 PM<br />
                       Sunday: Closed
@@ -139,7 +151,7 @@ const Contact = () => {
               </div>
               
               {/* Map */}
-              <div className="mt-10 rounded-lg overflow-hidden shadow-md">
+              <div className="mt-10 rounded-xl overflow-hidden shadow-lg border border-gray-100">
                 <iframe 
                   title="Clinic Location"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.3059353029!2d-74.25986548248684!3d40.69714941932609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sca!4v1619528911485!5m2!1sen!2sca" 
@@ -153,17 +165,17 @@ const Contact = () => {
             </div>
             
             {/* Contact Form */}
-            <div className="bg-gray-50 p-8 rounded-lg shadow-sm">
+            <div className="bg-vitality-50 p-8 rounded-xl shadow-lg border border-gray-100">
               {formStatus === "success" ? (
                 <div className="text-center py-8">
                   <div className="mb-4 mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800">Message Sent Successfully!</h2>
-                  <p className="text-gray-600 mb-6">
+                  <h2 className="text-2xl font-bold mb-4 text-vitality-700">Message Sent Successfully!</h2>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
                     Thank you for contacting Vitality Physiotherapy. We've received your message and will get back to you shortly.
                   </p>
-                  <Button onClick={() => setFormStatus("idle")}>
+                  <Button onClick={() => setFormStatus("idle")} className="bg-blue-600 hover:bg-blue-700">
                     Send Another Message
                   </Button>
                 </div>
@@ -173,19 +185,20 @@ const Contact = () => {
                   
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-3">
-                      <Label htmlFor="name">Full Name</Label>
+                      <Label htmlFor="name" className="text-vitality-700 font-medium">Full Name</Label>
                       <Input 
                         id="name"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
+                        className="border-gray-200 focus:border-blue-500"
                         required
                       />
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="email">Email Address</Label>
+                      <Label htmlFor="email" className="text-vitality-700 font-medium">Email Address</Label>
                       <Input 
                         id="email"
                         name="email"
@@ -193,28 +206,30 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter your email"
+                        className="border-gray-200 focus:border-blue-500"
                         required
                       />
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="phone">Phone Number</Label>
+                      <Label htmlFor="phone" className="text-vitality-700 font-medium">Phone Number</Label>
                       <Input 
                         id="phone"
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="Enter your phone number"
+                        className="border-gray-200 focus:border-blue-500"
                       />
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="inquiryType">Inquiry Type</Label>
+                      <Label htmlFor="inquiryType" className="text-vitality-700 font-medium">Inquiry Type</Label>
                       <Select 
                         onValueChange={handleSelectChange}
                         value={formData.inquiryType}
                       >
-                        <SelectTrigger id="inquiryType">
+                        <SelectTrigger id="inquiryType" className="border-gray-200">
                           <SelectValue placeholder="Select inquiry type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -228,7 +243,7 @@ const Contact = () => {
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="message">Message</Label>
+                      <Label htmlFor="message" className="text-vitality-700 font-medium">Message</Label>
                       <Textarea 
                         id="message"
                         name="message"
@@ -236,13 +251,14 @@ const Contact = () => {
                         onChange={handleInputChange}
                         placeholder="How can we help you?"
                         rows={5}
+                        className="border-gray-200 focus:border-blue-500"
                         required
                       />
                     </div>
                     
                     <Button 
                       type="submit" 
-                      className="w-full bg-accent hover:bg-accent/90"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3"
                       disabled={formStatus === "submitting"}
                     >
                       {formStatus === "submitting" ? "Sending..." : "Send Message"}
