@@ -20,9 +20,9 @@ export function SectionTitle({
       center && "text-center",
       className
     )}>
-      <h2 className="text-3xl md:text-4xl font-bold font-display relative inline-block mb-2">
+      <h2 className="text-3xl md:text-4xl font-bold font-display relative inline-block mb-2 text-vitality-700">
         {title}
-        <span className="absolute -bottom-2 left-0 w-1/3 h-1 bg-vitality-300 rounded"></span>
+        <span className="absolute -bottom-2 left-0 w-1/3 h-1 bg-blue-500 rounded"></span>
       </h2>
       {subtitle && (
         <p className="text-gray-600 mt-4 max-w-2xl">

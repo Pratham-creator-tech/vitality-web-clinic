@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -100,7 +101,7 @@
   bottom: 5px;
   width: 100%;
   height: 2px;
-  background: #1952dc;
+  background: #2563eb;
   transform: scaleX(0);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   transform-origin: right;
@@ -147,7 +148,7 @@
     --vitality-950: #152458;
     --brand-softblue: #f1f6ff;
     --brand-orange: #ff7a50;
-    --accent: #3169ee;
+    --accent: #2563eb;
   }
 
   .dark {
@@ -183,7 +184,7 @@
     --vitality-950: #eef5ff;
     --brand-softblue: #101827;
     --brand-orange: #ff7a50;
-    --accent: #4b83f7;
+    --accent: #3b82f6;
   }
 }
 
