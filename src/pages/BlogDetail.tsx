@@ -16,7 +16,7 @@ export default function BlogDetail() {
     return (
       <PageLayout>
         <div className="container mx-auto py-20 px-4 text-center">
-          <h2 className="text-3xl font-bold mb-2 text-vitality-700">Article Not Found</h2>
+          <h2 className="text-3xl font-bold mb-2 text-blue-900 font-display">Article Not Found</h2>
           <p className="text-gray-600 mb-6">Sorry, we couldn't find the article you're looking for.</p>
           <button
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -33,10 +33,10 @@ export default function BlogDetail() {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-vitality-50 via-white to-blue-50 py-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-100/20 to-green-100/20"></div>
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1)_0%,transparent_50%)]"></div>
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-vitality-50 py-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-100/30 to-vitality-100/30"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.15)_0%,transparent_50%)]"></div>
         </div>
         
         <div className="container mx-auto px-4 max-w-4xl relative z-10">
@@ -48,7 +48,7 @@ export default function BlogDetail() {
             Back to all articles
           </Link>
           
-          <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
+          <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-blue-100">
             <img
               src={post.image}
               alt={post.title}
@@ -57,7 +57,7 @@ export default function BlogDetail() {
             
             <div className="p-8">
               <div className="flex items-center gap-4 mb-6">
-                <Badge variant="secondary" className="bg-vitality-100 text-vitality-700 border-vitality-200">
+                <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-blue-200">
                   {post.category}
                 </Badge>
                 <span className="flex items-center text-gray-500 text-sm">
@@ -70,7 +70,7 @@ export default function BlogDetail() {
                 </span>
               </div>
               
-              <h1 className="text-3xl md:text-4xl font-bold font-display mb-6 text-vitality-700 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold font-display mb-6 text-blue-900 leading-tight">
                 {post.title}
               </h1>
               

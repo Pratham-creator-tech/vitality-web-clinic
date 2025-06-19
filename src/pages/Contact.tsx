@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
@@ -58,10 +57,10 @@ const Contact = () => {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-vitality-50 via-white to-blue-50 py-20 overflow-hidden">
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-100/20 to-green-100/20"></div>
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1)_0%,transparent_50%)]"></div>
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-vitality-50 py-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-100/30 to-vitality-100/30"></div>
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.15)_0%,transparent_50%)]"></div>
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -71,12 +70,12 @@ const Contact = () => {
               <span className="text-sm font-medium text-gray-700">We're Here to Help</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 font-display text-vitality-700 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 font-display text-blue-900 leading-tight">
               Contact 
               <span className="text-blue-600 block">Our Team</span>
             </h1>
             
-            <p className="text-lg text-gray-600 leading-relaxed">
+            <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
               Have questions or need assistance? We're here to help. Reach out to our friendly team through any of the methods below.
             </p>
           </div>
@@ -96,11 +95,11 @@ const Contact = () => {
               
               <div className="mt-8 space-y-8">
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
-                    <MapPin className="h-6 w-6 text-vitality-600" />
+                  <div className="bg-blue-100 p-3 rounded-xl mr-4">
+                    <MapPin className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Visit Us</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-1 font-display">Visit Us</h3>
                     <address className="not-italic text-gray-600 leading-relaxed">
                       123 Healing Street<br />
                       Wellness City, WC 10001<br />
@@ -110,11 +109,11 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
-                    <Phone className="h-6 w-6 text-vitality-600" />
+                  <div className="bg-blue-100 p-3 rounded-xl mr-4">
+                    <Phone className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Call Us</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-1 font-display">Call Us</h3>
                     <p className="text-gray-600 leading-relaxed">
                       Main: <a href="tel:+1234567890" className="hover:text-blue-600 transition-colors">(123) 456-7890</a><br />
                       Urgent Care: <a href="tel:+1234567899" className="hover:text-blue-600 transition-colors">(123) 456-7899</a>
@@ -123,24 +122,24 @@ const Contact = () => {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
-                    <Mail className="h-6 w-6 text-vitality-600" />
+                  <div className="bg-blue-100 p-3 rounded-xl mr-4">
+                    <Mail className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Email Us</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-1 font-display">Email Us</h3>
                     <p className="text-gray-600 leading-relaxed">
-                      General Inquiries: <a href="mailto:info@vitalityphysio.com" className="hover:text-blue-600 transition-colors">info@vitalityphysio.com</a><br />
-                      Appointments: <a href="mailto:appointments@vitalityphysio.com" className="hover:text-blue-600 transition-colors">appointments@vitalityphysio.com</a>
+                      General Inquiries: <a href="mailto:info@yashaphysiocare.com" className="hover:text-blue-600 transition-colors">info@yashaphysiocare.com</a><br />
+                      Appointments: <a href="mailto:appointments@yashaphysiocare.com" className="hover:text-blue-600 transition-colors">appointments@yashaphysiocare.com</a>
                     </p>
                   </div>
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="bg-vitality-100 p-3 rounded-xl mr-4">
-                    <Clock className="h-6 w-6 text-vitality-600" />
+                  <div className="bg-blue-100 p-3 rounded-xl mr-4">
+                    <Clock className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-vitality-700 mb-1">Hours of Operation</h3>
+                    <h3 className="text-lg font-bold text-blue-900 mb-1 font-display">Hours of Operation</h3>
                     <p className="text-gray-600 leading-relaxed">
                       Monday - Friday: 8:00 AM - 6:00 PM<br />
                       Saturday: 9:00 AM - 2:00 PM<br />
@@ -165,15 +164,15 @@ const Contact = () => {
             </div>
             
             {/* Contact Form */}
-            <div className="bg-vitality-50 p-8 rounded-xl shadow-lg border border-gray-100">
+            <div className="bg-gradient-to-br from-blue-50 to-vitality-50 p-8 rounded-xl shadow-lg border border-blue-100">
               {formStatus === "success" ? (
                 <div className="text-center py-8">
                   <div className="mb-4 mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
                     <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold mb-4 text-vitality-700">Message Sent Successfully!</h2>
+                  <h2 className="text-2xl font-bold mb-4 text-blue-900 font-display">Message Sent Successfully!</h2>
                   <p className="text-gray-600 mb-6 leading-relaxed">
-                    Thank you for contacting Vitality Physiotherapy. We've received your message and will get back to you shortly.
+                    Thank you for contacting Yasha Physiocare. We've received your message and will get back to you shortly.
                   </p>
                   <Button onClick={() => setFormStatus("idle")} className="bg-blue-600 hover:bg-blue-700">
                     Send Another Message
@@ -181,24 +180,24 @@ const Contact = () => {
                 </div>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold mb-6 text-vitality-700">Send Us a Message</h2>
+                  <h2 className="text-2xl font-bold mb-6 text-blue-900 font-display">Send Us a Message</h2>
                   
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-3">
-                      <Label htmlFor="name" className="text-vitality-700 font-medium">Full Name</Label>
+                      <Label htmlFor="name" className="text-blue-900 font-medium">Full Name</Label>
                       <Input 
                         id="name"
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
-                        className="border-gray-200 focus:border-blue-500"
+                        className="border-blue-200 focus:border-blue-500"
                         required
                       />
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="email" className="text-vitality-700 font-medium">Email Address</Label>
+                      <Label htmlFor="email" className="text-blue-900 font-medium">Email Address</Label>
                       <Input 
                         id="email"
                         name="email"
@@ -206,30 +205,30 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter your email"
-                        className="border-gray-200 focus:border-blue-500"
+                        className="border-blue-200 focus:border-blue-500"
                         required
                       />
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="phone" className="text-vitality-700 font-medium">Phone Number</Label>
+                      <Label htmlFor="phone" className="text-blue-900 font-medium">Phone Number</Label>
                       <Input 
                         id="phone"
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="Enter your phone number"
-                        className="border-gray-200 focus:border-blue-500"
+                        className="border-blue-200 focus:border-blue-500"
                       />
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="inquiryType" className="text-vitality-700 font-medium">Inquiry Type</Label>
+                      <Label htmlFor="inquiryType" className="text-blue-900 font-medium">Inquiry Type</Label>
                       <Select 
                         onValueChange={handleSelectChange}
                         value={formData.inquiryType}
                       >
-                        <SelectTrigger id="inquiryType" className="border-gray-200">
+                        <SelectTrigger id="inquiryType" className="border-blue-200">
                           <SelectValue placeholder="Select inquiry type" />
                         </SelectTrigger>
                         <SelectContent>
@@ -243,7 +242,7 @@ const Contact = () => {
                     </div>
                     
                     <div className="space-y-3">
-                      <Label htmlFor="message" className="text-vitality-700 font-medium">Message</Label>
+                      <Label htmlFor="message" className="text-blue-900 font-medium">Message</Label>
                       <Textarea 
                         id="message"
                         name="message"
@@ -251,7 +250,7 @@ const Contact = () => {
                         onChange={handleInputChange}
                         placeholder="How can we help you?"
                         rows={5}
-                        className="border-gray-200 focus:border-blue-500"
+                        className="border-blue-200 focus:border-blue-500"
                         required
                       />
                     </div>

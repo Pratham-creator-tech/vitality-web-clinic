@@ -15,13 +15,13 @@ export const MobileNavHeader = ({ onClose }: MobileNavHeaderProps) => {
         <div className="w-8 h-8 mr-2 overflow-hidden">
           <img 
             src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
-            alt="YASHA's Physiocare Logo"
+            alt="Yasha Physiocare Logo"
             className="w-full h-full object-contain"
           />
         </div>
-        <SheetTitle className="text-xl font-bold">
-          <span className="text-vitality-600">
-            Physiocare
+        <SheetTitle className="text-xl font-bold font-display">
+          <span className="text-blue-600">
+            Yasha Physiocare
           </span>
         </SheetTitle>
       </div>
