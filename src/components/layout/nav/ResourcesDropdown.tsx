@@ -26,39 +26,39 @@ export const ResourcesDropdown = () => {
           <NavDropdownItem
             href="/ai-assistant"
             title="AI Assistant"
-            description="Get instant answers to your health questions"
-            icon={<Brain className="h-4 w-4" />}
-          />
+          >
+            Get instant answers to your health questions
+          </NavDropdownItem>
           <NavDropdownItem
             href="/video-library"
             title="Exercise Videos"
-            description="Guided exercises and rehabilitation videos"
-            icon={<Video className="h-4 w-4" />}
-          />
+          >
+            Guided exercises and rehabilitation videos
+          </NavDropdownItem>
           <NavDropdownItem
             href="/interactive-body-map"
             title="Body Map"
-            description="Interactive body map for targeted exercises"
-            icon={<Users className="h-4 w-4" />}
-          />
+          >
+            Interactive body map for targeted exercises
+          </NavDropdownItem>
           <NavDropdownItem
             href="/pain-tracker"
             title="Pain Tracker"
-            description="Track your pain levels and progress"
-            icon={<Activity className="h-4 w-4" />}
-          />
+          >
+            Track your pain levels and progress
+          </NavDropdownItem>
           <NavDropdownItem
             href="/recommendations"
             title="Doctor Recommendations"
-            description="Find the right healthcare professional"
-            icon={<Stethoscope className="h-4 w-4" />}
-          />
+          >
+            Find the right healthcare professional
+          </NavDropdownItem>
           <NavDropdownItem
             href="/diet-plan"
             title="Diet Plan"
-            description="Personalized nutrition and medicine guide"
-            icon={<Apple className="h-4 w-4" />}
-          />
+          >
+            Personalized nutrition and medicine guide
+          </NavDropdownItem>
         </div>
       </NavigationMenuContent>
     </NavigationMenuItem>

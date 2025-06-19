@@ -14,54 +14,48 @@ import {
 export const MobileNavResourcesSection = () => {
   const resourceItems = [
     {
-      href: "/ai-assistant",
+      to: "/ai-assistant",
       label: "AI Assistant",
       icon: Brain,
-      description: "Get instant answers to your health questions"
     },
     {
-      href: "/video-library", 
+      to: "/video-library", 
       label: "Exercise Videos",
       icon: Video,
-      description: "Guided exercises and rehabilitation videos"
     },
     {
-      href: "/interactive-body-map",
+      to: "/interactive-body-map",
       label: "Body Map", 
       icon: Users,
-      description: "Interactive body map for targeted exercises"
     },
     {
-      href: "/pain-tracker",
+      to: "/pain-tracker",
       label: "Pain Tracker",
       icon: Activity, 
-      description: "Track your pain levels and progress"
     },
     {
-      href: "/recommendations",
+      to: "/recommendations",
       label: "Doctor Recommendations",
       icon: Stethoscope,
-      description: "Find the right healthcare professional"
     },
     {
-      href: "/diet-plan",
+      to: "/diet-plan",
       label: "Diet Plan",
       icon: Apple,
-      description: "Personalized nutrition and medicine guide"
     }
   ];
 
   return (
-    <MobileNavAccordion title="Resources" defaultOpen={false}>
+    <MobileNavAccordion value="resources" title="Resources">
       <div className="space-y-3">
         {resourceItems.map((item) => (
           <MobileNavItemWithIcon
-            key={item.href}
-            href={item.href}
+            key={item.to}
+            to={item.to}
             icon={item.icon}
-            label={item.label}
-            description={item.description}
-          />
+          >
+            {item.label}
+          </MobileNavItemWithIcon>
         ))}
       </div>
     </MobileNavAccordion>
