@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Home, Info, Calendar, Video, MessageCircle, UserPlus, Stethoscope, Brain, Users } from "lucide-react";
+import { Facebook, Instagram, Twitter, Mail, MapPin, Phone, Home, Info, Calendar, Video, MessageCircle, UserPlus, Stethoscope, Brain, Users, Apple } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-vitality-700">Vitality Physiotherapy</h3>
+            <h3 className="text-lg font-bold mb-4 text-vitality-700">Yasha Physiocare</h3>
             <p className="text-gray-600 mb-4">
               Professional physiotherapy services to help you move better, feel better, and live better.
             </p>
@@ -75,6 +75,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/diet-plan" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
+                  <Apple className="mr-2 h-4 w-4" /> Diet Plan
+                </Link>
+              </li>
+              <li>
                 <Link to="/doctor-registration" className="text-gray-600 hover:text-vitality-400 transition-colors flex items-center">
                   <UserPlus className="mr-2 h-4 w-4" /> Doctor Registration
                 </Link>
@@ -100,8 +105,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <Mail size={20} className="mr-2 text-vitality-400 flex-shrink-0" />
-                <a href="mailto:info@vitalityphysio.com" className="text-gray-600 hover:text-vitality-400 transition-colors">
-                  info@vitalityphysio.com
+                <a href="mailto:info@yashaphysiocare.com" className="text-gray-600 hover:text-vitality-400 transition-colors">
+                  info@yashaphysiocare.com
                 </a>
               </li>
             </ul>
@@ -111,7 +116,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="pt-8 border-t border-gray-200 text-center md:flex md:justify-between md:text-left">
           <p className="text-gray-500 text-sm">
-            © {currentYear} Vitality Physiotherapy. All rights reserved.
+            © {currentYear} Yasha Physiocare. All rights reserved.
           </p>
           <div className="mt-4 md:mt-0 flex flex-wrap justify-center md:justify-end gap-4">
             <Link to="/privacy-policy" className="text-gray-500 text-sm hover:text-vitality-400 transition-colors">
