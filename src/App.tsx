@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -18,7 +17,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import AIAssistant from "./pages/AIAssistant";
 import VideoLibrary from "./pages/VideoLibrary";
 import VirtualTour from "./pages/VirtualTour";
-import InteractiveBodyMap from "./pages/InteractiveBodyMap"; // Make sure this matches exactly (case-sensitive)
+import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import Meeting from "./pages/Meeting";
 import DoctorRegistration from "./pages/DoctorRegistration";
 import DoctorOnboarding from "./pages/DoctorOnboarding";
@@ -34,6 +33,7 @@ import Recommendations from "./pages/Recommendations";
 import DoctorsPage from "./pages/DoctorsPage";
 import DoctorProfile from "./pages/DoctorProfile";
 import DoctorBenefits from "./pages/DoctorBenefits";
+import Feedback from "./pages/Feedback";
 
 // Service pages
 import SportsRehabilitation from "./pages/services/SportsRehabilitation";
@@ -59,6 +59,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { FeedbackFloatingButton } from "@/components/feedback/FeedbackFloatingButton";
 
 function App() {
   return (
@@ -101,6 +102,7 @@ function App() {
                 <Route path="/billing" element={<Billing />} />
                 <Route path="/pain-tracker" element={<PainTracker />} />
                 <Route path="/recommendations" element={<Recommendations />} />
+                <Route path="/feedback" element={<Feedback />} />
                 
                 {/* Service routes */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
@@ -124,6 +126,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <ScrollToTop />
+              <FeedbackFloatingButton />
             </div>
             <Toaster />
           </Router>

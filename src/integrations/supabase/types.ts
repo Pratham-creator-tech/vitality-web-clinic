@@ -1024,6 +1024,60 @@ export type Database = {
         }
         Relationships: []
       }
+      user_feedback: {
+        Row: {
+          admin_notes: string | null
+          created_at: string | null
+          email: string
+          feedback_type: string
+          id: string
+          is_anonymous: boolean | null
+          message: string
+          name: string
+          page_url: string | null
+          rating: number | null
+          status: string | null
+          subject: string | null
+          updated_at: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string | null
+          email: string
+          feedback_type: string
+          id?: string
+          is_anonymous?: boolean | null
+          message: string
+          name: string
+          page_url?: string | null
+          rating?: number | null
+          status?: string | null
+          subject?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string | null
+          email?: string
+          feedback_type?: string
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string
+          name?: string
+          page_url?: string | null
+          rating?: number | null
+          status?: string | null
+          subject?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

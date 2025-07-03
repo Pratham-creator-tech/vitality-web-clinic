@@ -1,15 +1,39 @@
 
 import { Link } from "react-router-dom";
-import { SheetClose } from "@/components/ui/sheet";
-import { CalendarCheck } from "lucide-react";
 
 export const MobileNavFooter = () => {
   return (
-    <SheetClose asChild>
-      <Link to="/booking" className="flex items-center justify-center py-3 px-4 mt-4 rounded-full bg-vitality-600 text-white hover:bg-vitality-700">
-        <CalendarCheck className="mr-2 h-5 w-5" />
-        <span>Book Appointment</span>
-      </Link>
-    </SheetClose>
+    <div className="border-t mt-6 pt-6">
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <Link 
+          to="/contact" 
+          className="text-gray-600 hover:text-blue-600 transition-colors"
+        >
+          Contact
+        </Link>
+        <Link 
+          to="/feedback" 
+          className="text-gray-600 hover:text-blue-600 transition-colors"
+        >
+          Feedback
+        </Link>
+        <Link 
+          to="/faq" 
+          className="text-gray-600 hover:text-blue-600 transition-colors"
+        >
+          FAQ
+        </Link>
+        <Link 
+          to="/terms" 
+          className="text-gray-600 hover:text-blue-600 transition-colors"
+        >
+          Terms
+        </Link>
+      </div>
+      
+      <div className="mt-4 pt-4 border-t text-center text-xs text-gray-500">
+        © 2024 PhysioFlex. All rights reserved.
+      </div>
+    </div>
   );
 };
