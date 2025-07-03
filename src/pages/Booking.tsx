@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Button } from "@/components/ui/button";
@@ -10,11 +11,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Video } from "lucide-react";
+import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Video, UserPlus } from "lucide-react";
 import { format } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 import { generateMeetingId, generateMeetingLink } from "@/utils/meetingUtils";
 import { setMeetingHost } from "@/components/meeting/VideoCall";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const services = [
   "Sports Rehabilitation",
@@ -27,7 +30,7 @@ const services = [
 
 const therapists = [
   "Dr. Emily Chen",
-  "Dr. Marcus Johnson",
+  "Dr. Marcus Johnson",  
   "Dr. Sarah Rodriguez",
   "No Preference"
 ];
@@ -46,6 +49,8 @@ const Booking = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     name: "",
@@ -81,8 +86,22 @@ const Booking = () => {
            date !== undefined;
   };
 
+  const handleRegisterRedirect = () => {
+    navigate("/signup");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if user is authenticated
+    if (!user) {
+      toast({
+        title: "Registration Required",
+        description: "Please register or sign in first to book an appointment.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     if (!isFormValid()) {
       toast({
@@ -103,20 +122,32 @@ const Booking = () => {
       // Set the person who books as the host
       setMeetingHost(meetingId, formData.name);
       
-      const appointmentData = {
-        ...formData,
-        date: date?.toISOString(),
-        meetingId,
-        meetingLink,
-        isHost: true,
-        bookingTime: new Date().toISOString()
-      };
+      // Save meeting details to Supabase
+      const { error: supabaseError } = await supabase
+        .from('meeting_details')
+        .insert({
+          patient_id: user.id,
+          meeting_id: meetingId,
+          meeting_link: meetingLink,
+          patient_name: formData.name,
+          patient_email: formData.email,
+          patient_phone: formData.phone,
+          service: formData.service,
+          therapist: formData.therapist,
+          appointment_date: date!.toISOString(),
+          time_slot: formData.timeSlot,
+          is_new_patient: formData.isNewPatient,
+          message: formData.message,
+          is_host: true,
+          booking_time: new Date().toISOString()
+        });
+
+      if (supabaseError) {
+        console.error("Supabase error:", supabaseError);
+        throw new Error("Failed to save appointment details");
+      }
       
-      console.log("Booking form submitted:", appointmentData);
-      
-      // Here you would typically send emails to both doctor and patient
-      // For now, we'll simulate the booking process
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log("Appointment saved to database successfully");
       
       setFormStatus("success");
       
@@ -165,6 +196,26 @@ const Booking = () => {
         </div>
       </section>
 
+      {/* Authentication Check Banner */}
+      {!user && (
+        <section className="bg-blue-50 border-b border-blue-200 py-4">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between bg-blue-100 rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <UserPlus className="h-6 w-6 text-blue-600" />
+                <div>
+                  <h3 className="font-semibold text-blue-900">Registration Required</h3>
+                  <p className="text-sm text-blue-700">Please register or sign in first to book an appointment</p>
+                </div>
+              </div>
+              <Button onClick={handleRegisterRedirect} className="bg-blue-600 hover:bg-blue-700">
+                Register Now
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Booking Form Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -177,8 +228,8 @@ const Booking = () => {
                   </div>
                   <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking Confirmed!</h2>
                   <p className="text-gray-600 mb-6">
-                    Thank you for scheduling your appointment with Vitality Physiotherapy. 
-                    We've sent confirmation emails with meeting details to both you and your assigned therapist.
+                    Thank you for scheduling your appointment with Yasha Physiocare. 
+                    We've saved your appointment details and sent confirmation emails with meeting details to both you and your assigned therapist.
                   </p>
                   
                   <div className="bg-vitality-50 border border-vitality-200 rounded-lg p-6 mb-6">
@@ -190,7 +241,7 @@ const Booking = () => {
                       <p>✓ Check your email for the secure meeting link</p>
                       <p>✓ You will be the meeting host and can start the session</p>
                       <p>✓ Your therapist will join at the scheduled time</p>
-                      <p>✓ Meeting details have been sent to your assigned therapist</p>
+                      <p>✓ Meeting details have been saved to your account</p>
                     </div>
                   </div>
                   
@@ -219,6 +270,7 @@ const Booking = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           placeholder="Enter your full name"
+                          disabled={!user}
                           required
                         />
                       </div>
@@ -232,6 +284,7 @@ const Booking = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="Enter your email"
+                          disabled={!user}
                           required
                         />
                       </div>
@@ -244,6 +297,7 @@ const Booking = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
+                          disabled={!user}
                           required
                         />
                       </div>
@@ -253,6 +307,7 @@ const Booking = () => {
                         <Select 
                           onValueChange={(value) => handleSelectChange("service", value)}
                           value={formData.service}
+                          disabled={!user}
                           required
                         >
                           <SelectTrigger id="service">
@@ -273,6 +328,7 @@ const Booking = () => {
                         <Select 
                           onValueChange={(value) => handleSelectChange("therapist", value)}
                           value={formData.therapist}
+                          disabled={!user}
                           required
                         >
                           <SelectTrigger id="therapist">
@@ -294,6 +350,7 @@ const Booking = () => {
                           <PopoverTrigger asChild>
                             <Button
                               variant="outline"
+                              disabled={!user}
                               className={cn(
                                 "w-full justify-start text-left font-normal",
                                 !date && "text-muted-foreground"
@@ -319,6 +376,7 @@ const Booking = () => {
                         <Select 
                           onValueChange={(value) => handleSelectChange("timeSlot", value)}
                           value={formData.timeSlot}
+                          disabled={!user}
                           required
                         >
                           <SelectTrigger id="timeSlot">
@@ -340,6 +398,7 @@ const Booking = () => {
                         id="isNewPatient" 
                         checked={formData.isNewPatient}
                         onCheckedChange={handleCheckboxChange}
+                        disabled={!user}
                       />
                       <Label htmlFor="isNewPatient">I am a new patient</Label>
                     </div>
@@ -352,6 +411,7 @@ const Booking = () => {
                         value={formData.message}
                         onChange={handleInputChange}
                         placeholder="Please share any specific concerns or information about your condition"
+                        disabled={!user}
                         rows={4}
                       />
                     </div>
@@ -373,12 +433,17 @@ const Booking = () => {
                       <Button 
                         type="submit" 
                         className="w-full bg-vitality-600 hover:bg-vitality-700 text-white py-3 text-lg font-semibold"
-                        disabled={formStatus === "submitting" || !isFormValid()}
+                        disabled={formStatus === "submitting" || !isFormValid() || !user}
                       >
                         {formStatus === "submitting" ? (
                           <>
                             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                             Confirming Booking...
+                          </>
+                        ) : !user ? (
+                          <>
+                            <UserPlus className="mr-2 h-5 w-5" />
+                            Please Register First
                           </>
                         ) : (
                           <>
@@ -388,7 +453,7 @@ const Booking = () => {
                         )}
                       </Button>
                       <p className="text-sm text-gray-500 mt-2 text-center">
-                        * Required fields. Meeting details will be emailed to you and your therapist.
+                        {!user ? "Registration required to book appointments" : "* Required fields. Meeting details will be emailed to you and your therapist."}
                       </p>
                     </div>
                   </form>
@@ -424,7 +489,7 @@ const Booking = () => {
                     <Mail className="h-5 w-5 text-vitality-400 mr-3" />
                     <div>
                       <p className="font-medium text-gray-800">Email:</p>
-                      <a href="mailto:appointments@vitalityphysio.com" className="text-gray-600 hover:text-vitality-500">appointments@vitalityphysio.com</a>
+                      <a href="mailto:appointments@yashaphysiocare.com" className="text-gray-600 hover:text-vitality-500">appointments@yashaphysiocare.com</a>
                     </div>
                   </div>
                   

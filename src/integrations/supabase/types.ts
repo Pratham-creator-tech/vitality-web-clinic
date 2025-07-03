@@ -544,6 +544,69 @@ export type Database = {
           },
         ]
       }
+      meeting_details: {
+        Row: {
+          appointment_date: string
+          booking_time: string | null
+          created_at: string | null
+          id: string
+          is_host: boolean | null
+          is_new_patient: boolean | null
+          meeting_id: string
+          meeting_link: string
+          message: string | null
+          patient_email: string
+          patient_id: string
+          patient_name: string
+          patient_phone: string
+          service: string
+          status: string | null
+          therapist: string
+          time_slot: string
+          updated_at: string | null
+        }
+        Insert: {
+          appointment_date: string
+          booking_time?: string | null
+          created_at?: string | null
+          id?: string
+          is_host?: boolean | null
+          is_new_patient?: boolean | null
+          meeting_id: string
+          meeting_link: string
+          message?: string | null
+          patient_email: string
+          patient_id: string
+          patient_name: string
+          patient_phone: string
+          service: string
+          status?: string | null
+          therapist: string
+          time_slot: string
+          updated_at?: string | null
+        }
+        Update: {
+          appointment_date?: string
+          booking_time?: string | null
+          created_at?: string | null
+          id?: string
+          is_host?: boolean | null
+          is_new_patient?: boolean | null
+          meeting_id?: string
+          meeting_link?: string
+          message?: string | null
+          patient_email?: string
+          patient_id?: string
+          patient_name?: string
+          patient_phone?: string
+          service?: string
+          status?: string | null
+          therapist?: string
+          time_slot?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       patient_diagnoses_history: {
         Row: {
           created_at: string
