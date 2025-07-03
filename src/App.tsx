@@ -34,7 +34,6 @@ import Recommendations from "./pages/Recommendations";
 import DoctorsPage from "./pages/DoctorsPage";
 import DoctorProfile from "./pages/DoctorProfile";
 import DoctorBenefits from "./pages/DoctorBenefits";
-import DietPlan from "./pages/DietPlan";
 
 // Service pages
 import SportsRehabilitation from "./pages/services/SportsRehabilitation";
@@ -102,7 +101,6 @@ function App() {
                 <Route path="/billing" element={<Billing />} />
                 <Route path="/pain-tracker" element={<PainTracker />} />
                 <Route path="/recommendations" element={<Recommendations />} />
-                <Route path="/diet-plan" element={<DietPlan />} />
                 
                 {/* Service routes */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
