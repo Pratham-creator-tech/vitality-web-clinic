@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/layout/PageLayout";
@@ -11,8 +12,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Video, UserPlus } from "lucide-react";
-import { format } from "date-fns";
+import { CalendarIcon, Clock, MapPin, Phone, Mail, ArrowRight, CheckCircle, Video, UserPlus, AlertCircle } from "lucide-react";
+import { format, isToday, isBefore, startOfDay, addDays } from "date-fns";
 import { useToast } from "@/components/ui/use-toast";
 import { generateMeetingId, generateMeetingLink } from "@/utils/meetingUtils";
 import { setMeetingHost } from "@/components/meeting/VideoCall";
@@ -48,8 +49,9 @@ const timeSlots = [
 const Booking = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [formStatus, setFormStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -63,36 +65,134 @@ const Booking = () => {
     message: ""
   });
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    return phoneRegex.test(phone.replace(/[\s\-\(\)]/g, ''));
+  };
+
+  const validateForm = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    // Required field validation
+    if (!formData.name.trim()) {
+      errors.name = "Full name is required";
+    } else if (formData.name.trim().length < 2) {
+      errors.name = "Name must be at least 2 characters";
+    } else if (formData.name.trim().length > 100) {
+      errors.name = "Name must be less than 100 characters";
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = "Email address is required";
+    } else if (!validateEmail(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.phone.trim()) {
+      errors.phone = "Phone number is required";
+    } else if (!validatePhone(formData.phone)) {
+      errors.phone = "Please enter a valid phone number";
+    }
+
+    if (!formData.service) {
+      errors.service = "Please select a service";
+    }
+
+    if (!formData.therapist) {
+      errors.therapist = "Please select a therapist";
+    }
+
+    if (!formData.timeSlot) {
+      errors.timeSlot = "Please select a time slot";
+    }
+
+    if (!date) {
+      errors.date = "Please select an appointment date";
+    } else if (isBefore(date, startOfDay(new Date()))) {
+      errors.date = "Please select a future date";
+    } else if (isBefore(date, addDays(new Date(), 1)) && !isToday(date)) {
+      errors.date = "Please select a date at least 24 hours in advance";
+    }
+
+    if (formData.message && formData.message.length > 500) {
+      errors.message = "Message must be less than 500 characters";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear specific field error on change
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear specific field error on change
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: "" }));
+    }
   };
 
   const handleCheckboxChange = (checked: boolean) => {
     setFormData(prev => ({ ...prev, isNewPatient: checked }));
   };
 
-  const isFormValid = () => {
-    return formData.name.trim() !== "" && 
-           formData.email.trim() !== "" && 
-           formData.phone.trim() !== "" && 
-           formData.service !== "" && 
-           formData.therapist !== "" && 
-           formData.timeSlot !== "" && 
-           date !== undefined;
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    
+    // Clear date error on change
+    if (formErrors.date) {
+      setFormErrors(prev => ({ ...prev, date: "" }));
+    }
   };
 
   const handleRegisterRedirect = () => {
     navigate("/signup");
   };
 
+  const checkExistingAppointment = async (userId: string, appointmentDate: Date, timeSlot: string): Promise<boolean> => {
+    try {
+      const { data, error } = await supabase
+        .from('meeting_details')
+        .select('id')
+        .eq('patient_id', userId)
+        .eq('appointment_date', appointmentDate.toISOString())
+        .eq('time_slot', timeSlot)
+        .eq('status', 'scheduled');
+
+      if (error) {
+        console.error("Error checking existing appointments:", error);
+        return false;
+      }
+
+      return data && data.length > 0;
+    } catch (error) {
+      console.error("Error in checkExistingAppointment:", error);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Prevent double submission
+    if (formStatus === "submitting") {
+      return;
+    }
+
     // Check if user is authenticated
     if (!user) {
       toast({
@@ -102,11 +202,12 @@ const Booking = () => {
       });
       return;
     }
-    
-    if (!isFormValid()) {
+
+    // Validate form
+    if (!validateForm()) {
       toast({
-        title: "Please fill all required fields",
-        description: "All fields except additional information are required.",
+        title: "Please fix the errors below",
+        description: "All required fields must be filled correctly.",
         variant: "destructive",
       });
       return;
@@ -115,6 +216,19 @@ const Booking = () => {
     setFormStatus("submitting");
     
     try {
+      // Check for existing appointment at the same time
+      const hasExistingAppointment = await checkExistingAppointment(user.id, date!, formData.timeSlot);
+      
+      if (hasExistingAppointment) {
+        toast({
+          title: "Appointment Conflict",
+          description: "You already have an appointment scheduled for this date and time.",
+          variant: "destructive",
+        });
+        setFormStatus("error");
+        return;
+      }
+
       // Generate meeting details
       const meetingId = generateMeetingId();
       const meetingLink = generateMeetingLink(meetingId);
@@ -122,29 +236,49 @@ const Booking = () => {
       // Set the person who books as the host
       setMeetingHost(meetingId, formData.name);
       
+      // Prepare data for insertion
+      const meetingData = {
+        patient_id: user.id,
+        meeting_id: meetingId,
+        meeting_link: meetingLink,
+        patient_name: formData.name.trim(),
+        patient_email: formData.email.trim().toLowerCase(),
+        patient_phone: formData.phone.trim(),
+        service: formData.service,
+        therapist: formData.therapist,
+        appointment_date: date!.toISOString(),
+        time_slot: formData.timeSlot,
+        is_new_patient: formData.isNewPatient,
+        message: formData.message.trim() || null,
+        is_host: true,
+        status: 'scheduled'
+      };
+
       // Save meeting details to Supabase
       const { error: supabaseError } = await supabase
         .from('meeting_details')
-        .insert({
-          patient_id: user.id,
-          meeting_id: meetingId,
-          meeting_link: meetingLink,
-          patient_name: formData.name,
-          patient_email: formData.email,
-          patient_phone: formData.phone,
-          service: formData.service,
-          therapist: formData.therapist,
-          appointment_date: date!.toISOString(),
-          time_slot: formData.timeSlot,
-          is_new_patient: formData.isNewPatient,
-          message: formData.message,
-          is_host: true,
-          booking_time: new Date().toISOString()
-        });
+        .insert(meetingData);
 
       if (supabaseError) {
         console.error("Supabase error:", supabaseError);
-        throw new Error("Failed to save appointment details");
+        
+        // Handle specific error cases
+        if (supabaseError.code === '23505') { // Unique constraint violation
+          toast({
+            title: "Booking Error",
+            description: "This appointment slot may already be taken. Please try a different time.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Booking Failed",
+            description: "Failed to save appointment details. Please try again.",
+            variant: "destructive",
+          });
+        }
+        
+        setFormStatus("error");
+        return;
       }
       
       console.log("Appointment saved to database successfully");
@@ -168,17 +302,33 @@ const Booking = () => {
         message: ""
       });
       setDate(undefined);
+      setFormErrors({});
       
     } catch (error) {
       console.error("Booking error:", error);
       setFormStatus("error");
       toast({
         title: "Booking Failed",
-        description: "There was an error processing your booking. Please try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     }
   };
+
+  // Loading state
+  if (authLoading) {
+    return (
+      <PageLayout>
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-vitality-600"></div>
+            </div>
+          </div>
+        </section>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
@@ -229,7 +379,7 @@ const Booking = () => {
                   <h2 className="text-2xl font-bold mb-4 text-gray-800">Booking Confirmed!</h2>
                   <p className="text-gray-600 mb-6">
                     Thank you for scheduling your appointment with Yasha Physiocare. 
-                    We've saved your appointment details and sent confirmation emails with meeting details to both you and your assigned therapist.
+                    We've saved your appointment details and you'll receive confirmation with meeting details.
                   </p>
                   
                   <div className="bg-vitality-50 border border-vitality-200 rounded-lg p-6 mb-6">
@@ -238,10 +388,10 @@ const Booking = () => {
                       <h3 className="text-lg font-semibold text-vitality-700">What's Next?</h3>
                     </div>
                     <div className="text-sm text-gray-600 space-y-2">
-                      <p>✓ Check your email for the secure meeting link</p>
+                      <p>✓ Your appointment has been confirmed and saved</p>
                       <p>✓ You will be the meeting host and can start the session</p>
                       <p>✓ Your therapist will join at the scheduled time</p>
-                      <p>✓ Meeting details have been saved to your account</p>
+                      <p>✓ Meeting details are securely stored in your account</p>
                     </div>
                   </div>
                   
@@ -257,7 +407,7 @@ const Booking = () => {
                 <>
                   <SectionTitle 
                     title="Schedule Your Visit" 
-                    subtitle="Fill out the form below to request an appointment. Meeting details will be emailed to you and your therapist."
+                    subtitle="Fill out the form below to request an appointment. All fields marked with * are required."
                   />
                   
                   <form onSubmit={handleSubmit} className="mt-8 space-y-6">
@@ -270,9 +420,16 @@ const Booking = () => {
                           value={formData.name}
                           onChange={handleInputChange}
                           placeholder="Enter your full name"
-                          disabled={!user}
+                          disabled={!user || formStatus === "submitting"}
                           required
+                          className={cn(formErrors.name && "border-red-500")}
                         />
+                        {formErrors.name && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.name}
+                          </p>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
@@ -284,9 +441,16 @@ const Booking = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="Enter your email"
-                          disabled={!user}
+                          disabled={!user || formStatus === "submitting"}
                           required
+                          className={cn(formErrors.email && "border-red-500")}
                         />
+                        {formErrors.email && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.email}
+                          </p>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
@@ -297,9 +461,16 @@ const Booking = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder="Enter your phone number"
-                          disabled={!user}
+                          disabled={!user || formStatus === "submitting"}
                           required
+                          className={cn(formErrors.phone && "border-red-500")}
                         />
+                        {formErrors.phone && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.phone}
+                          </p>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
@@ -307,10 +478,10 @@ const Booking = () => {
                         <Select 
                           onValueChange={(value) => handleSelectChange("service", value)}
                           value={formData.service}
-                          disabled={!user}
+                          disabled={!user || formStatus === "submitting"}
                           required
                         >
-                          <SelectTrigger id="service">
+                          <SelectTrigger id="service" className={cn(formErrors.service && "border-red-500")}>
                             <SelectValue placeholder="Select a service" />
                           </SelectTrigger>
                           <SelectContent>
@@ -321,6 +492,12 @@ const Booking = () => {
                             ))}
                           </SelectContent>
                         </Select>
+                        {formErrors.service && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.service}
+                          </p>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
@@ -328,10 +505,10 @@ const Booking = () => {
                         <Select 
                           onValueChange={(value) => handleSelectChange("therapist", value)}
                           value={formData.therapist}
-                          disabled={!user}
+                          disabled={!user || formStatus === "submitting"}
                           required
                         >
-                          <SelectTrigger id="therapist">
+                          <SelectTrigger id="therapist" className={cn(formErrors.therapist && "border-red-500")}>
                             <SelectValue placeholder="Select a therapist" />
                           </SelectTrigger>
                           <SelectContent>
@@ -342,6 +519,12 @@ const Booking = () => {
                             ))}
                           </SelectContent>
                         </Select>
+                        {formErrors.therapist && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.therapist}
+                          </p>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
@@ -350,10 +533,11 @@ const Booking = () => {
                           <PopoverTrigger asChild>
                             <Button
                               variant="outline"
-                              disabled={!user}
+                              disabled={!user || formStatus === "submitting"}
                               className={cn(
                                 "w-full justify-start text-left font-normal",
-                                !date && "text-muted-foreground"
+                                !date && "text-muted-foreground",
+                                formErrors.date && "border-red-500"
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
@@ -364,11 +548,21 @@ const Booking = () => {
                             <Calendar
                               mode="single"
                               selected={date}
-                              onSelect={setDate}
+                              onSelect={handleDateSelect}
+                              disabled={(date) => 
+                                isBefore(date, startOfDay(new Date())) || 
+                                isBefore(date, addDays(new Date(), 1))
+                              }
                               initialFocus
                             />
                           </PopoverContent>
                         </Popover>
+                        {formErrors.date && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.date}
+                          </p>
+                        )}
                       </div>
                       
                       <div className="space-y-2">
@@ -376,10 +570,10 @@ const Booking = () => {
                         <Select 
                           onValueChange={(value) => handleSelectChange("timeSlot", value)}
                           value={formData.timeSlot}
-                          disabled={!user}
+                          disabled={!user || formStatus === "submitting"}
                           required
                         >
-                          <SelectTrigger id="timeSlot">
+                          <SelectTrigger id="timeSlot" className={cn(formErrors.timeSlot && "border-red-500")}>
                             <SelectValue placeholder="Select a time" />
                           </SelectTrigger>
                           <SelectContent>
@@ -390,6 +584,12 @@ const Booking = () => {
                             ))}
                           </SelectContent>
                         </Select>
+                        {formErrors.timeSlot && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.timeSlot}
+                          </p>
+                        )}
                       </div>
                     </div>
                     
@@ -398,7 +598,7 @@ const Booking = () => {
                         id="isNewPatient" 
                         checked={formData.isNewPatient}
                         onCheckedChange={handleCheckboxChange}
-                        disabled={!user}
+                        disabled={!user || formStatus === "submitting"}
                       />
                       <Label htmlFor="isNewPatient">I am a new patient</Label>
                     </div>
@@ -411,18 +611,30 @@ const Booking = () => {
                         value={formData.message}
                         onChange={handleInputChange}
                         placeholder="Please share any specific concerns or information about your condition"
-                        disabled={!user}
+                        disabled={!user || formStatus === "submitting"}
                         rows={4}
+                        className={cn(formErrors.message && "border-red-500")}
                       />
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">
+                          {formData.message.length}/500 characters
+                        </span>
+                        {formErrors.message && (
+                          <p className="text-sm text-red-500 flex items-center gap-1">
+                            <AlertCircle className="h-4 w-4" />
+                            {formErrors.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <div className="flex items-start gap-3">
                         <Video className="h-5 w-5 text-blue-600 mt-0.5" />
                         <div>
-                          <h4 className="font-medium text-blue-900">Virtual Consultation via Email</h4>
+                          <h4 className="font-medium text-blue-900">Virtual Consultation</h4>
                           <p className="text-sm text-blue-700 mt-1">
-                            Meeting details will be sent to your email and your therapist's email. You'll receive a secure video link to join your appointment.
+                            Your appointment details will be securely saved. You'll receive meeting information and be set as the host.
                           </p>
                         </div>
                       </div>
@@ -433,7 +645,7 @@ const Booking = () => {
                       <Button 
                         type="submit" 
                         className="w-full bg-vitality-600 hover:bg-vitality-700 text-white py-3 text-lg font-semibold"
-                        disabled={formStatus === "submitting" || !isFormValid() || !user}
+                        disabled={formStatus === "submitting" || !user}
                       >
                         {formStatus === "submitting" ? (
                           <>
@@ -453,7 +665,10 @@ const Booking = () => {
                         )}
                       </Button>
                       <p className="text-sm text-gray-500 mt-2 text-center">
-                        {!user ? "Registration required to book appointments" : "* Required fields. Meeting details will be emailed to you and your therapist."}
+                        {!user 
+                          ? "Registration required to book appointments" 
+                          : "* Required fields. Your appointment will be securely saved."
+                        }
                       </p>
                     </div>
                   </form>
@@ -510,7 +725,7 @@ const Booking = () => {
                     <div>
                       <p className="font-medium text-gray-800">Virtual Consultations:</p>
                       <p className="text-gray-600">
-                        Secure video meetings via email<br />
+                        Secure video meetings<br />
                         HD quality with screen sharing
                       </p>
                     </div>

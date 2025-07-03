@@ -5,15 +5,6 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { NavDropdownItem } from "./NavDropdownItem";
-import { 
-  MessageCircle, 
-  Video, 
-  Users, 
-  Activity, 
-  Stethoscope, 
-  Brain,
-  Apple
-} from "lucide-react";
 
 export const ResourcesDropdown = () => {
   return (
