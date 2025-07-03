@@ -14,8 +14,6 @@ interface RecommendationFilters {
   condition: string;
   language: string;
   availability: string;
-  experience: string;
-  rating: string;
 }
 
 const RecommendationEngine = () => {
@@ -24,8 +22,6 @@ const RecommendationEngine = () => {
     condition: "",
     language: "",
     availability: "",
-    experience: "",
-    rating: "",
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [recommendations, setRecommendations] = useState<any[]>([]);
@@ -112,8 +108,6 @@ const RecommendationEngine = () => {
       condition: "",
       language: "",
       availability: "",
-      experience: "",
-      rating: "",
     });
     setSearchQuery("");
   };
@@ -156,7 +150,7 @@ const RecommendationEngine = () => {
           </div>
 
           {/* Filter Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <Label>Location</Label>
               <Select value={filters.location} onValueChange={(value) => handleFilterChange("location", value)}>
@@ -210,34 +204,6 @@ const RecommendationEngine = () => {
                   <SelectItem value="tomorrow">Tomorrow</SelectItem>
                   <SelectItem value="week">This week</SelectItem>
                   <SelectItem value="flexible">Flexible</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label>Experience</Label>
-              <Select value={filters.experience} onValueChange={(value) => handleFilterChange("experience", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Min experience" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="5+">5+ years</SelectItem>
-                  <SelectItem value="10+">10+ years</SelectItem>
-                  <SelectItem value="15+">15+ years</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label>Rating</Label>
-              <Select value={filters.rating} onValueChange={(value) => handleFilterChange("rating", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Min rating" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="4.0+">4.0+ stars</SelectItem>
-                  <SelectItem value="4.5+">4.5+ stars</SelectItem>
-                  <SelectItem value="4.8+">4.8+ stars</SelectItem>
                 </SelectContent>
               </Select>
             </div>

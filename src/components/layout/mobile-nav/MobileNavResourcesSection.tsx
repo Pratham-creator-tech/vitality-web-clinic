@@ -7,8 +7,7 @@ import {
   Users, 
   Activity, 
   Stethoscope, 
-  Brain,
-  Apple
+  Brain
 } from "lucide-react";
 
 export const MobileNavResourcesSection = () => {
@@ -37,11 +36,6 @@ export const MobileNavResourcesSection = () => {
       to: "/recommendations",
       label: "Doctor Recommendations",
       icon: Stethoscope,
-    },
-    {
-      to: "/diet-plan",
-      label: "Diet Plan",
-      icon: Apple,
     }
   ];
 

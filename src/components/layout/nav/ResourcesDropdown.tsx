@@ -44,12 +44,6 @@ export const ResourcesDropdown = () => {
           >
             Find the right healthcare professional
           </NavDropdownItem>
-          <NavDropdownItem
-            href="/diet-plan"
-            title="Diet Plan"
-          >
-            Personalized nutrition and medicine guide
-          </NavDropdownItem>
         </div>
       </NavigationMenuContent>
     </NavigationMenuItem>

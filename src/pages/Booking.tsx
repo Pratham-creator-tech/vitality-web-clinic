@@ -29,13 +29,6 @@ const services = [
   "Strength & Conditioning"
 ];
 
-const therapists = [
-  "Dr. Emily Chen",
-  "Dr. Marcus Johnson",  
-  "Dr. Sarah Rodriguez",
-  "No Preference"
-];
-
 const timeSlots = [
   "9:00 AM",
   "10:00 AM",
@@ -59,7 +52,6 @@ const Booking = () => {
     email: "",
     phone: "",
     service: "",
-    therapist: "",
     timeSlot: "",
     isNewPatient: false,
     message: ""
@@ -101,10 +93,6 @@ const Booking = () => {
 
     if (!formData.service) {
       errors.service = "Please select a service";
-    }
-
-    if (!formData.therapist) {
-      errors.therapist = "Please select a therapist";
     }
 
     if (!formData.timeSlot) {
@@ -245,7 +233,7 @@ const Booking = () => {
         patient_email: formData.email.trim().toLowerCase(),
         patient_phone: formData.phone.trim(),
         service: formData.service,
-        therapist: formData.therapist,
+        therapist: "Available Therapist", // Default value since we removed the selection
         appointment_date: date!.toISOString(),
         time_slot: formData.timeSlot,
         is_new_patient: formData.isNewPatient,
@@ -296,7 +284,6 @@ const Booking = () => {
         email: "",
         phone: "",
         service: "",
-        therapist: "",
         timeSlot: "",
         isNewPatient: false,
         message: ""
@@ -390,7 +377,7 @@ const Booking = () => {
                     <div className="text-sm text-gray-600 space-y-2">
                       <p>✓ Your appointment has been confirmed and saved</p>
                       <p>✓ You will be the meeting host and can start the session</p>
-                      <p>✓ Your therapist will join at the scheduled time</p>
+                      <p>✓ Our available therapist will join at the scheduled time</p>
                       <p>✓ Meeting details are securely stored in your account</p>
                     </div>
                   </div>
@@ -496,33 +483,6 @@ const Booking = () => {
                           <p className="text-sm text-red-500 flex items-center gap-1">
                             <AlertCircle className="h-4 w-4" />
                             {formErrors.service}
-                          </p>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="therapist">Preferred Therapist *</Label>
-                        <Select 
-                          onValueChange={(value) => handleSelectChange("therapist", value)}
-                          value={formData.therapist}
-                          disabled={!user || formStatus === "submitting"}
-                          required
-                        >
-                          <SelectTrigger id="therapist" className={cn(formErrors.therapist && "border-red-500")}>
-                            <SelectValue placeholder="Select a therapist" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {therapists.map((therapist) => (
-                              <SelectItem key={therapist} value={therapist}>
-                                {therapist}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        {formErrors.therapist && (
-                          <p className="text-sm text-red-500 flex items-center gap-1">
-                            <AlertCircle className="h-4 w-4" />
-                            {formErrors.therapist}
                           </p>
                         )}
                       </div>
