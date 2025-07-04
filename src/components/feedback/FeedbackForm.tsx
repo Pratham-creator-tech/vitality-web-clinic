@@ -22,6 +22,7 @@ const feedbackSchema = z.object({
   subject: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters'),
   is_anonymous: z.boolean().default(false),
+  page_url: z.string().optional(),
 });
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
@@ -60,16 +61,21 @@ export const FeedbackForm = ({ onSuccess, compact = false }: FeedbackFormProps) 
     setIsSubmitting(true);
     try {
       const feedbackData = {
-        ...data,
+        name: data.name,
+        email: data.email,
+        feedback_type: data.feedback_type,
+        message: data.message,
+        subject: data.subject || null,
         user_id: isAnonymous ? null : user?.id || null,
         rating: rating > 0 ? rating : null,
         page_url: window.location.href,
         user_agent: navigator.userAgent,
+        is_anonymous: isAnonymous,
       };
 
       const { error } = await supabase
         .from('user_feedback')
-        .insert([feedbackData]);
+        .insert(feedbackData);
 
       if (error) throw error;
 
