@@ -9,7 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import AIChat from "./AIChat";
+import EnhancedAIChat from "./EnhancedAIChat";
 
 const AIFloatingButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,12 +25,12 @@ const AIFloatingButton = () => {
       </Button>
 
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
-        <DrawerContent className="max-h-[85vh]">
+        <DrawerContent className="max-h-[90vh]">
           <DrawerHeader className="flex items-center justify-between">
             <div>
-              <DrawerTitle>Vitality AI Assistant</DrawerTitle>
+              <DrawerTitle>Enhanced AI Medical Assistant</DrawerTitle>
               <DrawerDescription>
-                How can I help you today?
+                Upload files, find doctors, and get expert medical guidance
               </DrawerDescription>
             </div>
             <Button
@@ -43,7 +43,7 @@ const AIFloatingButton = () => {
             </Button>
           </DrawerHeader>
           <div className="px-4 pb-4">
-            <AIChat inDrawer={true} />
+            <EnhancedAIChat inDrawer={true} />
           </div>
         </DrawerContent>
       </Drawer>

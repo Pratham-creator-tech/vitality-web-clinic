@@ -2,8 +2,8 @@
 import PageLayout from "@/components/layout/PageLayout";
 import { SectionTitle } from "@/components/ui/section-title";
 import { Card, CardContent } from "@/components/ui/card";
-import AIChat from "@/components/ai/AIChat";
-import { Heart } from "lucide-react";
+import EnhancedAIChat from "@/components/ai/EnhancedAIChat";
+import { Heart, Bot, FileText, Stethoscope } from "lucide-react";
 
 const AIAssistant = () => {
   return (
@@ -18,33 +18,70 @@ const AIAssistant = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center mb-6 bg-white rounded-full py-2 px-6 w-fit mx-auto shadow-sm border border-blue-100">
-              <Heart className="h-5 w-5 text-blue-600 mr-3" />
+              <Bot className="h-5 w-5 text-blue-600 mr-3" />
               <span className="text-sm font-medium text-gray-700">AI-Powered Healthcare Assistant</span>
             </div>
             
             <h1 className="text-4xl md:text-6xl font-bold mb-6 font-display text-blue-900 leading-tight">
-              AI 
-              <span className="text-blue-600 block">Healthcare Assistant</span>
+              Enhanced AI 
+              <span className="text-blue-600 block">Medical Assistant</span>
             </h1>
             
             <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-              Get instant answers to your physiotherapy questions and concerns with our intelligent AI assistant powered by Yasha Physiocare's expertise.
+              Upload medical files for analysis, get doctor recommendations, and receive expert answers to your healthcare questions with our advanced AI assistant.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <FileText className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">File Analysis</h3>
+              <p className="text-gray-600 text-sm">
+                Upload medical reports, lab results, and documents for intelligent analysis and insights.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Stethoscope className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Doctor Recommendations</h3>
+              <p className="text-gray-600 text-sm">
+                Get personalized specialist recommendations based on your symptoms and health needs.
+              </p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <Bot className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2">Expert Answers</h3>
+              <p className="text-gray-600 text-sm">
+                Ask questions about health, treatments, and medical conditions for expert guidance.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-4 py-16">
         <SectionTitle
-          title="Chat with Our AI Assistant"
-          subtitle="Ask questions about physiotherapy, treatments, exercises, or general health concerns."
+          title="Your AI Medical Assistant"
+          subtitle="Upload files, find doctors, and get expert medical guidance all in one place."
           center
         />
 
-        <div className="max-w-4xl mx-auto mt-8">
+        <div className="max-w-5xl mx-auto mt-8">
           <Card className="border-2 border-blue-100 shadow-lg">
             <CardContent className="p-6">
-              <AIChat />
+              <EnhancedAIChat />
             </CardContent>
           </Card>
         </div>
