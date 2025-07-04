@@ -21,7 +21,6 @@ const feedbackSchema = z.object({
   rating: z.number().min(1).max(5).optional(),
   subject: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters'),
-  is_anonymous: z.boolean().default(false),
   page_url: z.string().optional(),
 });
 
@@ -50,12 +49,10 @@ export const FeedbackForm = ({ onSuccess, compact = false }: FeedbackFormProps) 
     defaultValues: {
       name: user?.user_metadata?.full_name || '',
       email: user?.email || '',
-      is_anonymous: false,
     },
   });
 
   const feedbackType = watch('feedback_type');
-  const isAnonymous = watch('is_anonymous');
 
   const onSubmit = async (data: FeedbackFormData) => {
     setIsSubmitting(true);
@@ -66,11 +63,11 @@ export const FeedbackForm = ({ onSuccess, compact = false }: FeedbackFormProps) 
         feedback_type: data.feedback_type,
         message: data.message,
         subject: data.subject || null,
-        user_id: isAnonymous ? null : user?.id || null,
+        user_id: user?.id || null,
         rating: rating > 0 ? rating : null,
         page_url: window.location.href,
         user_agent: navigator.userAgent,
-        is_anonymous: isAnonymous,
+        is_anonymous: false,
       };
 
       const { error } = await supabase
@@ -136,8 +133,6 @@ export const FeedbackForm = ({ onSuccess, compact = false }: FeedbackFormProps) 
               <Input
                 id="name"
                 {...register('name')}
-                disabled={isAnonymous}
-                className={isAnonymous ? 'bg-gray-100' : ''}
               />
               {errors.name && (
                 <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>
@@ -149,8 +144,6 @@ export const FeedbackForm = ({ onSuccess, compact = false }: FeedbackFormProps) 
                 id="email"
                 type="email"
                 {...register('email')}
-                disabled={isAnonymous}
-                className={isAnonymous ? 'bg-gray-100' : ''}
               />
               {errors.email && (
                 <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
@@ -207,18 +200,6 @@ export const FeedbackForm = ({ onSuccess, compact = false }: FeedbackFormProps) 
             {errors.message && (
               <p className="text-sm text-red-600 mt-1">{errors.message.message}</p>
             )}
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              id="is_anonymous"
-              {...register('is_anonymous')}
-              className="rounded"
-            />
-            <Label htmlFor="is_anonymous" className="text-sm">
-              Submit anonymously (your name and email won't be stored)
-            </Label>
           </div>
 
           <Button
