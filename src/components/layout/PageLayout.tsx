@@ -1,28 +1,21 @@
 
+import { ReactNode } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import AIFloatingButton from "@/components/ai/AIFloatingButton";
-import { FeedbackFloatingButton } from "@/components/feedback/FeedbackFloatingButton";
-import FloatingBookingButton from "@/components/ui/floating-booking-button";
-import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
 interface PageLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
-const PageLayout = ({ children, className }: PageLayoutProps) => {
+const PageLayout = ({ children, className = "" }: PageLayoutProps) => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className={`flex-1 ${className || ''}`}>
+      <main className={`flex-grow ${className}`}>
         {children}
       </main>
       <Footer />
-      <AIFloatingButton />
-      <FeedbackFloatingButton />
-      <FloatingBookingButton />
-      <ScrollToTop />
     </div>
   );
 };
