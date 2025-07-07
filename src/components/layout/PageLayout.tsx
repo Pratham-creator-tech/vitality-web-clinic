@@ -8,13 +8,14 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
 interface PageLayoutProps {
   children: React.ReactNode;
+  className?: string;
 }
 
-const PageLayout = ({ children }: PageLayoutProps) => {
+const PageLayout = ({ children, className }: PageLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1">
+      <main className={`flex-1 ${className || ''}`}>
         {children}
       </main>
       <Footer />

@@ -2,10 +2,20 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Calendar, Video, Star, Users, Award, Play, Pause } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const HeroSection = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+
+  useEffect(() => {
+    const video = document.getElementById('hero-video') as HTMLVideoElement;
+    if (video) {
+      video.play().catch(() => {
+        // Video autoplay failed, that's okay
+        setIsVideoPlaying(false);
+      });
+    }
+  }, []);
 
   const toggleVideo = () => {
     const video = document.getElementById('hero-video') as HTMLVideoElement;
@@ -29,19 +39,20 @@ const HeroSection = () => {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-30"
         >
-          <source src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=1920&h=1080&q=80" type="video/mp4" />
+          <source src="https://cdn.pixabay.com/video/2023/04/12/157462-820645041_large.mp4" type="video/mp4" />
+          <source src="https://cdn.pixabay.com/video/2022/09/26/132450-756308859_large.mp4" type="video/mp4" />
           {/* Fallback image */}
           <img 
-            src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=1920&h=1080&q=80" 
+            src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&w=1920&h=1080&q=80" 
             alt="Physiotherapy session" 
             className="w-full h-full object-cover"
           />
         </video>
         
         {/* Video Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-vitality-900/70 via-vitality-800/60 to-blue-900/70 animate-overlay-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-vitality-900/20 via-vitality-800/10 to-blue-900/20"></div>
         
         {/* Video Control Button */}
         <button
@@ -65,13 +76,13 @@ const HeroSection = () => {
               <span className="text-sm font-medium text-gray-700">Expert Physiotherapy Care</span>
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-white">
-              <span className="text-vitality-200">Professional</span>{" "}
-              <span className="text-blue-200">Physiotherapy</span>{" "}
-              <span className="text-white">Care at Home</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-gray-900">
+              <span className="text-vitality-600">Professional</span>{" "}
+              <span className="text-blue-600">Physiotherapy</span>{" "}
+              <span className="text-gray-900">Care at Home</span>
             </h1>
             
-            <p className="text-lg text-white/90 mb-8 leading-relaxed backdrop-blur-sm bg-black/20 p-4 rounded-lg">
+            <p className="text-lg text-gray-700 mb-8 leading-relaxed bg-white/80 backdrop-blur-sm p-4 rounded-lg">
               Experience personalized physiotherapy treatments with our certified professionals through secure video consultations. Get the care you need from the comfort of your home.
             </p>
 
@@ -91,7 +102,7 @@ const HeroSection = () => {
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm px-8 py-4 text-lg font-semibold hover:scale-105 transition-all"
+                className="border-vitality-600 text-vitality-600 hover:bg-vitality-50 backdrop-blur-sm px-8 py-4 text-lg font-semibold hover:scale-105 transition-all"
                 asChild
               >
                 <Link to="/services" className="flex items-center gap-2">
@@ -101,27 +112,27 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/20">
-              <div className="text-center">
+            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
+              <div className="text-center bg-white/70 backdrop-blur-sm rounded-lg p-3">
                 <div className="flex items-center justify-center gap-1 mb-2">
-                  <Star className="h-5 w-5 text-yellow-400 fill-current animate-gentle-bounce" />
-                  <span className="text-2xl font-bold text-white">4.9</span>
+                  <Star className="h-5 w-5 text-yellow-500 fill-current animate-gentle-bounce" />
+                  <span className="text-2xl font-bold text-gray-900">4.9</span>
                 </div>
-                <p className="text-sm text-white/80">Patient Rating</p>
+                <p className="text-sm text-gray-600">Patient Rating</p>
               </div>
-              <div className="text-center">
+              <div className="text-center bg-white/70 backdrop-blur-sm rounded-lg p-3">
                 <div className="flex items-center justify-center mb-2">
-                  <Users className="h-5 w-5 text-vitality-300 mr-1 animate-gentle-bounce" />
-                  <span className="text-2xl font-bold text-white">500+</span>
+                  <Users className="h-5 w-5 text-vitality-600 mr-1 animate-gentle-bounce" />
+                  <span className="text-2xl font-bold text-gray-900">500+</span>
                 </div>
-                <p className="text-sm text-white/80">Happy Patients</p>
+                <p className="text-sm text-gray-600">Happy Patients</p>
               </div>
-              <div className="text-center">
+              <div className="text-center bg-white/70 backdrop-blur-sm rounded-lg p-3">
                 <div className="flex items-center justify-center mb-2">
-                  <Award className="h-5 w-5 text-blue-300 mr-1 animate-gentle-bounce" />
-                  <span className="text-2xl font-bold text-white">15+</span>
+                  <Award className="h-5 w-5 text-blue-600 mr-1 animate-gentle-bounce" />
+                  <span className="text-2xl font-bold text-gray-900">15+</span>
                 </div>
-                <p className="text-sm text-white/80">Services</p>
+                <p className="text-sm text-gray-600">Services</p>
               </div>
             </div>
           </div>
