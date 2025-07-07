@@ -2,7 +2,7 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import AIFloatingButton from "@/components/ai/AIFloatingButton";
-import FeedbackFloatingButton from "@/components/feedback/FeedbackFloatingButton";
+import { FeedbackFloatingButton } from "@/components/feedback/FeedbackFloatingButton";
 import FloatingBookingButton from "@/components/ui/floating-booking-button";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
