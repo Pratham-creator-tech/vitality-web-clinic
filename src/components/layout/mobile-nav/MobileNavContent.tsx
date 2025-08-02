@@ -4,6 +4,7 @@ import { MobileNavMainItems } from "./MobileNavMainItems";
 import { MobileNavAboutSection } from "./MobileNavAboutSection";
 import { MobileNavServicesSection } from "./MobileNavServicesSection";
 import { MobileNavResourcesSection } from "./MobileNavResourcesSection";
+import { MobileNavUserDashboard } from "./MobileNavUserDashboard";
 
 export const MobileNavContent = () => {
   return (
@@ -15,6 +16,8 @@ export const MobileNavContent = () => {
         <MobileNavServicesSection />
         <MobileNavResourcesSection />
       </Accordion>
+      
+      <MobileNavUserDashboard />
     </nav>
   );
 };

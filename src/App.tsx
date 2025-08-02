@@ -60,6 +60,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { FeedbackFloatingButton } from "@/components/feedback/FeedbackFloatingButton";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 function App() {
   return (
@@ -75,34 +76,34 @@ function App() {
                 <Route path="/doctors" element={<DoctorsPage />} />
                 <Route path="/doctor/:id" element={<DoctorProfile />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/booking" element={<Booking />} />
+                <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogDetail />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/ai-assistant" element={<AIAssistant />} />
-                <Route path="/video-library" element={<VideoLibrary />} />
+                <Route path="/ai-assistant" element={<ProtectedRoute><AIAssistant /></ProtectedRoute>} />
+                <Route path="/video-library" element={<ProtectedRoute><VideoLibrary /></ProtectedRoute>} />
                 <Route path="/virtual-tour" element={<VirtualTour />} />
-                <Route path="/interactive-body-map" element={<InteractiveBodyMap />} />
-                <Route path="/meeting/:id" element={<Meeting />} />
+                <Route path="/interactive-body-map" element={<ProtectedRoute><InteractiveBodyMap /></ProtectedRoute>} />
+                <Route path="/meeting/:id" element={<ProtectedRoute><Meeting /></ProtectedRoute>} />
                 <Route path="/doctor-registration" element={<DoctorRegistration />} />
-                <Route path="/doctor-onboarding" element={<DoctorOnboarding />} />
-                <Route path="/patient-onboarding" element={<PatientOnboarding />} />
-                <Route path="/patients" element={<PatientsList />} />
-                <Route path="/patient/:id" element={<PatientDetail />} />
+                <Route path="/doctor-onboarding" element={<ProtectedRoute requiredRole="doctor"><DoctorOnboarding /></ProtectedRoute>} />
+                <Route path="/patient-onboarding" element={<ProtectedRoute requiredRole="patient"><PatientOnboarding /></ProtectedRoute>} />
+                <Route path="/patients" element={<ProtectedRoute requiredRole="doctor"><PatientsList /></ProtectedRoute>} />
+                <Route path="/patient/:id" element={<ProtectedRoute requiredRole="doctor"><PatientDetail /></ProtectedRoute>} />
                 <Route path="/doctor-usp" element={<DoctorUSP />} />
                 <Route path="/doctor-benefits" element={<DoctorBenefits />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/account-settings" element={<AccountSettings />} />
-                <Route path="/billing" element={<Billing />} />
-                <Route path="/pain-tracker" element={<PainTracker />} />
-                <Route path="/recommendations" element={<Recommendations />} />
-                <Route path="/feedback" element={<Feedback />} />
+                <Route path="/admin" element={<ProtectedRoute requiredRole="admin"><AdminDashboard /></ProtectedRoute>} />
+                <Route path="/account-settings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
+                <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
+                <Route path="/pain-tracker" element={<ProtectedRoute><PainTracker /></ProtectedRoute>} />
+                <Route path="/recommendations" element={<ProtectedRoute><Recommendations /></ProtectedRoute>} />
+                <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
                 
                 {/* Service routes */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import PageLayout from "@/components/layout/PageLayout";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 // Sign In Form Schema
 const signInFormSchema = z.object({
@@ -46,6 +47,16 @@ const SignIn = () => {
   const [activeTab, setActiveTab] = useState("signin");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, isLoading: authLoading } = useAuth();
+
+  // Redirect authenticated users away from login page
+  useEffect(() => {
+    if (!authLoading && user) {
+      const from = location.state?.from?.pathname || "/profile";
+      navigate(from, { replace: true });
+    }
+  }, [user, authLoading, navigate, location]);
 
   // Sign In Form
   const signInForm = useForm<SignInFormValues>({
@@ -94,7 +105,9 @@ const SignIn = () => {
         description: "Welcome back to YASHA's Physiocare!",
       });
       
-      navigate("/profile");
+      // Redirect to the original requested page or profile
+      const from = location.state?.from?.pathname || "/profile";
+      navigate(from, { replace: true });
     } catch (error) {
       console.error("Unexpected error during sign in:", error);
       toast({

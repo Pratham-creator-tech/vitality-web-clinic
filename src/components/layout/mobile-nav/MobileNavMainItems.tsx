@@ -23,6 +23,18 @@ export const MobileNavMainItems = () => {
         {t("app.header.contact")}
       </MobileNavItemWithIcon>
 
+      {userRole === "doctor" && (
+        <MobileNavItemWithIcon to="/patients" icon={Info}>
+          My Patients
+        </MobileNavItemWithIcon>
+      )}
+
+      {userRole === "patient" && (
+        <MobileNavItemWithIcon to="/doctors" icon={Info}>
+          Our Doctors
+        </MobileNavItemWithIcon>
+      )}
+
       {userRole === "admin" && (
         <MobileNavItemWithIcon to="/admin" icon={ShieldCheck}>
           Admin Dashboard
