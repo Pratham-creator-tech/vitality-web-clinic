@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import VideoCall from '@/components/meeting/VideoCall';
+import EnhancedVideoCall from '@/components/meeting/EnhancedVideoCall';
 import MeetingLobby from '@/components/meeting/MeetingLobby';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -51,7 +51,7 @@ const Meeting = () => {
           defaultUserName={defaultUserName}
         />
       ) : (
-        <VideoCall
+        <EnhancedVideoCall
           meetingId={meetingId}
           userName={userName}
           onEndCall={handleEndCall}

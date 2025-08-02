@@ -3,6 +3,260 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Enhanced Design System */
+@layer base {
+  :root {
+    /* Enhanced Color Palette */
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+    --primary-light: 221 83% 65%;
+    --primary-dark: 221 83% 45%;
+    
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 84% 4.9%;
+    
+    --accent: 210 40% 94%;
+    --accent-foreground: 222 84% 4.9%;
+    
+    --background: 0 0% 100%;
+    --foreground: 222 84% 4.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 84% 4.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 84% 4.9%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 46%;
+    
+    --ring: 221 83% 53%;
+    --radius: 0.75rem;
+    
+    /* Enhanced Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(221, 83%, 53%), hsl(221, 83%, 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(210, 40%, 96%), hsl(210, 40%, 94%));
+    --gradient-accent: linear-gradient(135deg, hsl(180, 100%, 85%), hsl(210, 100%, 90%));
+    --gradient-hero: linear-gradient(135deg, hsl(221, 83%, 53%) 0%, hsl(180, 100%, 85%) 50%, hsl(210, 100%, 90%) 100%);
+    
+    /* Enhanced Shadows */
+    --shadow-soft: 0 2px 8px -2px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-glow: 0 0 0 1px rgba(59, 130, 246, 0.1), 0 0 15px rgba(59, 130, 246, 0.1);
+    
+    /* Animation Variables */
+    --animation-fast: 0.15s;
+    --animation-normal: 0.3s;
+    --animation-slow: 0.5s;
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dark {
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 221 83% 53%;
+    --primary-foreground: 222 84% 4.9%;
+    
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    
+    --ring: 224 71% 36%;
+    
+    /* Dark mode gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(222, 84%, 4.9%) 0%, hsl(217, 33%, 17%) 50%, hsl(221, 83%, 53%) 100%);
+    --shadow-glow: 0 0 0 1px rgba(59, 130, 246, 0.2), 0 0 20px rgba(59, 130, 246, 0.15);
+  }
+}
+
+@layer components {
+  /* Enhanced Button Styles */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-primary-light text-primary-foreground;
+    @apply hover:from-primary-dark hover:to-primary;
+    @apply shadow-lg hover:shadow-xl transition-all duration-300;
+    @apply transform hover:scale-105 active:scale-95;
+  }
+  
+  .btn-glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+    @apply hover:bg-white/20 transition-all duration-300;
+    @apply shadow-lg hover:shadow-xl;
+  }
+  
+  /* Enhanced Card Styles */
+  .card-enhanced {
+    @apply bg-card/95 backdrop-blur-md border border-border/50;
+    @apply shadow-soft hover:shadow-medium transition-all duration-300;
+    @apply rounded-xl overflow-hidden;
+  }
+  
+  .card-glow {
+    @apply relative;
+    box-shadow: var(--shadow-glow);
+  }
+  
+  /* Floating Animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: -2s;
+  }
+  
+  /* Morphing Background */
+  .morphing-bg {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Enhanced Scale Animation */
+@keyframes scale-up {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+.animate-scale-up {
+  animation: scale-up 20s ease-in-out infinite alternate;
+}
+
+/* Enhanced Overlay Pulse */
+@keyframes overlay-pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+.animate-overlay-pulse {
+  animation: overlay-pulse 8s ease-in-out infinite;
+}
+
+/* Enhanced Fade Animations */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s var(--ease-out-quart) both;
+}
+
+@keyframes slide-fade-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-fade-in-right {
+  animation: slide-fade-in-right 0.8s var(--ease-out-quart) 0.2s both;
+}
+
+/* Enhanced Bounce */
+@keyframes gentle-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.05);
+  }
+}
+.animate-gentle-bounce {
+  animation: gentle-bounce 2s ease-in-out infinite;
+}
+
+/* Enhanced Hover Effects */
+.hover-lift {
+  @apply transition-all duration-300 hover:transform hover:scale-105 hover:shadow-xl;
+}
+
+.hover-glow {
+  @apply transition-all duration-300;
+}
+.hover-glow:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+/* Glassmorphism Effects */
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/20;
+}
+
+.glass-dark {
+  @apply bg-black/10 backdrop-blur-md border border-white/10;
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);
