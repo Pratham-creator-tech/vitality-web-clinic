@@ -92,8 +92,8 @@
 @layer components {
   /* Enhanced Button Styles */
   .btn-gradient {
-    @apply bg-gradient-to-r from-primary to-primary-light text-primary-foreground;
-    @apply hover:from-primary-dark hover:to-primary;
+    @apply bg-gradient-to-r from-primary to-blue-400 text-primary-foreground;
+    @apply hover:from-blue-600 hover:to-primary;
     @apply shadow-lg hover:shadow-xl transition-all duration-300;
     @apply transform hover:scale-105 active:scale-95;
   }

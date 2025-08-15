@@ -73,8 +73,8 @@ function App() {
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/services" element={<Services />} />
-                <Route path="/doctors" element={<DoctorsPage />} />
-                <Route path="/doctor/:id" element={<DoctorProfile />} />
+                <Route path="/doctors" element={<ProtectedRoute><DoctorsPage /></ProtectedRoute>} />
+                <Route path="/doctor/:id" element={<ProtectedRoute><DoctorProfile /></ProtectedRoute>} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
                 <Route path="/signin" element={<SignIn />} />
