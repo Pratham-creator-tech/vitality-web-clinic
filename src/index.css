@@ -107,8 +107,21 @@
   /* Enhanced Card Styles */
   .card-enhanced {
     @apply bg-card/95 backdrop-blur-md border border-border/50;
-    @apply shadow-soft hover:shadow-medium transition-all duration-300;
+    @apply shadow-lg hover:shadow-xl transition-all duration-300;
     @apply rounded-xl overflow-hidden;
+  }
+  
+  /* Custom Shadow Utilities */
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-medium {
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .shadow-large {
+    box-shadow: var(--shadow-large);
   }
   
   .card-glow {
