@@ -11,22 +11,33 @@ import { Search, MapPin, Star, Clock, Calendar, Filter, Award, Heart, Shield } f
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { PageLayout } from '@/components/layout/PageLayout';
+import PageLayout from '@/components/layout/PageLayout';
 
 interface Doctor {
   id: string;
+  user_id: string;
   full_name: string;
-  specialization: string;
-  profile_image?: string;
-  clinic_address?: string;
+  email: string;
   phone?: string;
-  email?: string;
+  specialization?: string;
   about?: string;
+  profile_image?: string;
+  subscription_tier?: string;
+  subscription_status?: string;
+  languages?: string[];
+  services?: string[];
+  clinic_address?: string;
+  awards?: string[];
+  professional_memberships?: string[];
   experience_years?: number;
+  subscription_start_date?: string;
+  subscription_end_date?: string;
+  created_at: string;
+  updated_at: string;
+  // UI enhancement fields
   rating?: number;
   reviews_count?: number;
   consultation_fee?: number;
-  languages?: string[];
   certifications?: string[];
   availability_status?: 'available' | 'busy' | 'offline';
 }
@@ -69,20 +80,19 @@ const DoctorsPage = () => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('doctors')
         .select('*')
-        .eq('role', 'doctor')
+        .eq('subscription_status', 'active')
         .order('full_name');
 
       if (error) throw error;
 
       // Mock additional data for demonstration
-      const enhancedData = data?.map(doctor => ({
+      const enhancedData: Doctor[] = data?.map(doctor => ({
         ...doctor,
         rating: 4.2 + Math.random() * 0.8,
         reviews_count: Math.floor(Math.random() * 500) + 50,
         consultation_fee: Math.floor(Math.random() * 500) + 300,
-        languages: ['English', 'Hindi', ...(Math.random() > 0.5 ? ['Regional'] : [])],
         certifications: ['BPT', 'MPT', ...(Math.random() > 0.7 ? ['PhD'] : [])],
         availability_status: ['available', 'busy', 'offline'][Math.floor(Math.random() * 3)] as 'available' | 'busy' | 'offline'
       })) || [];

@@ -26,25 +26,36 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { PageLayout } from '@/components/layout/PageLayout';
+import PageLayout from '@/components/layout/PageLayout';
 
 interface Doctor {
   id: string;
+  user_id: string;
   full_name: string;
-  specialization: string;
-  profile_image?: string;
-  clinic_address?: string;
+  email: string;
   phone?: string;
-  email?: string;
+  specialization?: string;
   about?: string;
-  experience_years?: number;
-  education?: string[];
-  certifications?: string[];
+  profile_image?: string;
+  subscription_tier?: string;
+  subscription_status?: string;
   languages?: string[];
-  services_offered?: string[];
-  consultation_fee?: number;
+  services?: string[];
+  clinic_address?: string;
+  awards?: string[];
+  professional_memberships?: string[];
+  experience_years?: number;
+  subscription_start_date?: string;
+  subscription_end_date?: string;
+  created_at: string;
+  updated_at: string;
+  // UI enhancement fields
   rating?: number;
   reviews_count?: number;
+  consultation_fee?: number;
+  education?: string[];
+  certifications?: string[];
+  services_offered?: string[];
   availability_hours?: string;
   achievements?: string[];
 }
@@ -63,6 +74,7 @@ const DoctorProfile = () => {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -75,24 +87,26 @@ const DoctorProfile = () => {
   const fetchDoctorProfile = async () => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('doctors')
         .select('*')
         .eq('id', id)
-        .eq('role', 'doctor')
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) {
+        setError('Doctor not found');
+        return;
+      }
 
       // Enhance with mock data for demonstration
-      const enhancedDoctor = {
+      const enhancedDoctor: Doctor = {
         ...data,
         rating: 4.2 + Math.random() * 0.8,
         reviews_count: Math.floor(Math.random() * 500) + 50,
         consultation_fee: Math.floor(Math.random() * 500) + 300,
         education: ['Bachelor of Physiotherapy (BPT)', 'Master of Physiotherapy (MPT)'],
         certifications: ['Certified Manual Therapist', 'Dry Needling Certification', 'Sports Injury Specialist'],
-        languages: ['English', 'Hindi', 'Regional Language'],
-        services_offered: [
+        services_offered: data?.services || [
           'Orthopedic Rehabilitation',
           'Sports Injury Treatment',
           'Manual Therapy',
