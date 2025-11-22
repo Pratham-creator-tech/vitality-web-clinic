@@ -217,42 +217,65 @@ const DoctorProfile = () => {
 
   return (
     <PageLayout>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-cyan-50/50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/20 to-background py-8">
         <div className="container mx-auto px-4">
           {/* Back Button */}
-          <Button variant="ghost" asChild className="mb-6">
+          <Button variant="ghost" asChild className="mb-6 hover:bg-primary/10 hover:text-primary transition-colors">
             <Link to="/doctors" className="flex items-center">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Doctors
+              Back to All Doctors
             </Link>
           </Button>
 
-          {/* Doctor Header */}
-          <Card className="mb-8 shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-            <CardContent className="p-8">
+          {/* Doctor Header - Enhanced Design */}
+          <Card className="mb-8 shadow-2xl border border-border/50 bg-card overflow-hidden animate-fade-in">
+            {/* Hero Background */}
+            <div className="relative h-48 bg-gradient-to-br from-primary/20 via-blue-100 to-cyan-100 dark:from-primary/30 dark:via-blue-900/30 dark:to-cyan-900/30">
+              <div className="absolute inset-0 bg-grid-pattern opacity-10"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent"></div>
+            </div>
+            
+            <CardContent className="p-8 -mt-20">
               <div className="flex flex-col lg:flex-row gap-8">
-                <div className="flex flex-col items-center lg:items-start">
-                  <Avatar className="h-32 w-32 border-4 border-white shadow-xl mb-4">
-                    <AvatarImage src={doctor.profile_image} alt={doctor.full_name} />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-2xl font-bold">
-                      {getInitials(doctor.full_name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-sm font-medium">Available</span>
+                <div className="flex flex-col items-center lg:items-start relative z-10">
+                  <div className="relative group">
+                    <Avatar className="h-40 w-40 border-6 border-card shadow-2xl ring-4 ring-background/50 transition-transform duration-300 group-hover:scale-105">
+                      <AvatarImage src={doctor.profile_image} alt={doctor.full_name} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-blue-600 text-primary-foreground text-4xl font-bold">
+                        {getInitials(doctor.full_name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-3 border-4 border-card shadow-lg pulse">
+                      <div className="w-4 h-4 bg-white rounded-full"></div>
                     </div>
-                    <Badge className="bg-blue-100 text-blue-800">Verified</Badge>
+                  </div>
+                  
+                  <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+                    <Badge className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 border border-green-200 dark:border-green-800 px-4 py-2 shadow-sm">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                      Available Today
+                    </Badge>
+                    <Badge className="bg-primary/10 text-primary border border-primary/20 px-4 py-2 shadow-sm">
+                      <Shield className="h-3 w-3 mr-2" />
+                      Verified
+                    </Badge>
+                    <Badge className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 border border-blue-200 dark:border-blue-800 px-4 py-2 shadow-sm">
+                      <Award className="h-3 w-3 mr-2" />
+                      Top Rated
+                    </Badge>
                   </div>
                 </div>
 
                 <div className="flex-1">
                   <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
-                    <div>
-                      <h1 className="text-3xl font-bold text-gray-900 mb-2">{doctor.full_name}</h1>
-                      <p className="text-xl text-blue-600 font-medium mb-4">{doctor.specialization}</p>
+                    <div className="flex-1">
+                      <h1 className="text-4xl font-bold text-foreground mb-3 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+                        Dr. {doctor.full_name}
+                      </h1>
+                      <p className="text-xl text-primary font-semibold mb-5 flex items-center">
+                        <GraduationCap className="h-5 w-5 mr-2" />
+                        {doctor.specialization}
+                      </p>
                       
                       <div className="flex items-center gap-6 mb-4">
                         <div className="flex items-center">

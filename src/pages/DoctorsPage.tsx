@@ -7,11 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, MapPin, Star, Clock, Calendar, Filter, Award, Heart, Shield } from 'lucide-react';
+import { Search, MapPin, Star, Clock, Calendar, Filter, Award, Heart, Shield, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import PageLayout from '@/components/layout/PageLayout';
+import { Separator } from '@/components/ui/separator';
 
 interface Doctor {
   id: string;
@@ -178,37 +179,67 @@ const DoctorsPage = () => {
 
   return (
     <PageLayout>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-white to-cyan-50/50 py-8">
+      <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-background py-12">
         <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Our Expert Physiotherapists
+          {/* Hero Header */}
+          <div className="text-center mb-16 animate-fade-in">
+            <div className="inline-block mb-4">
+              <Badge className="bg-primary/10 text-primary hover:bg-primary/20 px-4 py-2 text-sm">
+                <Shield className="h-4 w-4 mr-2 inline" />
+                Verified Healthcare Professionals
+              </Badge>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
+              Find Your Perfect
+              <br />Physiotherapy Expert
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Connect with certified physiotherapy professionals across India. Each doctor is verified and committed to providing exceptional care.
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Connect with India's top certified physiotherapists. Expert care for sports injuries, chronic pain, rehabilitation, and wellness.
             </p>
             
             {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center gap-6 mt-8">
-              <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-md">
-                <Shield className="h-5 w-5 text-green-500 mr-2" />
-                <span className="text-sm font-medium">Government Certified</span>
+            <div className="flex flex-wrap justify-center gap-4 mt-10">
+              <div className="group flex items-center bg-card border border-border rounded-2xl px-6 py-4 shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1">
+                <div className="bg-green-100 dark:bg-green-900/30 rounded-full p-2 mr-3 group-hover:scale-110 transition-transform">
+                  <Shield className="h-5 w-5 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-semibold text-foreground">Certified</div>
+                  <div className="text-xs text-muted-foreground">Government Licensed</div>
+                </div>
               </div>
-              <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-md">
-                <Award className="h-5 w-5 text-blue-500 mr-2" />
-                <span className="text-sm font-medium">5+ Years Experience</span>
+              <div className="group flex items-center bg-card border border-border rounded-2xl px-6 py-4 shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1">
+                <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-2 mr-3 group-hover:scale-110 transition-transform">
+                  <Award className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-semibold text-foreground">Experienced</div>
+                  <div className="text-xs text-muted-foreground">5+ Years Average</div>
+                </div>
               </div>
-              <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-md">
-                <Heart className="h-5 w-5 text-red-500 mr-2" />
-                <span className="text-sm font-medium">Patient-Focused Care</span>
+              <div className="group flex items-center bg-card border border-border rounded-2xl px-6 py-4 shadow-soft hover:shadow-medium transition-all duration-300 hover:-translate-y-1">
+                <div className="bg-red-100 dark:bg-red-900/30 rounded-full p-2 mr-3 group-hover:scale-110 transition-transform">
+                  <Heart className="h-5 w-5 text-red-600 dark:text-red-400" />
+                </div>
+                <div className="text-left">
+                  <div className="text-sm font-semibold text-foreground">Patient First</div>
+                  <div className="text-xs text-muted-foreground">98% Satisfaction</div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Filters */}
-          <Card className="mb-8 shadow-lg border-0 bg-white/80 backdrop-blur-sm">
+          <Card className="mb-8 shadow-xl border border-border bg-card/95 backdrop-blur-sm">
             <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-foreground">Find Your Perfect Match</h2>
+                <Button asChild variant="outline" size="sm" className="gap-2">
+                  <Link to="/doctors/compare">
+                    Compare Doctors
+                  </Link>
+                </Button>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -277,84 +308,116 @@ const DoctorsPage = () => {
           </div>
 
           {/* Doctors Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDoctors.map((doctor) => (
-              <Card key={doctor.id} className="hover:shadow-xl transition-all duration-300 border-0 bg-white/90 backdrop-blur-sm hover:-translate-y-1">
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className="relative">
-                        <Avatar className="h-16 w-16 border-4 border-white shadow-lg">
-                          <AvatarImage src={doctor.profile_image} alt={doctor.full_name} />
-                          <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
-                            {getInitials(doctor.full_name)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className={`absolute -bottom-1 -right-1 w-5 h-5 ${getAvailabilityColor(doctor.availability_status)} rounded-full border-2 border-white`}></div>
-                      </div>
-                      <div className="flex-1">
-                        <CardTitle className="text-lg text-gray-800 mb-2">{doctor.full_name}</CardTitle>
-                        <p className="text-sm text-blue-600 font-medium">{doctor.specialization}</p>
-                        <p className="text-xs text-muted-foreground">{getAvailabilityText(doctor.availability_status)}</p>
-                      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredDoctors.map((doctor, index) => (
+              <Card 
+                key={doctor.id} 
+                className="group hover:shadow-2xl transition-all duration-500 border border-border bg-card hover:-translate-y-2 hover:border-primary/50 overflow-hidden animate-fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                {/* Card Header with Gradient Overlay */}
+                <div className="relative h-32 bg-gradient-to-br from-primary/10 via-blue-50 to-cyan-50 dark:from-primary/20 dark:via-blue-900/20 dark:to-cyan-900/20">
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent"></div>
+                  <div className="absolute -bottom-12 left-6">
+                    <div className="relative">
+                      <Avatar className="h-24 w-24 border-4 border-card shadow-xl ring-4 ring-background/50 transition-transform duration-300 group-hover:scale-110">
+                        <AvatarImage src={doctor.profile_image} alt={doctor.full_name} />
+                        <AvatarFallback className="bg-gradient-to-br from-primary to-blue-600 text-primary-foreground text-xl font-bold">
+                          {getInitials(doctor.full_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className={`absolute -bottom-1 -right-1 w-6 h-6 ${getAvailabilityColor(doctor.availability_status)} rounded-full border-3 border-card shadow-lg pulse`}></div>
+                      <Badge className="absolute -top-2 -right-2 bg-primary text-primary-foreground shadow-lg">
+                        <Award className="h-3 w-3 mr-1" />
+                        Verified
+                      </Badge>
                     </div>
                   </div>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  {/* Rating and Experience */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1">
-                      <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                      <span className="font-semibold">{doctor.rating?.toFixed(1)}</span>
-                      <span className="text-sm text-muted-foreground">({doctor.reviews_count} reviews)</span>
+                </div>
+
+                <CardContent className="pt-16 pb-6 px-6 space-y-4">
+                  {/* Doctor Info */}
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
+                      {doctor.full_name}
+                    </h3>
+                    <p className="text-sm text-primary font-medium mb-2">{doctor.specialization}</p>
+                    <div className="inline-flex items-center bg-muted rounded-full px-3 py-1 text-xs">
+                      <div className={`w-2 h-2 ${getAvailabilityColor(doctor.availability_status)} rounded-full mr-2 animate-pulse`}></div>
+                      <span className="font-medium">{getAvailabilityText(doctor.availability_status)}</span>
                     </div>
+                  </div>
+
+                  {/* Stats Row */}
+                  <div className="flex items-center justify-between py-3 border-y border-border">
+                    <div className="flex items-center space-x-1">
+                      <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                      <span className="font-bold text-foreground">{doctor.rating?.toFixed(1)}</span>
+                      <span className="text-xs text-muted-foreground">({doctor.reviews_count})</span>
+                    </div>
+                    <Separator orientation="vertical" className="h-4" />
                     {doctor.experience_years && (
-                      <Badge variant="secondary" className="bg-blue-50 text-blue-700">
-                        {doctor.experience_years} years exp
+                      <Badge variant="secondary" className="bg-primary/10 text-primary">
+                        {doctor.experience_years}+ yrs
                       </Badge>
                     )}
+                    <Separator orientation="vertical" className="h-4" />
+                    <div className="text-right">
+                      <div className="text-xs text-muted-foreground">Fee</div>
+                      <div className="font-bold text-green-600 dark:text-green-400">₹{doctor.consultation_fee}</div>
+                    </div>
                   </div>
 
                   {/* Location */}
                   {doctor.clinic_address && (
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <MapPin className="h-4 w-4 mr-2" />
-                      <span className="truncate">{doctor.clinic_address}</span>
+                    <div className="flex items-start text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
+                      <MapPin className="h-4 w-4 mr-2 mt-0.5 flex-shrink-0 text-primary" />
+                      <span className="line-clamp-2">{doctor.clinic_address}</span>
                     </div>
                   )}
 
-                  {/* Consultation Fee */}
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground">Consultation Fee:</span>
-                    <span className="font-semibold text-green-600">₹{doctor.consultation_fee}</span>
-                  </div>
-
                   {/* Languages */}
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-2">
                     {doctor.languages?.slice(0, 3).map((language, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
+                      <Badge key={index} variant="outline" className="text-xs border-primary/20 hover:border-primary hover:bg-primary/10 transition-colors">
                         {language}
                       </Badge>
                     ))}
+                    {doctor.languages && doctor.languages.length > 3 && (
+                      <Badge variant="outline" className="text-xs">
+                        +{doctor.languages.length - 3} more
+                      </Badge>
+                    )}
                   </div>
 
-                  {/* About */}
+                  {/* About Preview */}
                   {doctor.about && (
-                    <p className="text-sm text-muted-foreground line-clamp-2">{doctor.about}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed italic">
+                      "{doctor.about}"
+                    </p>
                   )}
 
                   {/* Action Buttons */}
-                  <div className="flex gap-2 pt-4">
-                    <Button asChild variant="outline" size="sm" className="flex-1 hover:bg-blue-50">
-                      <Link to={`/doctor/${doctor.id}`}>
-                        View Profile
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      asChild 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-300"
+                    >
+                      <Link to={`/doctor/${doctor.id}`} className="flex items-center justify-center">
+                        <User className="h-4 w-4 mr-2" />
+                        Profile
                       </Link>
                     </Button>
-                    <Button asChild size="sm" className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                    <Button 
+                      asChild 
+                      size="sm" 
+                      className="flex-[2] bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
                       <Link to="/booking" className="flex items-center justify-center">
                         <Calendar className="h-4 w-4 mr-2" />
-                        Book Now
+                        Book Appointment
                       </Link>
                     </Button>
                   </div>
