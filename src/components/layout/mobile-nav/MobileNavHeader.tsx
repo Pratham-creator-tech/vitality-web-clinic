@@ -16,7 +16,7 @@ export const MobileNavHeader = ({ onClose }: MobileNavHeaderProps) => {
           <img 
             src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
             alt="Yasha Physiocare Logo"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-screen opacity-90"
           />
         </div>
         <SheetTitle className="text-xl font-bold font-display">
