@@ -48,11 +48,11 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center group">
               <div className="flex items-center">
-                {/* Logo Image - No background box, matches navbar background */}
+                {/* Logo Image - Blends with navbar background */}
                 <motion.img 
                   src="/lovable-uploads/d4839bdf-5201-41d9-9549-0b1021009501.png"
                   alt="YASHA's Physiocare Logo"
-                  className="h-10 w-10 object-contain"
+                  className="h-10 w-10 object-contain mix-blend-multiply dark:mix-blend-screen opacity-90"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}

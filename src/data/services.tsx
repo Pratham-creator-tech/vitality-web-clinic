@@ -40,7 +40,7 @@ export const serviceData = [
     description: "Specialized treatment for sports-related injuries and performance enhancement.",
     icon: <Activity className="h-10 w-10 text-vitality-400" />,
     link: "/services/sports-rehabilitation",
-    image: "/lovable-uploads/510a9189-5ee7-49c6-8e7b-8f93d604890e.png",
+    image: new URL("../assets/sports-rehabilitation.jpg", import.meta.url).href,
     category: "core",
   },
   {
@@ -49,7 +49,7 @@ export const serviceData = [
     description: "Hands-on techniques to reduce pain, decrease restriction and restore mobility.",
     icon: <HandHeart className="h-10 w-10 text-vitality-400" />,
     link: "/services/manual-therapy",
-    image: "/lovable-uploads/efbaad3c-8a4b-4c84-ad49-dd7aac058243.png",
+    image: new URL("../assets/manual-therapy.jpg", import.meta.url).href,
     category: "core",
   },
   {
@@ -58,7 +58,7 @@ export const serviceData = [
     description: "Specialized programs for optimal recovery after surgery.",
     icon: <Bone className="h-10 w-10 text-vitality-400" />,
     link: "/services/post-surgical",
-    image: "/lovable-uploads/863e4279-0e48-4920-b67b-bc998a402a0a.png",
+    image: new URL("../assets/post-surgical.jpg", import.meta.url).href,
     category: "core",
   },
   {
@@ -67,7 +67,7 @@ export const serviceData = [
     description: "Comprehensive approaches to manage and reduce persistent pain.",
     icon: <Heart className="h-10 w-10 text-vitality-400" />,
     link: "/services/chronic-pain",
-    image: "/lovable-uploads/d81465e1-16ed-4f41-9628-3135bd368c43.png",
+    image: new URL("../assets/chronic-pain.jpg", import.meta.url).href,
     category: "core",
   },
   {
@@ -76,7 +76,7 @@ export const serviceData = [
     description: "Specialized care for neurological conditions and recovery.",
     icon: <BrainCircuit className="h-10 w-10 text-vitality-400" />,
     link: "/services/neurological",
-    image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1773&q=80",
+    image: new URL("../assets/neurological.jpg", import.meta.url).href,
     category: "core",
   },
   {
@@ -85,7 +85,7 @@ export const serviceData = [
     description: "Build strength, improve function and prevent injuries with expert guidance.",
     icon: <Dumbbell className="h-10 w-10 text-vitality-400" />,
     link: "/services/strength-conditioning",
-    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: new URL("../assets/strength-conditioning.jpg", import.meta.url).href,
     category: "core",
   },
   {
@@ -94,7 +94,7 @@ export const serviceData = [
     description: "Specialized care for children's development and rehabilitation needs.",
     icon: <Baby className="h-10 w-10 text-vitality-400" />,
     link: "/services/pediatric-rehabilitation",
-    image: "/lovable-uploads/7e0d7c53-c8c7-41ee-ba96-080fb8d69252.png",
+    image: new URL("../assets/pediatric.jpg", import.meta.url).href,
     category: "specialized",
   },
   {
@@ -103,7 +103,7 @@ export const serviceData = [
     description: "Specialized care for elderly patients focusing on mobility and independence.",
     icon: <ThermometerSun className="h-10 w-10 text-vitality-400" />,
     link: "/services/geriatric-rehabilitation",
-    image: "/lovable-uploads/f2423b88-6c23-434c-aaf9-05075064894d.png",
+    image: new URL("../assets/geriatric.jpg", import.meta.url).href,
     category: "specialized",
   },
   {
