@@ -32,6 +32,7 @@ import PainTracker from "./pages/PainTracker";
 import Recommendations from "./pages/Recommendations";
 import DoctorsPage from "./pages/DoctorsPage";
 import DoctorProfile from "./pages/DoctorProfile";
+import DoctorComparison from "./pages/DoctorComparison";
 import DoctorBenefits from "./pages/DoctorBenefits";
 import Feedback from "./pages/Feedback";
 
@@ -75,6 +76,7 @@ function App() {
                 <Route path="/services" element={<Services />} />
                 <Route path="/doctors" element={<ProtectedRoute><DoctorsPage /></ProtectedRoute>} />
                 <Route path="/doctor/:id" element={<ProtectedRoute><DoctorProfile /></ProtectedRoute>} />
+                <Route path="/doctors/compare" element={<ProtectedRoute><DoctorComparison /></ProtectedRoute>} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
                 <Route path="/signin" element={<SignIn />} />
