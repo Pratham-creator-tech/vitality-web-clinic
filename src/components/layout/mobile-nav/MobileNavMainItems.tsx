@@ -1,5 +1,4 @@
-
-import { Home, Info, Phone, ShieldCheck } from "lucide-react";
+import { Home, Info, Phone, ShieldCheck, HelpCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { MobileNavLink } from "./MobileNavLink";
@@ -13,6 +12,10 @@ export const MobileNavMainItems = () => {
     <>
       <MobileNavItemWithIcon to="/" icon={Home}>
         {t("app.header.home")}
+      </MobileNavItemWithIcon>
+      
+      <MobileNavItemWithIcon to="/service-selector" icon={HelpCircle}>
+        Service Selector Quiz
       </MobileNavItemWithIcon>
       
       <MobileNavLink to="/pricing">

@@ -28,6 +28,9 @@ export const MobileNavUserDashboard = () => {
           <MobileNavItemWithIcon to="/pain-tracker" icon={Activity}>
             Pain Tracker
           </MobileNavItemWithIcon>
+          <MobileNavItemWithIcon to="/progress-tracker" icon={Activity}>
+            Progress Tracker
+          </MobileNavItemWithIcon>
           <MobileNavItemWithIcon to="/recommendations" icon={Stethoscope}>
             Recommendations
           </MobileNavItemWithIcon>

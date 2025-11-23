@@ -29,6 +29,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AccountSettings from "./pages/AccountSettings";
 import Billing from "./pages/Billing";
 import PainTracker from "./pages/PainTracker";
+import ProgressTracker from "./pages/ProgressTracker";
+import ServiceSelector from "./pages/ServiceSelector";
 import Recommendations from "./pages/Recommendations";
 import DoctorsPage from "./pages/DoctorsPage";
 import DoctorProfile from "./pages/DoctorProfile";
@@ -104,6 +106,8 @@ function App() {
                 <Route path="/account-settings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
                 <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
                 <Route path="/pain-tracker" element={<ProtectedRoute><PainTracker /></ProtectedRoute>} />
+                <Route path="/progress-tracker" element={<ProtectedRoute><ProgressTracker /></ProtectedRoute>} />
+                <Route path="/service-selector" element={<ServiceSelector />} />
                 <Route path="/recommendations" element={<ProtectedRoute><Recommendations /></ProtectedRoute>} />
                 <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
                 

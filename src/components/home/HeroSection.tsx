@@ -69,9 +69,9 @@ const HeroSection = () => {
             
             <div className="flex flex-col sm:flex-row gap-6 mb-12">
               <Button asChild size="lg" className="btn-gradient text-lg py-6 px-8 rounded-full shadow-xl hover-lift">
-                <Link to="/recommendations" className="flex items-center">
+                <Link to="/service-selector" className="flex items-center">
                   <Search className="mr-3 h-6 w-6" />
-                  Find Your Doctor
+                  Find Your Service
                 </Link>
               </Button>
               <Button asChild size="lg" className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white text-lg py-6 px-8 rounded-full shadow-xl hover-lift">
