@@ -112,7 +112,7 @@ export const serviceData = [
     description: "Specialized physiotherapy services for women's unique health needs.",
     icon: <Heart className="h-10 w-10 text-vitality-400" />,
     link: "/services/womens-health",
-    image: "https://images.unsplash.com/photo-1518310952931-b1de897abd40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: new URL("../assets/womens-health.jpg", import.meta.url).href,
     category: "specialized",
   },
   {
@@ -121,7 +121,7 @@ export const serviceData = [
     description: "Correct posture problems and improve ergonomic wellness.",
     icon: <UserPlus className="h-10 w-10 text-vitality-400" />,
     link: "/services/postural-alignment",
-    image: "/lovable-uploads/0c401620-99d7-4077-92c4-8991ed051b54.png",
+    image: new URL("../assets/postural-alignment.jpg", import.meta.url).href,
     category: "specialized",
   },
   {
@@ -130,7 +130,7 @@ export const serviceData = [
     description: "Personalized weight management and fitness programs for sustainable results.",
     icon: <Weight className="h-10 w-10 text-vitality-400" />,
     link: "/services/obesity-management",
-    image: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1769&q=80",
+    image: new URL("../assets/obesity-management.jpg", import.meta.url).href,
     category: "specialized",
   },
   {
@@ -139,7 +139,7 @@ export const serviceData = [
     description: "Motivating group sessions for fitness and rehabilitation.",
     icon: <Users className="h-10 w-10 text-vitality-400" />,
     link: "/services/group-exercises",
-    image: "/lovable-uploads/79205ab3-ab93-49a4-92bc-d9d6765c3a9a.png",
+    image: new URL("../assets/group-exercise.jpg", import.meta.url).href,
     category: "specialized",
   },
   {
@@ -148,7 +148,7 @@ export const serviceData = [
     description: "Advanced taping techniques for pain relief and muscle support.",
     icon: <Bandage className="h-10 w-10 text-vitality-400" />,
     link: "/services/kinesiotaping",
-    image: "/lovable-uploads/ac03d3e2-37c6-4508-8fa1-f9919c46e85d.png",
+    image: new URL("../assets/kinesiotaping.jpg", import.meta.url).href,
     category: "advanced",
   },
   {
@@ -157,7 +157,7 @@ export const serviceData = [
     description: "Precision treatment for muscle pain and tension.",
     icon: <Syringe className="h-10 w-10 text-vitality-400" />,
     link: "/services/dry-needling",
-    image: "/lovable-uploads/bc0dc033-b554-4c42-b097-ae2e85030924.png",
+    image: new URL("../assets/dry-needling.jpg", import.meta.url).href,
     category: "advanced",
   },
   {
@@ -166,7 +166,7 @@ export const serviceData = [
     description: "Advanced treatment for nerve-related conditions.",
     icon: <Zap className="h-10 w-10 text-vitality-400" />,
     link: "/services/neuro-dynamic",
-    image: "https://images.unsplash.com/photo-1607962837359-5e7e89f86776?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: new URL("../assets/neuro-dynamic.jpg", import.meta.url).href,
     category: "advanced",
   },
   {
@@ -175,7 +175,7 @@ export const serviceData = [
     description: "Traditional therapy for muscle tension and circulation.",
     icon: <Grid className="h-10 w-10 text-vitality-400" />,
     link: "/services/cupping-therapy",
-    image: "/lovable-uploads/2eff2a62-2c07-4abe-8845-55eaef425bf8.png",
+    image: new URL("../assets/cupping-therapy.jpg", import.meta.url).href,
     category: "advanced",
   },
   {
@@ -184,7 +184,7 @@ export const serviceData = [
     description: "Expert care from the comfort of your home.",
     icon: <Video className="h-10 w-10 text-vitality-400" />,
     link: "/services/virtual-physiotherapy",
-    image: "https://images.unsplash.com/photo-1609220136736-443140cffec6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1770&q=80",
+    image: new URL("../assets/virtual-physiotherapy.jpg", import.meta.url).href,
     category: "advanced",
   },
 ];
