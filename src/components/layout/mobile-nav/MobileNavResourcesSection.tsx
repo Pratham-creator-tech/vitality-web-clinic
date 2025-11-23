@@ -1,4 +1,3 @@
-
 import { MobileNavAccordion } from "./MobileNavAccordion";
 import { MobileNavItemWithIcon } from "./MobileNavItemWithIcon";
 import { 
@@ -7,11 +6,18 @@ import {
   Users, 
   Activity, 
   Stethoscope, 
-  Brain
+  Brain,
+  TrendingUp,
+  HelpCircle
 } from "lucide-react";
 
 export const MobileNavResourcesSection = () => {
   const resourceItems = [
+    {
+      to: "/service-selector",
+      label: "Service Selector Quiz",
+      icon: HelpCircle,
+    },
     {
       to: "/ai-assistant",
       label: "AI Assistant",
@@ -31,6 +37,11 @@ export const MobileNavResourcesSection = () => {
       to: "/pain-tracker",
       label: "Pain Tracker",
       icon: Activity, 
+    },
+    {
+      to: "/progress-tracker",
+      label: "Progress Tracker",
+      icon: TrendingUp,
     },
     {
       to: "/recommendations",

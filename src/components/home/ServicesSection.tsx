@@ -103,8 +103,8 @@ const ServicesSection = () => {
             </Link>
           </Button>
           <Button asChild>
-            <Link to="/ai-assistant" className="flex items-center">
-              Try Our AI Assistant
+            <Link to="/service-selector" className="flex items-center">
+              Find Your Perfect Service
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
