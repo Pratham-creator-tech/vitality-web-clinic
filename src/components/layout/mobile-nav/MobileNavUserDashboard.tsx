@@ -1,4 +1,4 @@
-import { Calendar, User, Settings, CreditCard, Activity, Users, Stethoscope } from "lucide-react";
+import { Calendar, User, Settings, CreditCard, Activity, Users, Stethoscope, LayoutDashboard, Gift } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { MobileNavItemWithIcon } from "./MobileNavItemWithIcon";
 
@@ -18,6 +18,18 @@ export const MobileNavUserDashboard = () => {
       <MobileNavItemWithIcon to="/profile" icon={User}>
         My Profile
       </MobileNavItemWithIcon>
+
+      {userRole === "patient" && (
+        <MobileNavItemWithIcon to="/patient-dashboard" icon={LayoutDashboard}>
+          Patient Dashboard
+        </MobileNavItemWithIcon>
+      )}
+
+      {userRole === "doctor" && (
+        <MobileNavItemWithIcon to="/doctor-dashboard" icon={LayoutDashboard}>
+          Doctor Dashboard
+        </MobileNavItemWithIcon>
+      )}
       
       <MobileNavItemWithIcon to="/booking" icon={Calendar}>
         {userRole === "doctor" ? "Appointments" : "Book Appointment"}
@@ -33,6 +45,9 @@ export const MobileNavUserDashboard = () => {
           </MobileNavItemWithIcon>
           <MobileNavItemWithIcon to="/recommendations" icon={Stethoscope}>
             Recommendations
+          </MobileNavItemWithIcon>
+          <MobileNavItemWithIcon to="/referral-program" icon={Gift}>
+            Referral Program
           </MobileNavItemWithIcon>
         </>
       )}

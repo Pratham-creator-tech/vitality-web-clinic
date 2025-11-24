@@ -41,16 +41,29 @@ export const NavbarLinks = () => {
               </NavLink>
             </NavigationMenuItem>
 
+            {/* Dashboard links based on role */}
+            {user && userRole === "patient" && (
+              <RoleBasedNavLink 
+                linkPath="/patient-dashboard"
+                linkText="Dashboard"
+              />
+            )}
+
+            {user && userRole === "doctor" && (
+              <RoleBasedNavLink 
+                linkPath="/doctor-dashboard"
+                linkText="Dashboard"
+              />
+            )}
+
             {/* Conditionally show Doctors/Patients links based on user role */}
             {user && userRole === "doctor" ? (
               <RoleBasedNavLink 
-                role="doctor"
                 linkPath="/patients"
                 linkText="Patients"
               />
             ) : user && userRole === "patient" ? (
               <RoleBasedNavLink 
-                role="patient"
                 linkPath="/doctors"
                 linkText="Our Doctors"
               />

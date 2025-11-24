@@ -351,6 +351,9 @@ export type Database = {
           subscription_tier: string | null
           updated_at: string
           user_id: string
+          verification_documents: Json | null
+          verification_notes: string | null
+          verification_status: string | null
         }
         Insert: {
           about?: string | null
@@ -373,6 +376,9 @@ export type Database = {
           subscription_tier?: string | null
           updated_at?: string
           user_id: string
+          verification_documents?: Json | null
+          verification_notes?: string | null
+          verification_status?: string | null
         }
         Update: {
           about?: string | null
@@ -395,8 +401,87 @@ export type Database = {
           subscription_tier?: string | null
           updated_at?: string
           user_id?: string
+          verification_documents?: Json | null
+          verification_notes?: string | null
+          verification_status?: string | null
         }
         Relationships: []
+      }
+      exercise_prescriptions: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          doctor_id: string
+          duration: string | null
+          exercise_name: string
+          frequency: string | null
+          id: string
+          instructions: string | null
+          is_active: boolean | null
+          patient_id: string
+          reps: number | null
+          sets: number | null
+          treatment_plan_id: string | null
+          updated_at: string | null
+          video_url: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          doctor_id: string
+          duration?: string | null
+          exercise_name: string
+          frequency?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean | null
+          patient_id: string
+          reps?: number | null
+          sets?: number | null
+          treatment_plan_id?: string | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          doctor_id?: string
+          duration?: string | null
+          exercise_name?: string
+          frequency?: string | null
+          id?: string
+          instructions?: string | null
+          is_active?: boolean | null
+          patient_id?: string
+          reps?: number | null
+          sets?: number | null
+          treatment_plan_id?: string | null
+          updated_at?: string | null
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exercise_prescriptions_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_prescriptions_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exercise_prescriptions_treatment_plan_id_fkey"
+            columns: ["treatment_plan_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       faqs: {
         Row: {
@@ -930,6 +1015,56 @@ export type Database = {
           },
         ]
       }
+      referrals: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          referee_email: string
+          referee_name: string | null
+          referral_code: string
+          referrer_id: string
+          reward_amount: number | null
+          reward_status: string | null
+          status: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          referee_email: string
+          referee_name?: string | null
+          referral_code: string
+          referrer_id: string
+          reward_amount?: number | null
+          reward_status?: string | null
+          status?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          referee_email?: string
+          referee_name?: string | null
+          referral_code?: string
+          referrer_id?: string
+          reward_amount?: number | null
+          reward_status?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_referrer_id_fkey"
+            columns: ["referrer_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_details: {
         Row: {
           benefits: string[] | null
@@ -1028,6 +1163,66 @@ export type Database = {
           verified?: boolean
         }
         Relationships: []
+      }
+      treatment_plans: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          doctor_id: string
+          end_date: string | null
+          goals: Json | null
+          id: string
+          notes: string | null
+          patient_id: string
+          start_date: string
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          doctor_id: string
+          end_date?: string | null
+          goals?: Json | null
+          id?: string
+          notes?: string | null
+          patient_id: string
+          start_date: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          doctor_id?: string
+          end_date?: string | null
+          goals?: Json | null
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          start_date?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_plans_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatment_plans_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_feedback: {
         Row: {
