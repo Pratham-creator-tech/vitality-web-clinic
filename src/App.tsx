@@ -21,6 +21,9 @@ import InteractiveBodyMap from "./pages/InteractiveBodyMap";
 import Meeting from "./pages/Meeting";
 import DoctorRegistration from "./pages/DoctorRegistration";
 import DoctorOnboarding from "./pages/DoctorOnboarding";
+import PatientDashboard from "./pages/PatientDashboard";
+import DoctorDashboard from "./pages/DoctorDashboard";
+import ReferralProgram from "./pages/ReferralProgram";
 import PatientOnboarding from "./pages/PatientOnboarding";
 import PatientsList from "./pages/PatientsList";
 import PatientDetail from "./pages/PatientDetail";
@@ -110,6 +113,9 @@ function App() {
                 <Route path="/service-selector" element={<ServiceSelector />} />
                 <Route path="/recommendations" element={<ProtectedRoute><Recommendations /></ProtectedRoute>} />
                 <Route path="/feedback" element={<ProtectedRoute><Feedback /></ProtectedRoute>} />
+                <Route path="/patient-dashboard" element={<ProtectedRoute requiredRole="patient"><PatientDashboard /></ProtectedRoute>} />
+                <Route path="/doctor-dashboard" element={<ProtectedRoute requiredRole="doctor"><DoctorDashboard /></ProtectedRoute>} />
+                <Route path="/referral-program" element={<ProtectedRoute><ReferralProgram /></ProtectedRoute>} />
                 
                 {/* Service routes */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />
