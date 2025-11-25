@@ -25,10 +25,12 @@ const SportsRehabilitation = () => {
                   <Link to="/booking">Book a Session</Link>
                 </Button>
               </div>
-              <div className="md:w-1/2 flex justify-center">
-                <div className="bg-vitality-100 w-32 h-32 rounded-full flex items-center justify-center">
-                  <Activity className="h-16 w-16 text-vitality-600" />
-                </div>
+              <div className="md:w-1/2">
+                <img 
+                  src="/lovable-uploads/0c401620-99d7-4077-92c4-8991ed051b54.png" 
+                  alt="Sports rehabilitation exercises and therapy" 
+                  className="rounded-lg shadow-xl w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>
