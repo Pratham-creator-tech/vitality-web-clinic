@@ -31,6 +31,7 @@ import DoctorUSP from "./pages/DoctorUSP";
 import AdminDashboard from "./pages/AdminDashboard";
 import AccountSettings from "./pages/AccountSettings";
 import Billing from "./pages/Billing";
+import ChatPage from "./pages/ChatPage";
 import PainTracker from "./pages/PainTracker";
 import ProgressTracker from "./pages/ProgressTracker";
 import ServiceSelector from "./pages/ServiceSelector";
@@ -116,6 +117,7 @@ function App() {
                 <Route path="/patient-dashboard" element={<ProtectedRoute requiredRole="patient"><PatientDashboard /></ProtectedRoute>} />
                 <Route path="/doctor-dashboard" element={<ProtectedRoute requiredRole="doctor"><DoctorDashboard /></ProtectedRoute>} />
                 <Route path="/referral-program" element={<ProtectedRoute><ReferralProgram /></ProtectedRoute>} />
+                <Route path="/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
                 
                 {/* Service routes */}
                 <Route path="/services/sports-rehabilitation" element={<SportsRehabilitation />} />

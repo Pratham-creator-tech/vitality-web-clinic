@@ -11,7 +11,10 @@ import { AdminAppointments } from "@/components/admin/AdminAppointments";
 import { AdminServices } from "@/components/admin/AdminServices";
 import { AdminSettings } from "@/components/admin/AdminSettings";
 import { AdminHome } from "@/components/admin/AdminHome";
-import { UserPlus, CalendarRange, Layout, Settings, Home } from "lucide-react";
+import { AdminDoctorVerification } from "@/components/admin/AdminDoctorVerification";
+import { AdminReferrals } from "@/components/admin/AdminReferrals";
+import { AdminFeedback } from "@/components/admin/AdminFeedback";
+import { UserPlus, CalendarRange, Layout, Settings, Home, CheckCircle, Gift, MessageSquare } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
 
@@ -73,6 +76,18 @@ const AdminDashboard = () => {
                   <Settings className="h-4 w-4" />
                   <span className="hidden sm:inline">Settings</span>
                 </TabsTrigger>
+                <TabsTrigger value="verification" className="flex items-center gap-1">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="hidden sm:inline">Verification</span>
+                </TabsTrigger>
+                <TabsTrigger value="referrals" className="flex items-center gap-1">
+                  <Gift className="h-4 w-4" />
+                  <span className="hidden sm:inline">Referrals</span>
+                </TabsTrigger>
+                <TabsTrigger value="feedback" className="flex items-center gap-1">
+                  <MessageSquare className="h-4 w-4" />
+                  <span className="hidden sm:inline">Feedback</span>
+                </TabsTrigger>
               </TabsList>
             </div>
 
@@ -94,6 +109,18 @@ const AdminDashboard = () => {
             
             <TabsContent value="settings">
               <AdminSettings />
+            </TabsContent>
+
+            <TabsContent value="verification">
+              <AdminDoctorVerification />
+            </TabsContent>
+
+            <TabsContent value="referrals">
+              <AdminReferrals />
+            </TabsContent>
+
+            <TabsContent value="feedback">
+              <AdminFeedback />
             </TabsContent>
           </Tabs>
         </div>

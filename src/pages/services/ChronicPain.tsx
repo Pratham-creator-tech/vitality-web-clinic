@@ -25,10 +25,12 @@ const ChronicPain = () => {
                   <Link to="/booking">Book a Consultation</Link>
                 </Button>
               </div>
-              <div className="md:w-1/2 flex justify-center">
-                <div className="bg-vitality-100 w-32 h-32 rounded-full flex items-center justify-center">
-                  <Heart className="h-16 w-16 text-vitality-600" />
-                </div>
+              <div className="md:w-1/2">
+                <img 
+                  src="/lovable-uploads/24065092-317b-43fa-b198-38a431488a28.png" 
+                  alt="Chronic pain management therapy" 
+                  className="rounded-lg shadow-xl w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>

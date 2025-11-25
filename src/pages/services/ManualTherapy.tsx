@@ -25,10 +25,12 @@ const ManualTherapy = () => {
                   <Link to="/booking">Book a Session</Link>
                 </Button>
               </div>
-              <div className="md:w-1/2 flex justify-center">
-                <div className="bg-vitality-100 w-32 h-32 rounded-full flex items-center justify-center">
-                  <UserPlus className="h-16 w-16 text-vitality-600" />
-                </div>
+              <div className="md:w-1/2">
+                <img 
+                  src="/lovable-uploads/15bba306-a1f7-4b1f-a92f-9874fd19d0a8.png" 
+                  alt="Manual therapy hands-on treatment" 
+                  className="rounded-lg shadow-xl w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>
